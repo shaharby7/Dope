@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	"Dope/deployable/constants"
-	"Dope/deployable/helpers"
+	"github.com/shaharby7/Dope/pkg/deployable/constants"
+	"github.com/shaharby7/Dope/pkg/deployable/helpers"
 )
 
 type ITarget interface {

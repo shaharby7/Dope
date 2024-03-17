@@ -2,16 +2,15 @@ package deployable
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"os"
 	"sync"
 
 	"github.com/joho/godotenv"
 
-	"Dope/deployable/constants"
-	"Dope/deployable/controllable"
-	"Dope/deployable/loggable"
+	"github.com/shaharby7/Dope/pkg/deployable/constants"
+	"github.com/shaharby7/Dope/pkg/deployable/controllable"
+	"github.com/shaharby7/Dope/pkg/deployable/loggable"
 )
 
 type Environments string
@@ -41,7 +40,7 @@ func NewDeployable(
 	enfile string, //TODO make it controlled by deployer
 ) (*Deployable, error) {
 	ENV := Environments(os.Getenv("ENV"))
-	if "" == ENV {
+	if ENV == "" {
 		ENV = "LOCAL"
 	}
 	if ENV == LOCAL {
@@ -89,14 +88,14 @@ func (deployable *Deployable) initiateDeployableContext(parentContext context.Co
 func verifyEnvVariables(requiredEnvVariables *[]string) error {
 	for _, name := range *requiredEnvVariables {
 		val := os.Getenv(name)
-		if "" == val {
-			return errors.New(fmt.Sprintf("required ENV variable %s is not found", name))
+		if val == "" {
+			return fmt.Errorf("required ENV variable %s is not found", name)
 		}
 	}
 	return nil
 }
 
-func loadEnvfile(projectName string, envfile string) error {
+func loadEnvfile(_ string, envfile string) error {
 	// _, b, _, _ := runtime.Caller(0)
 	// basePath := filepath.Dir(b)
 	// envFilePath := fmt.Sprintf("%s/local/%s.env", basePath, projectName)

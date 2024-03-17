@@ -6,8 +6,8 @@ import (
 	"io"
 	"net/http"
 
-	"Dope/deployable/constants"
-	"Dope/deployable/errorable"
+	"github.com/shaharby7/Dope/pkg/deployable/constants"
+	"github.com/shaharby7/Dope/pkg/deployable/errorable"
 )
 
 type TServerInput = *http.Request
@@ -17,7 +17,6 @@ type HttpResponse struct {
 	Headers    map[string]string
 }
 type TServerOutput *HttpResponse
-
 
 type ServerControllableConfig struct{ Port int }
 
