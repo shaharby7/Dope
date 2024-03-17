@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"sync"
 
-	"Dope/deployable/constants"
-	"Dope/deployable/errorable"
+	"github.com/shaharby7/Dope/pkg/deployable/constants"
+	"github.com/shaharby7/Dope/pkg/deployable/errorable"
 
 	"github.com/google/uuid"
 )

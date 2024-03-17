@@ -6,9 +6,9 @@ import (
 	"io"
 	"net/http"
 
-	deployable "Dope/deployable"
-	controllable "Dope/deployable/controllable"
-	loggable "Dope/deployable/loggable"
+	"github.com/shaharby7/Dope/pkg/deployable"
+	"github.com/shaharby7/Dope/pkg/deployable/controllable"
+	"github.com/shaharby7/Dope/pkg/deployable/loggable"
 )
 
 func Initiate() *deployable.Deployable {

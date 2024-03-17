@@ -3,7 +3,7 @@ package helpers
 import (
 	"context"
 
-	"Dope/deployable/constants"
+	"github.com/shaharby7/Dope/pkg/deployable/constants"
 )
 
 func VerifyDeployableContext(ctx context.Context) bool {
