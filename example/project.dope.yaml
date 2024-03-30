@@ -1,4 +1,4 @@
-dopVersion: 0.0.1
+dopeVersion: 0.0.1
 
 metadata:
   name: example
@@ -9,15 +9,17 @@ metadata:
 apps:
   - name: "app1"
     description: "app example"
-    controllables:
+    controllers:
       - name: "server1"
         description: "http sever controlled by app1"
-        type: HttpServer
-        actionables:
-          - name: "/api/great"
+        type: HTTPServer
+        actions:
+          - name: "/api/great/:name"
             description: "Great anyone who wants"
             package: greeter
             ref: Greet
+            bind:
+              - method: Get
 
 environments:
   - name: local

@@ -1,7 +1,9 @@
 package types
 
+// import "gopkg.in/yaml.v3"
+
 type ProjectConfig struct {
-	DopVersion   string `validate:"required" yaml:"dopVersion"`
+	DopeVersion  string `validate:"required" yaml:"dopeVersion"`
 	Metadata     ProjectMetadataConfig
 	Apps         []AppConfig
 	Environments []EnvConfig
@@ -15,23 +17,25 @@ type ProjectMetadataConfig struct {
 }
 
 type AppConfig struct {
-	Name          string `validate:"required"`
-	Description   string
-	Controllables []ControllableConfig
-}
-
-type ControllableConfig struct {
 	Name        string `validate:"required"`
 	Description string
-	Type        string `validate:"required,oneof=HttpServer"`
-	Actionables []ActionableConfig
+	Controllers []ControllersConfig
 }
 
-type ActionableConfig struct {
+type ControllersConfig struct {
+	Name        string `validate:"required"`
+	Description string
+	Type        ControllerType `validate:"required"`
+	Actions     []ActionConfig
+}
+
+type ActionConfig struct {
 	Name        string `validate:"required"`
 	Description string
 	Package     string `validate:"required"`
 	Ref         string `validate:"required"`
+	// Bind        yaml.Node
+	Bind *HTTPSeverActionConfig //TODO: support dynamic config for other controller types
 }
 
 type EnvConfig struct {
