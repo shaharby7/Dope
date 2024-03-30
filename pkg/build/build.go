@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/shaharby7/Dope/pkg/types"
+	"github.com/shaharby7/Dope/types"
 	"gopkg.in/yaml.v3"
 )
 
@@ -70,8 +70,8 @@ func buildSrcFiles(dst string, config *types.ProjectConfig) error {
 
 func createAppTemplateInput(metadataConfig *types.ProjectMetadataConfig, appConfig *types.AppConfig) (*appTemplateInput, error) {
 	return &appTemplateInput{
-		AppConfig: appConfig,
+		AppConfig:             appConfig,
 		ProjectMetadataConfig: metadataConfig,
-		Imports: []string{},
+		Imports:               []string{},
 	}, nil
 }

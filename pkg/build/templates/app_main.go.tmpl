@@ -1,34 +1,29 @@
 package main
 
-
 import (
-    
-	"fmt"
+	"context"
+	"sync"
 
-	"github.com/shaharby7/Dope/pkg/deployable"
-	"github.com/shaharby7/Dope/pkg/deployable/loggable"
+	"github.com/shaharby7/Dope/pkg/runtime/controller"
+	"github.com/shaharby7/dopeexample/pkg/greeter"
 
-    "context"
-    
-{{ range $index, $import := .Imports}}
-    "{{ $import }}"
-{{ end }})
-
-func initiate() *deployable.Deployable {
-	myLoggable := &loggable.Loggable{}
-
-	dep, _ := deployable.NewDeployable(
-		deployable.DeployableConfig{
-			ProjectName:          "{{ .AppConfig.Name }}",
-		},
-		*myLoggable,
-		func(ctx context.Context, err error) { fmt.Println(err) },
-        ""
-	)
-
-	return dep
-}
+	"github.com/shaharby7/Dope/types"
+)
 
 func main() {
-	initiate().Start(context.Background())
+	var wg sync.WaitGroup
+
+	greetConf := &types.ActionConfig{
+		Name: "/api/greet",
+		Bind: &types.HTTPSeverActionConfig{Method: types.POST},
+	}
+	c := controller.NewHTTPServer(
+		types.HTTPServerConfig{Port: 3000},
+		[]*types.TypedAction{
+			types.CreateTypedAction(greetConf, greeter.Greet),
+		},
+	)
+	wg.Add(1)
+	c.Start(context.Background())
+	wg.Wait()
 }

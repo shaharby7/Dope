@@ -4,6 +4,7 @@
         "controllables",
         "dopeexample",
         "Errorable",
+        "httprouter",
         "loggable",
         "shaharby"
     ]
