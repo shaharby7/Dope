@@ -5,8 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"net"
 	"net/http"
 	"reflect"
+	"sync"
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/shaharby7/Dope/types"
@@ -50,14 +52,17 @@ func NewHTTPServer(config types.HTTPServerConfig, actions []*types.TypedAction) 
 	}
 }
 
-func (httpServer *HTTPServer) Start(ctx context.Context) error {
+func (httpServer *HTTPServer) Start(ctx context.Context, wg *sync.WaitGroup) error {
+	listener, err := net.Listen("tcp", httpServer.server.Addr)
+	if err != nil {
+		return err
+	}
 	go func() {
-		err := httpServer.server.ListenAndServe() //TODO: handle errors and cancellations
-		if err != nil {
+		if err := httpServer.server.Serve(listener); err != nil {
 			panic(err)
 		}
-		fmt.Printf("http server is listening on port: %d", httpServer.config.Port)
 	}()
+	fmt.Printf("http server is listening on port: %d", httpServer.config.Port)
 	return nil
 }
 

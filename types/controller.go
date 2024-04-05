@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"reflect"
+	"sync"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -18,7 +19,7 @@ const (
 
 // base types
 type Controller[ActionConfig any] interface {
-	Start(ctx context.Context) error
+	Start(ctx context.Context, wg sync.WaitGroup) error
 	// RegisterAction(name string, action Action[any, any], config ActionConfig)
 }
 
