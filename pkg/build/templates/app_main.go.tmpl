@@ -2,31 +2,22 @@ package main
 
 import (
 	"context"
+	"fmt"
+	"os"
 	"sync"
-
-	"github.com/shaharby7/Dope/pkg/runtime/controller"
-	"github.com/shaharby7/dopeexample/pkg/greeter"
-
-	"github.com/shaharby7/Dope/types"
 )
 
 func main() {
 	var wg sync.WaitGroup
-
-	greetConf := &types.ActionConfig{
-		Name: "/api/greet",
-		Bind: &types.HTTPSeverActionConfig{Method: types.POST},
-	}
-	c := controller.NewHTTPServer(
-		types.HTTPServerConfig{Port: 3000},
-		[]*types.TypedAction{
-			types.CreateTypedAction(greetConf, greeter.Greet),
-		},
-	)
 	wg.Add(1)
-	err := c.Start(context.Background(), &wg)
+	controllerName := os.Getenv("DOPE_CONTROLLER")
+	controller, ok := controllers[controllerName]
+	if !ok {
+		panic(fmt.Sprintf("could not find controller:%s", controllerName))
+	}
+	err := controller.Start(context.Background(), &wg)
 	if err != nil {
-		panic(err)
+		panic(fmt.Sprintf("could not initiate controller:%s", err.Error()))
 	}
 	wg.Wait()
 }
