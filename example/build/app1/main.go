@@ -24,6 +24,9 @@ func main() {
 		},
 	)
 	wg.Add(1)
-	c.Start(context.Background())
+	err := c.Start(context.Background(), &wg)
+	if err != nil {
+		panic(err)
+	}
 	wg.Wait()
 }
