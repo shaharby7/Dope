@@ -18,8 +18,8 @@ apps:
             description: "Great anyone who wants"
             package: greeter
             ref: Greet
-            bind:
-              - method: Get
+            controllerBinding:
+              method: Get
 
 environments:
   - name: local

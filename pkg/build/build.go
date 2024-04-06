@@ -51,27 +51,37 @@ func buildSrcFiles(dst string, config *types.ProjectConfig) error {
 	for _, appConfig := range config.Apps {
 		var appDst = filepath.Join(dst, appConfig.Name)
 		os.MkdirAll(appDst, os.ModePerm)
-		file, err := os.Create(filepath.Join(appDst, "main.go"))
+		err := createFileByTemplate(appDst, "app_main.go", SRC_FILE_MAIN, &mainFileInput{})
 		if err != nil {
-			return fmt.Errorf("could not create main file for app (%s): %w", appConfig.Name, err)
+			return wrapSrcFileCreationError(appConfig.Name, SRC_FILE_CONTROLLER, err)
 		}
-		defer file.Close()
-		input, err := createAppTemplateInput(&config.Metadata, &appConfig)
+		err = createFileByTemplate(appDst, "controller.go", SRC_FILE_CONTROLLER, generateControllerInput(
+			appConfig,
+		))
 		if err != nil {
-			return fmt.Errorf("invalid config for file app (%s): %w", appConfig.Name, err)
-		}
-		err = getTemplate("app_main.go").Execute(file, input)
-		if err != nil {
-			return fmt.Errorf("could not build src files for app (%s): %w", appConfig.Name, err)
+			return wrapSrcFileCreationError(appConfig.Name, SRC_FILE_CONTROLLER, err)
 		}
 	}
 	return nil
 }
 
-func createAppTemplateInput(metadataConfig *types.ProjectMetadataConfig, appConfig *types.AppConfig) (*appTemplateInput, error) {
-	return &appTemplateInput{
-		AppConfig:             appConfig,
-		ProjectMetadataConfig: metadataConfig,
-		Imports:               []string{},
-	}, nil
+func generateControllerInput(appConfig types.AppConfig) *controllerFileInput {
+	return nil
+}
+
+func createFileByTemplate[FileInput any](appDst string, templateName string, dstFile SRC_FILES, input *FileInput) error {
+	file, err := os.Create(filepath.Join(appDst, string(dstFile)))
+	if err != nil {
+		return fmt.Errorf("could not open file %s: %w", dstFile, err)
+	}
+	defer file.Close()
+	err = getTemplate(templateName).Execute(file, input)
+	if err != nil {
+		return fmt.Errorf("could not parse template (%s): %w", templateName, err)
+	}
+	return nil
+}
+
+func wrapSrcFileCreationError(appName string, fileName SRC_FILES, err error) error {
+	return fmt.Errorf("could not could not create src file %s for app %s: %w", fileName, appName, err)
 }

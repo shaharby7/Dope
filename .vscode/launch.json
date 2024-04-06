@@ -17,8 +17,11 @@
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "./example/build/app1/main.go",
-            "cwd": "${workspaceFolder}/example"
+            "program": "./example/build/app1",
+            "cwd": "${workspaceFolder}/example",
+            "env": {
+                "DOPE_CONTROLLER":"Controllerserver1"
+            }
         }
     ]
 }

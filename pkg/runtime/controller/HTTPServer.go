@@ -39,7 +39,7 @@ func NewHTTPServer(config types.HTTPServerConfig, actions []*types.TypedAction) 
 		actionConfig := action.Config
 		handler := generateRouteHandler(action)
 		router.Handle(
-			string(actionConfig.Bind.Method),
+			string(actionConfig.ControllerBinding.Method),
 			actionConfig.Name,
 			handler,
 		)
