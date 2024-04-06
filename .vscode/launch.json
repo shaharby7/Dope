@@ -20,7 +20,7 @@
             "program": "./example/build/app1",
             "cwd": "${workspaceFolder}/example",
             "env": {
-                "DOPE_CONTROLLER":"Controllerserver1"
+                "DOPE_CONTROLLER":"server1"
             }
         }
     ]

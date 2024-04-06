@@ -11,4 +11,16 @@ type mainFileInput struct {
 }
 
 type controllerFileInput struct {
+	Imports     []string
+	Controllers []*controllerInput
+}
+
+type controllerInput struct {
+	Name string
+	Identifier string
+	Actions    []*actionInput
+}
+type actionInput struct {
+	Name   string
+	Caller string
 }

@@ -3,22 +3,32 @@ package main
 import (
 	"github.com/shaharby7/Dope/pkg/runtime/controller"
 	"github.com/shaharby7/Dope/types"
-	"github.com/shaharby7/dopeexample/pkg/greeter"
+    {{ range $index, $import := .Imports }}
+    "{{ $import }}"{{ end }}
 )
 
 var controllers = map[string]types.Controller[any]{
-	"Controllerserver1": Controllerserver1,
+{{ range $index, $controller := .Controllers }}
+    "{{ $controller.Name }}": {{ $controller.Identifier }},
+{{ end  }}
 }
 
-var Controllerserver1 = controller.NewHTTPServer(
+{{ range $index, $controller := .Controllers }}
+var {{ $controller.Identifier }} = controller.NewHTTPServer(
 	types.HTTPServerConfig{Port: 3000},
 	[]*types.TypedAction{
 		types.CreateTypedAction(
+            {{ range $index, $action := $controller.Actions }}
 			&types.ActionConfig{
-				Name: "/api/greet",
+				Name: "{{ $action.Name }}",
 				ControllerBinding: &types.HTTPSeverActionConfig{
 					Method: types.POST,
 				},
-			}, greeter.Greet),
+			},
+            {{ $action.Caller}},
+            ),
+            {{ end }}
 	},
 )
+{{ end }}
+
