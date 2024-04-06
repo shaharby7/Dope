@@ -14,9 +14,9 @@ apps:
         description: "http sever controlled by app1"
         type: HTTPServer
         actions:
-          - name: "/api/great/:name"
+          - name: "/api/greet"
             description: "Great anyone who wants"
-            package: greeter
+            package: pkg/greeter
             ref: Greet
             controllerBinding:
               method: Get

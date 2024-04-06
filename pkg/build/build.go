@@ -3,9 +3,11 @@ package build
 import (
 	"fmt"
 	"os"
+	"path"
 	"path/filepath"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/shaharby7/Dope/pkg/utils"
 	"github.com/shaharby7/Dope/types"
 	"gopkg.in/yaml.v3"
 )
@@ -56,6 +58,7 @@ func buildSrcFiles(dst string, config *types.ProjectConfig) error {
 			return wrapSrcFileCreationError(appConfig.Name, SRC_FILE_CONTROLLER, err)
 		}
 		err = createFileByTemplate(appDst, "controller.go", SRC_FILE_CONTROLLER, generateControllerInput(
+			config,
 			appConfig,
 		))
 		if err != nil {
@@ -65,8 +68,37 @@ func buildSrcFiles(dst string, config *types.ProjectConfig) error {
 	return nil
 }
 
-func generateControllerInput(appConfig types.AppConfig) *controllerFileInput {
-	return nil
+func generateControllerInput(
+	config *types.ProjectConfig,
+	appConfig types.AppConfig,
+) *controllerFileInput {
+	imports := utils.NewSet[string]()
+	controllers := []*controllerInput{}
+	for _, controllerConfig := range appConfig.Controllers {
+		controller := &controllerInput{
+			Name:       controllerConfig.Name,
+			Identifier: "Controller_" + controllerConfig.Name,
+			Actions:    []*actionInput{},
+		}
+		for _, actionConfig := range controllerConfig.Actions {
+			imports.Add(
+				path.Join(config.Metadata.Module, actionConfig.Package),
+			)
+			action := &actionInput{
+				Name: actionConfig.Name,
+				Caller: fmt.Sprintf(
+					"%s.%s", path.Base(actionConfig.Package), actionConfig.Ref,
+				),
+			}
+			controller.Actions = append(controller.Actions, action)
+		}
+		controllers = append(controllers, controller)
+	}
+
+	return &controllerFileInput{
+		Imports:     imports.ToSlice(),
+		Controllers: controllers,
+	}
 }
 
 func createFileByTemplate[FileInput any](appDst string, templateName string, dstFile SRC_FILES, input *FileInput) error {
