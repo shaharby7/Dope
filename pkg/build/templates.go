@@ -16,31 +16,46 @@ const (
 var (
 	//go:embed templates/*
 	files     embed.FS
-	templates map[string]*template.Template
+	templates map[FILES]*template.Template
 )
 
 func loadTemplates() {
 	if templates == nil {
-		templates = make(map[string]*template.Template)
+		templates = make(map[FILES]*template.Template)
 	}
-	tmplFiles, err := fs.ReadDir(files, templatesDir)
+	err := fs.WalkDir(
+		files,
+		".",
+		func(path string, dirEntry fs.DirEntry, err error) error {
+			if err != nil {
+				return fmt.Errorf("could not read template file (%s) because: %w", path, err)
+			}
+			if dirEntry.IsDir() {
+				return nil
+			}
+			pt, err := template.ParseFS(
+				files,
+				path,
+			)
+			if err != nil {
+				return fmt.Errorf("could not parse (%s):%w", path, err)
+			}
+			tmplName := FILES(strings.Replace(
+				strings.Replace(path, extension, "", 1),
+				templatesDir+"/",
+				"",
+				1,
+			))
+			templates[tmplName] = pt
+			return nil
+		},
+	)
 	if err != nil {
-		panic(fmt.Errorf("could not read templates dir (%s):%w", templatesDir, err))
-	}
-	for _, tmpl := range tmplFiles {
-		if tmpl.IsDir() {
-			continue
-		}
-		tmplName := strings.Replace(tmpl.Name(), extension, "", 1)
-		pt, err := template.ParseFS(files, templatesDir+"/"+tmpl.Name())
-		if err != nil {
-			panic(fmt.Errorf("could not load template (%s): %w", tmplName, err))
-		}
-		templates[tmplName] = pt
+		panic(fmt.Errorf("could not load templates: %w", err))
 	}
 }
 
-func getTemplate(tmplName string) *template.Template {
+func getTemplate(tmplName FILES) *template.Template {
 	tmpl := templates[tmplName]
 	if tmpl == nil {
 		panic(fmt.Errorf("could not find template %s", tmplName))

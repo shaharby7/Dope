@@ -4,11 +4,12 @@ import (
 	"github.com/shaharby7/Dope/types"
 )
 
-type SRC_FILES string
+type FILES string
 
 const (
-	SRC_FILE_MAIN       SRC_FILES = "main.go"
-	SRC_FILE_CONTROLLER SRC_FILES = "controllers.go"
+	SRC_FILE_MAIN       FILES = "src/main.go"
+	SRC_FILE_CONTROLLER FILES = "src/controllers.go"
+	DOCKERFILE          FILES = "Dockerfile"
 )
 
 type mainFileInput struct {
@@ -29,4 +30,8 @@ type actionInput struct {
 	Name              string
 	Caller            string
 	ControllerBinding *types.ControllerBinding
+}
+
+type dockerfileInput struct {
+	AppName string
 }
