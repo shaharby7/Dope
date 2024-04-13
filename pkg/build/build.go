@@ -53,11 +53,11 @@ func buildSrcFiles(dst string, config *types.ProjectConfig) error {
 	for _, appConfig := range config.Apps {
 		var appDst = filepath.Join(dst, appConfig.Name)
 		os.MkdirAll(appDst, os.ModePerm)
-		err := createFileByTemplate(appDst, "app_main.go", SRC_FILE_MAIN, &mainFileInput{})
+		err := createFileByTemplate(appDst, SRC_FILE_MAIN, &mainFileInput{})
 		if err != nil {
 			return wrapSrcFileCreationError(appConfig.Name, SRC_FILE_CONTROLLER, err)
 		}
-		err = createFileByTemplate(appDst, "controller.go", SRC_FILE_CONTROLLER, generateControllerInput(
+		err = createFileByTemplate(appDst, SRC_FILE_CONTROLLER, generateControllerInput(
 			config,
 			appConfig,
 		))
@@ -78,6 +78,7 @@ func generateControllerInput(
 		controller := &controllerInput{
 			Name:       controllerConfig.Name,
 			Identifier: "Controller_" + controllerConfig.Name,
+			Type:       controllerConfig.Type,
 			Actions:    []*actionInput{},
 		}
 		for _, actionConfig := range controllerConfig.Actions {
@@ -89,6 +90,7 @@ func generateControllerInput(
 				Caller: fmt.Sprintf(
 					"%s.%s", path.Base(actionConfig.Package), actionConfig.Ref,
 				),
+				ControllerBinding: actionConfig.ControllerBinding,
 			}
 			controller.Actions = append(controller.Actions, action)
 		}
@@ -101,15 +103,15 @@ func generateControllerInput(
 	}
 }
 
-func createFileByTemplate[FileInput any](appDst string, templateName string, dstFile SRC_FILES, input *FileInput) error {
-	file, err := os.Create(filepath.Join(appDst, string(dstFile)))
+func createFileByTemplate[FileInput any](appDst string, tmpl SRC_FILES, input *FileInput) error {
+	file, err := os.Create(filepath.Join(appDst, string(tmpl)))
 	if err != nil {
-		return fmt.Errorf("could not open file %s: %w", dstFile, err)
+		return fmt.Errorf("could not open file %s: %w", tmpl, err)
 	}
 	defer file.Close()
-	err = getTemplate(templateName).Execute(file, input)
+	err = getTemplate(string(tmpl)).Execute(file, input)
 	if err != nil {
-		return fmt.Errorf("could not parse template (%s): %w", templateName, err)
+		return fmt.Errorf("could not parse template (%s): %w", tmpl, err)
 	}
 	return nil
 }
