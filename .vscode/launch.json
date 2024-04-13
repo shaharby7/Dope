@@ -20,7 +20,8 @@
             "program": "./example/build/app1",
             "cwd": "${workspaceFolder}/example",
             "env": {
-                "DOPE_CONTROLLER":"server1"
+                "DOPE_CONTROLLER":"server1",
+                "DOPE_HTTPSERVER_PORT":"3000"
             }
         }
     ]

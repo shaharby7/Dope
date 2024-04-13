@@ -1,5 +1,6 @@
 package types
 
+
 type ProjectConfig struct {
 	DopeVersion  string `validate:"required" yaml:"dopeVersion"`
 	Metadata     ProjectMetadataConfig
@@ -28,12 +29,11 @@ type ControllersConfig struct {
 }
 
 type ActionConfig struct {
-	Name        string `validate:"required"`
-	Description string
-	Package     string `validate:"required"`
-	Ref         string `validate:"required"`
-	//TODO: support dynamic config for other controller types
-	ControllerBinding *HTTPSeverActionConfig `yaml:"controllerBinding"`
+	Name              string `validate:"required"`
+	Description       string
+	Package           string             `validate:"required"`
+	Ref               string             `validate:"required"`
+	ControllerBinding *ControllerBinding `yaml:"controllerBinding"`
 }
 
 type EnvConfig struct {

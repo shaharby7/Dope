@@ -11,41 +11,50 @@ import (
 	"sync"
 
 	"github.com/julienschmidt/httprouter"
+	"github.com/shaharby7/Dope/pkg/utils"
 	"github.com/shaharby7/Dope/types"
 )
 
-type Temp struct {
-	Name string
+type HTTPServerConfig struct {
+	Port string
 }
-
 type HTTPServerBindConfig struct {
 	Method string `yaml:"method"`
 }
 
 type HTTPServer struct {
-	config     types.HTTPServerConfig
+	config     HTTPServerConfig
 	server     *http.Server
 	router     *httprouter.Router
 	middleware func(n httprouter.Handle) httprouter.Handle
 }
 
-func NewHTTPServer(config types.HTTPServerConfig, actions []*types.TypedAction) *HTTPServer {
+func NewHTTPServer(actions []*types.TypedAction) *HTTPServer {
+
 	router := httprouter.New()
+	port := utils.Getenv(
+		types.ENV_VARS_HTTPSERVER_PORT,
+		fmt.Sprint(types.HTTPSERVER_DEFAULT_PORT),
+	)
+	config := &HTTPServerConfig{
+		Port: port,
+	}
 	server := &http.Server{
-		Addr:    fmt.Sprintf(":%d", config.Port),
+		Addr:    fmt.Sprintf(":%s", config.Port),
 		Handler: router,
 	}
 	for _, action := range actions {
 		actionConfig := action.Config
 		handler := generateRouteHandler(action)
+		method := utils.GetFromMapWithDefault(*actionConfig.ControllerBinding, "method", "GET")
 		router.Handle(
-			string(actionConfig.ControllerBinding.Method),
+			method,
 			actionConfig.Name,
 			handler,
 		)
 	}
 	return &HTTPServer{
-		config:     config,
+		config:     *config,
 		server:     server,
 		router:     router,
 		middleware: defaultMiddleware, // TODO: allow custom middlewares
@@ -62,7 +71,7 @@ func (httpServer *HTTPServer) Start(ctx context.Context, wg *sync.WaitGroup) err
 			panic(err)
 		}
 	}()
-	fmt.Printf("http server is listening on port: %d", httpServer.config.Port)
+	fmt.Printf("http server is listening on port: %s", httpServer.config.Port)
 	return nil
 }
 

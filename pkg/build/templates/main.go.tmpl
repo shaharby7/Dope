@@ -5,12 +5,14 @@ import (
 	"fmt"
 	"os"
 	"sync"
+
+	"github.com/shaharby7/Dope/types"
 )
 
 func main() {
 	var wg sync.WaitGroup
 	wg.Add(1)
-	controllerName := os.Getenv("DOPE_CONTROLLER")
+	controllerName := os.Getenv(string(types.ENV_VARS_CONTROLLER))
 	controller, ok := controllers[controllerName]
 	if !ok {
 		panic(fmt.Sprintf("could not find controller:%s", controllerName))

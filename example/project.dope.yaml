@@ -19,7 +19,7 @@ apps:
             package: pkg/greeter
             ref: Greet
             controllerBinding:
-              method: Get
+              method: POST
 
 environments:
   - name: local

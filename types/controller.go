@@ -2,7 +2,6 @@ package types
 
 import (
 	"context"
-	"fmt"
 	"reflect"
 	"sync"
 
@@ -20,7 +19,6 @@ const (
 // base types
 type Controller[ActionConfig any] interface {
 	Start(ctx context.Context, wg *sync.WaitGroup) error
-	// RegisterAction(name string, action Action[any, any], config ActionConfig)
 }
 
 type Action[In any, Out any] func(
@@ -33,39 +31,12 @@ type Action[In any, Out any] func(
 	error,
 )
 
+type ControllerBinding map[string]string
 type TypedAction struct {
 	Callback Action[any, any]
 	In       reflect.Type
 	Out      reflect.Type
 	Config   *ActionConfig
-}
-
-func CreateTypedAction[In any, Out any](config *ActionConfig, action Action[In, Out]) *TypedAction {
-	cb := func(
-		ctx context.Context,
-		input any,
-		controllerPayload *ActionInputMetadata,
-	) (
-		any,
-		*ActionOutputMetadata,
-		error,
-	) {
-		in, ok := input.(In)
-		if !ok {
-			return nil, nil, fmt.Errorf("got incorrect input type for action")
-		}
-		return action(
-			ctx,
-			in,
-			controllerPayload,
-		)
-	}
-	return &TypedAction{
-		Callback: cb,
-		In:       reflect.TypeOf(action).In(1),
-		Out:      reflect.TypeOf(action).Out(0),
-		Config:   config,
-	}
 }
 
 // configs
@@ -79,13 +50,13 @@ type ActionOutputMetadata struct {
 
 // HTTPServer specifics
 
-type HTTPServerConfig struct {
-	Port uint32
-}
+// type HTTPServerConfig struct {
+// 	Port string
+// }
 
-type HTTPSeverActionConfig struct {
-	Method HTTPMethod
-}
+// type HTTPSeverActionConfig struct {
+// 	Method HTTPMethod
+// }
 
 type HTTPServerResponseConfig struct {
 	StatusCode int
