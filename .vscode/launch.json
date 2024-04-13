@@ -17,7 +17,7 @@
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "./example/build/app1",
+            "program": "./example/build/app1/src",
             "cwd": "${workspaceFolder}/example",
             "env": {
                 "DOPE_CONTROLLER":"server1",
