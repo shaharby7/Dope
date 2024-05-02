@@ -1,4 +1,4 @@
-3apiVersion: argoproj.io/v1alpha1
+apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
   name: create-vm-worflow-template
