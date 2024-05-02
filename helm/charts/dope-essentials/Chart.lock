@@ -8,5 +8,5 @@ dependencies:
 - name: ci
   repository: https://shaharby7.github.io/Dope/helm/charts
   version: 0.1.0
-digest: sha256:357ccb647d77708a3fc970ab435ec9e8877c6b0c7815bd9b4f2626da1eed9b0c
-generated: "2024-05-03T01:03:11.314384786+03:00"
+digest: sha256:03927964e4ceb9db3b2e5dc2c8d01f66e4ac6424b5fac271d84746af89cc4b4f
+generated: "2024-05-03T01:23:08.507720999+03:00"
