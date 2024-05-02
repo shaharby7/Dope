@@ -1,0 +1,33 @@
+3apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: create-vm-worflow-template
+  namespace: runspace
+spec:
+  serviceAccountName: ci-sa
+  arguments:
+    parameters:
+      - name: app
+  entrypoint: ci
+  templates:
+    - name: ci
+      arguments:
+        parameters:
+          - name: app
+            value: my-app
+      steps:
+        - - name: hello
+            template: hello
+
+    - name: hello
+      inputs:
+        parameters:
+          - name: app
+      container:
+        image: docker/whalesay
+        command: [cowsay]
+        args: ["{{inputs.parameters.message}}"]
+        resources:
+          limits:
+            memory: 32Mi
+            cpu: 100m

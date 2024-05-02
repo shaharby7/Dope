@@ -4,8 +4,8 @@ go 1.21.5
 
 require (
 	github.com/go-playground/validator/v10 v10.19.0
-	github.com/google/uuid v1.6.0
-	github.com/joho/godotenv v1.5.1
+	// github.com/google/uuid v1.6.0
+	// github.com/joho/godotenv v1.5.1
 	github.com/julienschmidt/httprouter v1.3.0
 	gopkg.in/yaml.v3 v3.0.1
 
