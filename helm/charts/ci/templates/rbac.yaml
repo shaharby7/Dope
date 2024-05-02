@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ci-sa
+  namespace: dope
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: ci-role
+  namespace: dope
+rules:
+  - apiGroups:
+      - argoproj.io
+    verbs:
+      - "*"
+    resources:
+      - workflows
+      - workflowtemplates
+      - cronworkflows
+      - clusterworkflowtemplates
+  - apiGroups:
+      - ""
+    verbs:
+      - "*"
+    resources:
+      - pods
+      - secrets
+      - services
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: ci-role-binding
+  namespace: dope
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: ci-role
+subjects:
+  - kind: ServiceAccount
+    name: ci-sa

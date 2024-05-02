@@ -6,6 +6,9 @@ metadata:
   description: "project example"
   module: github.com/shaharby7/dopeexample
 
+git:
+  url: git@github.com:shaharby7/Dope.git
+
 apps:
   - name: "app1"
     description: "app example"
@@ -20,6 +23,24 @@ apps:
             ref: Greet
             controllerBinding:
               method: POST
+    requirements:
+      env:
+        - "UGLY_NAMES"
 
 environments:
   - name: local
+    provider: minikube
+    ci:
+      type: dope-default-ci
+    apps:
+      - name: "app1"
+        repository: docker.io/local-app1
+        env:
+          UGLY_NAMES: "shahar,danny"
+        resources:
+          requests:
+            cpu: 1
+            memory: 2GB
+          limits:
+            cpu: 2
+            memory: 4FB

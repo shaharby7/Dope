@@ -1,0 +1,33 @@
+package main
+
+import (
+	"github.com/shaharby7/Dope/pkg/runtime/controller"
+	"github.com/shaharby7/Dope/types"
+    {{ range $index, $import := .Imports }}
+    "{{ $import }}"{{ end }}
+)
+
+var controllers = map[string]types.Controller[any]{
+{{ range $index, $controller := .Controllers }}
+    "{{ $controller.Name }}": {{ $controller.Identifier }},
+{{ end  }}
+}
+
+{{ range $index, $controller := .Controllers }}
+var {{ $controller.Identifier }} = controller.New{{ $controller.Type }}(
+	[]*types.TypedAction{
+		controller.CreateTypedAction(
+            {{ range $index, $action := $controller.Actions }}
+			&types.ActionConfig{
+				Name: "{{ $action.Name }}",
+				ControllerBinding: &types.ControllerBinding{
+					{{ range $key, $value := $action.ControllerBinding }}"{{$key}}":"{{$value}}",{{ end }}
+				},
+			},
+            {{ $action.Caller}},
+            ),
+            {{ end }}
+	},
+)
+{{ end }}
+
