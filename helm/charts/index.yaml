@@ -3,9 +3,9 @@ entries:
   ci:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2024-05-03T01:28:10.769809064+03:00"
+    created: "2024-05-03T01:34:07.644731474+03:00"
     description: A Helm chart for Kubernetes
-    digest: dd4db21ca68177cbb3109bff5e46696b4cd1ee6783ffc65869f7f4dbef8c5af4
+    digest: 1bc8450b4f68d59771724949252d1fad47bd36e10e4283db25609b66ea7c9296
     name: ci
     type: application
     urls:
@@ -14,7 +14,7 @@ entries:
   dope-essentials:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2024-05-03T01:28:10.780033607+03:00"
+    created: "2024-05-03T01:34:07.655070969+03:00"
     dependencies:
     - name: argo-cd
       repository: https://argoproj.github.io/argo-helm
@@ -34,4 +34,4 @@ entries:
     urls:
     - https://shaharby7.github.io/Dope/helm/charts/dope-essentials-0.1.0.tgz
     version: 0.1.0
-generated: "2024-05-03T01:28:10.769494293+03:00"
+generated: "2024-05-03T01:34:07.644350246+03:00"
