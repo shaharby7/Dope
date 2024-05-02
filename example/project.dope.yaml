@@ -29,6 +29,7 @@ apps:
 
 environments:
   - name: local
+    provider: minikube
     ci:
       type: dope-default-ci
     apps:

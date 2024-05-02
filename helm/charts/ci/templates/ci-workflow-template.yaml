@@ -20,9 +20,6 @@ spec:
             template: hello
 
     - name: hello
-      inputs:
-        parameters:
-          - name: app
       container:
         image: docker/whalesay
         command: [cowsay]
