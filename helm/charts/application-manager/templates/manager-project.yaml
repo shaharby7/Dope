@@ -32,4 +32,4 @@ spec:
         - application-manager
       name: application-manager-admin
       policies:
-        - p, proj:application-manager:application-manager-admin, applications, *, application-manager/*, allow
+        - p, proj:application-manager:application-manager-admin, dope, *, application-manager/*, allow
