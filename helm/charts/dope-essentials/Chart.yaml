@@ -32,7 +32,11 @@ dependencies:
     version: "0.37.1"
     repository: "https://argoproj.github.io/argo-helm"
     condition: argo-workflows.enabled
-  - name: ci
+  - name: dope-ci
     version: "0.1.0"
     repository: "https://shaharby7.github.io/Dope/helm/charts"
-    condition: ci.enabled
+    condition: dope-ci.enabled
+  - name: operator
+    version: "5.0.14"
+    alias: "minio"
+    condition: minio.enabled

@@ -25,5 +25,7 @@ argo-workflows:
     clusterWorkflowTemplates:
       enabled: true
 
-ci:
+dope-ci:
   enabled: true
+
+
