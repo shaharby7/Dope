@@ -1,0 +1,15 @@
+dependencies:
+- name: argo-cd
+  repository: https://argoproj.github.io/argo-helm
+  version: 5.27.0
+- name: application-manager
+  repository: https://shaharby7.github.io/Dope/helm/charts
+  version: 0.1.0
+- name: argo-workflows
+  repository: https://argoproj.github.io/argo-helm
+  version: 0.37.1
+- name: dope-ci
+  repository: https://shaharby7.github.io/Dope/helm/charts
+  version: 0.1.0
+digest: sha256:d0f1fa76029fd276c915b49d0a0c14ce34dba3b84d90ac1fc720f0f02f8e5f14
+generated: "2024-05-11T13:52:48.578549232+03:00"

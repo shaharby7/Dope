@@ -27,5 +27,18 @@ argo-workflows:
 
 dope-ci:
   enabled: true
-  
-applications-list:
+
+applications-manager:
+  enabled: true
+  applications-list:
+    environment: local
+    sources:
+      fakeprovider:
+        repoURL: https://github.com/shaharby7/CloudyOps.git
+        revision: main
+        targetRevision: main
+        path: applications/charts/fakeprovider
+        helm:
+          releaseName: fakeprovider
+          valueFiles:
+            - ../../values/fakeprovider/values.yaml
