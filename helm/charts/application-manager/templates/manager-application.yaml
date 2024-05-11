@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: application-manager
+  name: applications-list
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
@@ -14,10 +14,10 @@ spec:
       environment: {{ .Values.environment }}
       sources: {{- .Values.sources | toYaml | nindent 7 }}
     helm:
-      releaseName: application-manager
+      releaseName: applications-list
   destination:
     server: "https://kubernetes.default.svc"
-    namespace: applications
+    namespace: dope
   {{- if eq "local" $.Values.environment}}
   syncPolicy:
     automated:
