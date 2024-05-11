@@ -28,6 +28,10 @@ dependencies:
     version: "5.27.0"
     repository: "https://argoproj.github.io/argo-helm"
     condition: argo-cd.enabled
+  - name: application-manager
+    version: "0.1.0"
+    repository: "https://shaharby7.github.io/Dope/helm/charts"
+    condition: application-manager
   - name: argo-workflows
     version: "0.37.1"
     repository: "https://argoproj.github.io/argo-helm"
