@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: applications-list
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: application-manager
+  source:
+    repoURL: https://shaharby7.github.io/Dope/helm/charts
+    chart: "applications-list"
+    targetRevision: 0.1.0
+    values:
+      environment: {{ .Values.environment }}
+      sources: {{- .Values.sources | toYaml | nindent 7 }}
+    helm:
+      releaseName: applications-list
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: dope
+  {{- if eq "local" $.Values.environment}}
+  syncPolicy:
+    automated:
+      prune: true
+  {{- end }}

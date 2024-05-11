@@ -30,11 +30,10 @@ apps:
 environments:
   - name: local
     provider: minikube
-    ci:
-      type: dope-default-ci
+    branch: example
     apps:
       - name: "app1"
-        repository: docker.io/local-app1
+        repository: docker.io/shaharby7/app1-local
         env:
           UGLY_NAMES: "shahar,danny"
         resources:
@@ -44,3 +43,31 @@ environments:
           limits:
             cpu: 2
             memory: 4FB
+    dope-essentials:
+      argo-cd:
+        enabled: true
+        redis-ha:
+          enabled: false
+        controller:
+          replicas: 1
+        server:
+          replicas: 1
+        repoServer:
+          replicas: 1
+        applicationSet:
+          replicaCount: 1
+      argo-workflows:
+        enabled: true
+        server:
+          extraArgs: [--auth-mode=server]
+          clusterWorkflowTemplates:
+            enabled: true
+        controller:
+          workflowNamespaces:
+            - dope
+          rbac:
+            create: true
+          clusterWorkflowTemplates:
+            enabled: true
+      dope-ci:
+        enabled: true
