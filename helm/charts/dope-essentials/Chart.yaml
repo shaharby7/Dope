@@ -31,7 +31,7 @@ dependencies:
   - name: application-manager
     version: "0.1.0"
     repository: "https://shaharby7.github.io/Dope/helm/charts"
-    condition: application-manager
+    condition: application-manager.enabled
   - name: argo-workflows
     version: "0.37.1"
     repository: "https://argoproj.github.io/argo-helm"
