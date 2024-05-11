@@ -6,12 +6,12 @@ metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  project: runspace
+  project: applications
   source:
     {{- $values | toYaml | nindent 4}}
   destination:
     server: "https://kubernetes.default.svc"
-    namespace: runspace
+    namespace: applications
   {{- if eq "local" $.Values.environment}}
   syncPolicy:
     automated:

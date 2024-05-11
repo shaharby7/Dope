@@ -17,7 +17,7 @@ spec:
       releaseName: application-manager
   destination:
     server: "https://kubernetes.default.svc"
-    namespace: argocd
+    namespace: applications
   {{- if eq "local" $.Values.environment}}
   syncPolicy:
     automated:
