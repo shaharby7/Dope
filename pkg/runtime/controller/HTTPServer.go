@@ -53,6 +53,17 @@ func NewHTTPServer(actions []*types.TypedAction) *HTTPServer {
 			handler,
 		)
 	}
+	router.Handle( //TODO: allow custom readyz/livez
+		"GET",
+		"/",
+		func(writer http.ResponseWriter, request *http.Request, p httprouter.Params) {
+			returnServerOutput(
+				"OK",
+				types.HTTPServerResponseConfig{StatusCode: 200},
+				writer,
+			)
+		},
+	)
 	return &HTTPServer{
 		config:     *config,
 		server:     server,

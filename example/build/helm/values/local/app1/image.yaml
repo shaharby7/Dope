@@ -1,4 +1,4 @@
 image:
-  repository: docker.io/local-app1
+  repository: docker.io/shaharby7/app1-local
   pullPolicy: IfNotPresent
-  tag: latest
+  tag: 3

@@ -30,9 +30,10 @@ apps:
 environments:
   - name: local
     provider: minikube
+    branch: example
     apps:
       - name: "app1"
-        repository: docker.io/local-app1
+        repository: docker.io/shaharby7/app1-local
         env:
           UGLY_NAMES: "shahar,danny"
         resources:
