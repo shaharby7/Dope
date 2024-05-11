@@ -36,7 +36,7 @@ dependencies:
     version: "0.1.0"
     repository: "https://shaharby7.github.io/Dope/helm/charts"
     condition: dope-ci.enabled
-  - name: operator
-    version: "5.0.14"
-    alias: "minio"
-    condition: minio.enabled
+  # - name: operator
+  #   version: "5.0.14"
+  #   alias: "minio"
+  #   condition: minio.enabled
