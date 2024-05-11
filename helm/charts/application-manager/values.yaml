@@ -1,0 +1,18 @@
+environment: local
+
+addons:
+  events:
+    enabled: true
+  workflows:
+    enabled: true
+
+sources:
+  fakeprovider:
+    repoURL: https://github.com/shaharby7/CloudyOps.git
+    revision: main
+    targetRevision: main
+    path: applications/charts/fakeprovider
+    helm:
+      releaseName: fakeprovider
+      valueFiles:
+        - ../../values/fakeprovider/values.yaml

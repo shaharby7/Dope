@@ -1,4 +1,4 @@
 image:
   repository: docker.io/local-app1
   pullPolicy: IfNotPresent
-  tag: 3765d5315da41615b39aad649d5b325dd4f9f1ee
+  tag: latest
