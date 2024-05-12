@@ -7,3 +7,13 @@ addons:
     enabled: true
 
 sources:
+  app1:
+    repoURL: https://shaharby7.github.io/Dope/helm/charts
+    targetRevision: 0.1.0
+    chart: application
+    helm:
+      releaseName: app1
+      valueFiles:
+        - https://raw.githubusercontent.com/shaharby7/Dope/example/example/build/helm/values/local/app1/values.yaml
+        - https://raw.githubusercontent.com/shaharby7/Dope/example/example/build/helm/values/local/app1/apps.yaml
+        - https://raw.githubusercontent.com/shaharby7/Dope/example/example/build/helm/values/local/app1/image.yaml

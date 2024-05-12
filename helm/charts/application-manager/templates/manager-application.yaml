@@ -13,7 +13,8 @@ spec:
     helm:
       values:
         environment: {{ .Values.environment }}
-        sources: {{- .Values.sources | toYaml | nindent 7 }}
+        sources: 
+        {{- .Values.sources | toYaml | nindent 7 }}
       releaseName: applications-list
   destination:
     server: "https://kubernetes.default.svc"
