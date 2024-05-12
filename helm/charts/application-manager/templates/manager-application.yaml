@@ -11,10 +11,10 @@ spec:
     chart: "applications-list"
     targetRevision: 0.1.0
     helm:
-      values:
+      values: |
         environment: {{ .Values.environment }}
         sources: 
-        {{- .Values.sources | toYaml | nindent 9 }}
+      {{- .Values.sources | toYaml | nindent 9 }}
       releaseName: applications-list
   destination:
     server: "https://kubernetes.default.svc"
