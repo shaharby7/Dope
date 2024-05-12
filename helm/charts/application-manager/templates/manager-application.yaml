@@ -10,10 +10,10 @@ spec:
     repoURL: https://shaharby7.github.io/Dope/helm/charts
     chart: "applications-list"
     targetRevision: 0.1.0
-    values:
-      environment: {{ .Values.environment }}
-      sources: {{- .Values.sources | toYaml | nindent 7 }}
     helm:
+      values:
+        environment: {{ .Values.environment }}
+        sources: {{- .Values.sources | toYaml | nindent 7 }}
       releaseName: applications-list
   destination:
     server: "https://kubernetes.default.svc"
