@@ -1,18 +1,13 @@
 environment: local
 
-addons:
-  events:
-    enabled: true
-  workflows:
-    enabled: true
-
 sources:
-  fakeprovider:
-    repoURL: https://github.com/shaharby7/CloudyOps.git
-    revision: main
-    targetRevision: main
-    path: applications/charts/fakeprovider
+  app1:
+    repoURL: https://shaharby7.github.io/Dope/helm/charts
+    targetRevision: 0.1.0
+    chart: application
     helm:
-      releaseName: fakeprovider
+      releaseName: app1
       valueFiles:
-        - ../../values/fakeprovider/values.yaml
+        - https://raw.githubusercontent.com/shaharby7/Dope/example/example/build/helm/values/local/app1/values.yaml
+        - https://raw.githubusercontent.com/shaharby7/Dope/example/example/build/helm/values/local/app1/apps.yaml
+        - https://raw.githubusercontent.com/shaharby7/Dope/example/example/build/helm/values/local/app1/image.yaml

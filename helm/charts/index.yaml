@@ -3,7 +3,7 @@ entries:
   application:
   - apiVersion: v2
     appVersion: 0.0.0
-    created: "2024-05-11T19:02:04.563488929+03:00"
+    created: "2024-05-12T22:27:58.952439054+03:00"
     description: A Helm chart for Kubernetes
     digest: a944e6a349df7f0ffea7fac4ecf372d33fc1a556f7d711c431ab47a5e295275d
     name: application
@@ -14,9 +14,9 @@ entries:
   application-manager:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2024-05-11T19:02:04.563675401+03:00"
+    created: "2024-05-12T22:27:58.952655162+03:00"
     description: A Helm chart for Kubernetes
-    digest: 819c85dee4bc20affdfd20929b5227886b2bada5067d47942a48520c86192c4c
+    digest: 2e5fc0c77a6475cb8c2ea42c03fce6d6f0ce3a9b4d9f67ce0be09539ad99c48a
     name: application-manager
     type: application
     urls:
@@ -25,9 +25,9 @@ entries:
   applications-list:
   - apiVersion: v2
     appVersion: 0.0.0
-    created: "2024-05-11T19:02:04.563810266+03:00"
+    created: "2024-05-12T22:27:58.95280123+03:00"
     description: A Helm chart for Kubernetes
-    digest: 42de3fa250ca4a5fefcebc5b1d7ed689d3fb52ff5f0902f4d301ad3e5211b482
+    digest: f1b4b1513130a9b11bc52c4f9c40204f0d25cbf7bc612017a2bdfa436f65b7c7
     name: applications-list
     type: application
     urls:
@@ -36,7 +36,7 @@ entries:
   dope-ci:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2024-05-11T19:02:04.563922398+03:00"
+    created: "2024-05-12T22:27:58.952924477+03:00"
     description: A Helm chart for Kubernetes
     digest: 9b6012197912a85a297fd2ad4f356ed6ad6f8d3d3e781c66e42a0936077d0125
     name: dope-ci
@@ -47,7 +47,7 @@ entries:
   dope-essentials:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2024-05-11T19:02:04.57393951+03:00"
+    created: "2024-05-12T22:27:58.963081331+03:00"
     dependencies:
     - name: argo-cd
       repository: https://argoproj.github.io/argo-helm
@@ -67,4 +67,4 @@ entries:
     urls:
     - https://shaharby7.github.io/Dope/helm/charts/dope-essentials-0.1.0.tgz
     version: 0.1.0
-generated: "2024-05-11T19:02:04.563032646+03:00"
+generated: "2024-05-12T22:27:58.951849358+03:00"
