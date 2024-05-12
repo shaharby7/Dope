@@ -1,4 +1,6 @@
 argo-cd:
+  crds:
+    install: false
   enabled: true
   redis-ha:
     enabled: false
@@ -12,6 +14,8 @@ argo-cd:
     replicaCount: 1
 
 argo-workflows:
+  crds:
+    install: false
   enabled: true
   server:
     extraArgs: [--auth-mode=server]
