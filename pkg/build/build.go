@@ -21,14 +21,12 @@ func BuildProject(projectFile string, dst string) error {
 		return fmt.Errorf("could not generate config from file (%s): %w", projectFile, err)
 	}
 	for _, appConfig := range config.Apps {
-		appDst := ensurePath(dst, appConfig.Name)
-		err = buildSrcFiles(appDst, &config, &appConfig)
+		err = buildSrcFiles(dst, &config, &appConfig)
 		if err != nil {
 			return fmt.Errorf("could not build src files for: %w", err)
 		}
-		err = buildBuildFiles(appDst, &config, &appConfig)
-		if err != nil {
-			return fmt.Errorf("could not build build files for: %w", err)
+		for _, environmentConfig := range config.Environments {
+			err = buildHelmFiles(dst, &config, &appConfig, &environmentConfig)
 		}
 	}
 	return nil
@@ -55,14 +53,15 @@ func getConfigByPath(projectFile string) (types.ProjectConfig, error) {
 	return config, nil
 }
 
-func buildSrcFiles(appDst string, config *types.ProjectConfig, appConfig *types.AppConfig) error {
+func buildSrcFiles(dst string, config *types.ProjectConfig, appConfig *types.AppConfig) error {
+	appDst := ensurePath(dst, appConfig.Name)
 	err := createFileByTemplate(
 		appDst,
 		SRC_FILE_MAIN,
 		&mainFileInput{},
 	)
 	if err != nil {
-		return wrapSrcFileCreationError(appConfig.Name, SRC_FILE_CONTROLLER, err)
+		return wrapSrcFileCreationError(appConfig.Name, SRC_FILE_MAIN, err)
 	}
 	err = createFileByTemplate(
 		appDst,
@@ -74,6 +73,16 @@ func buildSrcFiles(appDst string, config *types.ProjectConfig, appConfig *types.
 	)
 	if err != nil {
 		return wrapSrcFileCreationError(appConfig.Name, SRC_FILE_CONTROLLER, err)
+	}
+	err = createFileByTemplate(
+		appDst,
+		DOCKERFILE,
+		&dockerfileInput{
+			AppName: appConfig.Name,
+		},
+	)
+	if err != nil {
+		return wrapSrcFileCreationError(appConfig.Name, DOCKERFILE, err)
 	}
 	return nil
 }
@@ -113,16 +122,6 @@ func generateControllerInput(
 	}
 }
 
-func buildBuildFiles(appDst string, _ *types.ProjectConfig, appConfig *types.AppConfig) error {
-	err := createFileByTemplate(
-		appDst,
-		DOCKERFILE,
-		&dockerfileInput{
-			AppName: appConfig.Name,
-		},
-	)
-	if err != nil {
-		return wrapSrcFileCreationError(appConfig.Name, DOCKERFILE, err)
-	}
+func buildHelmFiles(dst string, config *types.ProjectConfig, appConfig *types.AppConfig, environmentConfig *types.EnvConfig) error {
 	return nil
 }

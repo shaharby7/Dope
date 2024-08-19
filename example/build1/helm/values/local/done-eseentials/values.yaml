@@ -23,7 +23,7 @@ argo-workflows:
       enabled: true
   controller:
     workflowNamespaces:
-      - dope
+    - dope
     rbac:
       create: true
     clusterWorkflowTemplates:
@@ -43,6 +43,6 @@ application-manager:
       helm:
         releaseName: app1
         valueFiles:
-          - https://raw.githubusercontent.com/shaharby7/Dope/example/example/build/helm/values/local/app1/values.yaml
-          - https://raw.githubusercontent.com/shaharby7/Dope/example/example/build/helm/values/local/app1/apps.yaml
-          - https://raw.githubusercontent.com/shaharby7/Dope/example/example/build/helm/values/local/app1/image.yaml
+        - https://raw.githubusercontent.com/shaharby7/Dope/example/example/build/helm/values/local/app1/values.yaml
+        - https://raw.githubusercontent.com/shaharby7/Dope/example/example/build/helm/values/local/app1/apps.yaml
+        - https://raw.githubusercontent.com/shaharby7/Dope/example/example/build/helm/values/local/app1/image.yaml

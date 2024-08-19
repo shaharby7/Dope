@@ -3,7 +3,7 @@ FROM golang:1.21-alpine3.18 AS build
 WORKDIR /app
 COPY ./ ./
 RUN go mod download
-RUN go build -o /program ./build/src/{{ .AppName }}/docker/Dockerfile
+RUN go build -o /program ./build/src/app1
 
 #######
 FROM build

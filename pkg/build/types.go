@@ -9,7 +9,7 @@ type FILES string
 const (
 	SRC_FILE_MAIN       FILES = "src/main.go"
 	SRC_FILE_CONTROLLER FILES = "src/controllers.go"
-	DOCKERFILE          FILES = "docker/Dockerfile"
+	DOCKERFILE          FILES = "src/Dockerfile"
 )
 
 type mainFileInput struct {
