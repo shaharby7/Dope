@@ -47,6 +47,7 @@ environments:
     debug:
       enabled: true
       port: 4000
+      
   dope-essentials:
     argo-cd:
       enabled: true
