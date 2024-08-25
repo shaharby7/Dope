@@ -16,6 +16,10 @@ func (s *Set[V]) Exists(val V) bool {
 	return s.data[val]
 }
 
+func (s *Set[V]) Size() int {
+	return len(s.data)
+}
+
 func (s *Set[V]) ToSlice() []V {
 	i := 0
 	keys := make([]V, len(s.data))

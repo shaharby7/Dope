@@ -14,11 +14,11 @@ import (
 
 var validate = validator.New(validator.WithRequiredStructEnabled())
 
-func BuildProject(projectFile string, dst string) error {
+func BuildProject(projPath string, dst string) error {
 	loadTemplates()
-	config, err := getConfigByPath(projectFile)
+	config, err := getConfigByPath(projPath)
 	if err != nil {
-		return fmt.Errorf("could not generate config from file (%s): %w", projectFile, err)
+		return fmt.Errorf("could not generate config from file (%s): %w", projPath, err)
 	}
 	for _, appConfig := range config.Apps {
 		err = buildSrcFiles(dst, &config, &appConfig)

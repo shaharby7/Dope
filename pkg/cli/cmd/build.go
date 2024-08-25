@@ -1,16 +1,25 @@
 package cmd
 
 import (
-	"fmt"
-
+	"github.com/shaharby7/Dope/pkg/build"
 	"github.com/spf13/cobra"
 )
 
+var projPath string
+var dst string
+
+func init() {
+	cmdRoot.AddCommand(cmdBuild)
+	cmdBuild.Flags().StringVarP(&projPath, "path", "p", "./project.dope.yaml", "path to project file")
+	cmdBuild.Flags().StringVarP(&dst, "destination", "d", "./build", "destination of the build files")
+}
+
 var cmdBuild = &cobra.Command{
-	Use:   "build [ args ]",
+	Use:   "build",
 	Short: "build the project",
-	Long:  `build different stages of the project.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("starting to build...")
+	Long:  `builds different stages of the project.`,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		err := build.BuildProject(projPath, dst)
+		return err
 	},
 }

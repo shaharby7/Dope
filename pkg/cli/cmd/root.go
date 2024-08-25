@@ -9,20 +9,19 @@ import (
 	"runtime/debug"
 )
 
-var rootCmd = &cobra.Command{
+func init() {
+}
+
+var cmdRoot = &cobra.Command{
 	Use:   "dope",
-	Short: "Dope cli helps managing projects built with dope",
+	Short: "Dope cli helps maenaging projects built with dope",
 	Long:  "Dope (github.com/shaharby7/Dope) is a framework designated for golang microservices architecture on kubernetes.\nThis cli is designated to ease the process of creating and maintaining projects build with Dope",
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Print("hi!")
-	},
 }
 
 func Execute() {
-	rootCmd.AddCommand(cmdBuild)
 	info, _ := debug.ReadBuildInfo()
-	rootCmd.Version= info.Main.Version
-	if err := rootCmd.Execute(); err != nil {
+	cmdRoot.Version = info.Main.Version // TODO: add actual version :( https://github.com/golang/go/issues/50603
+	if err := cmdRoot.Execute(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
