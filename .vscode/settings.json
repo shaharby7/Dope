@@ -6,9 +6,11 @@
         "Controllerserver",
         "dopeexample",
         "Errorable",
+        "HADAS",
         "httprouter",
         "julienschmidt",
         "loggable",
+        "SHAHAR",
         "shaharby"
     ]
 }

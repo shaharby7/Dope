@@ -1,4 +1,4 @@
-package build
+package files
 
 import (
 	"embed"
@@ -15,16 +15,16 @@ const (
 
 var (
 	//go:embed templates/*
-	files     embed.FS
+	oFiles    embed.FS
 	templates map[TEMPLATE_FILES]*template.Template
 )
 
-func loadTemplates() {
+func init() {
 	if templates == nil {
 		templates = make(map[TEMPLATE_FILES]*template.Template)
 	}
 	err := fs.WalkDir(
-		files,
+		oFiles,
 		".",
 		func(path string, dirEntry fs.DirEntry, err error) error {
 			if err != nil {
@@ -34,7 +34,7 @@ func loadTemplates() {
 				return nil
 			}
 			pt, err := template.ParseFS(
-				files,
+				oFiles,
 				path,
 			)
 			if err != nil {

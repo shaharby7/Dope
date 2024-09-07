@@ -1,27 +1,12 @@
 package build
 
 import (
-	"bytes"
 	"fmt"
 	"os"
 	"path"
-)
 
-func generateFileByTemplate[FileData any](
-	basePath string,
-	tmpl TEMPLATE_FILES,
-	fileData *FileData,
-) (*BuiltFile, error) {
-	filePath := path.Join(basePath, string(tmpl))
-	content := &bytes.Buffer{}
-	err := getTemplate(tmpl).Execute(content, fileData)
-	if err != nil {
-		return nil, fmt.Errorf("could not parse template (%s): %w", tmpl, err)
-	}
-	return &BuiltFile{
-		Path:    filePath,
-		Content: content.String()}, nil
-}
+	"github.com/shaharby7/Dope/pkg/build/files"
+)
 
 func ensurePath(args ...string) string {
 	p := path.Join(args...)
@@ -29,7 +14,7 @@ func ensurePath(args ...string) string {
 	return p
 }
 
-func writeFiles(files []*BuiltFile) error {
+func writeFiles(files []*files.OutputFile) error {
 	for _, file := range files {
 		err := writeFile(file)
 		if err != nil {
@@ -39,7 +24,7 @@ func writeFiles(files []*BuiltFile) error {
 	return nil
 }
 
-func writeFile(file *BuiltFile) error {
+func writeFile(file *files.OutputFile) error {
 	ensurePath(path.Dir(file.Path))
 	fileRef, err := os.Create(file.Path)
 	if err != nil {

@@ -19,7 +19,7 @@ var cmdBuild = &cobra.Command{
 	Short: "build the project",
 	Long:  `builds different stages of the project.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		err := build.BuildProject(projPath, dst)
+		err := build.BuildProject(projPath, dst, build.BuildOptions{})
 		return err
 	},
 }

@@ -1,14 +1,14 @@
-package build
+package files
 
 import (
 	"fmt"
 	"path"
 
-	"github.com/shaharby7/Dope/pkg/utils"
+	"github.com/shaharby7/Dope/pkg/utils/set"
 	"github.com/shaharby7/Dope/types"
 )
 
-func buildSrcFiles(dst string, config *types.ProjectConfig, appConfig *types.AppConfig) ([]*BuiltFile, error) {
+func generateSrcFiles(dst string, config *types.ProjectConfig, appConfig *types.AppConfig) ([]*OutputFile, error) {
 	appDst := path.Join(dst, appConfig.Name)
 	mainFile, err := generateFileByTemplate(
 		appDst,
@@ -29,24 +29,14 @@ func buildSrcFiles(dst string, config *types.ProjectConfig, appConfig *types.App
 	if err != nil {
 		return nil, err
 	}
-	dockerFile, err := generateFileByTemplate(
-		appDst,
-		DOCKERFILE,
-		&dockerfileInput{
-			AppName: appConfig.Name,
-		},
-	)
-	if err != nil {
-		return nil, err
-	}
-	return []*BuiltFile{mainFile, controllerFile, dockerFile}, nil
+	return []*OutputFile{mainFile, controllerFile}, nil
 }
 
 func generateControllerInput(
 	config *types.ProjectConfig,
 	appConfig *types.AppConfig,
 ) *controllerFileInput {
-	imports := utils.NewSet[string]()
+	imports := set.NewSet[string]()
 	controllers := []*controllerInput{}
 	for _, controllerConfig := range appConfig.Controllers {
 		controller := &controllerInput{
@@ -64,7 +54,7 @@ func generateControllerInput(
 				Caller: fmt.Sprintf(
 					"%s.%s", path.Base(actionConfig.Package), actionConfig.Ref,
 				),
-				ControllerBinding: actionConfig.ControllerBinding,
+				ControllerBinding: &actionConfig.ControllerBinding,
 			}
 			controller.Actions = append(controller.Actions, action)
 		}

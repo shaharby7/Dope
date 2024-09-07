@@ -1,42 +1,14 @@
 package build
 
-import (
-	"github.com/shaharby7/Dope/types"
-)
+type BuildOptions struct {
+	Apps   []string
+	Envs   []string
+	Stages []BuildStage
+}
 
-type TEMPLATE_FILES string
+type BuildStage string
 
 const (
-	SRC_FILE_MAIN       TEMPLATE_FILES = "src/main.go"
-	SRC_FILE_CONTROLLER TEMPLATE_FILES = "src/controllers.go"
-	DOCKERFILE          TEMPLATE_FILES = "src/Dockerfile"
+	BuildStage_FILES  BuildStage = "files"
+	BuildStage_DOCKER BuildStage = "docker"
 )
-
-type BuiltFile struct {
-	Path    string
-	Content string
-}
-
-type mainFileInput struct {
-}
-
-type controllerFileInput struct {
-	Imports     []string
-	Controllers []*controllerInput
-}
-
-type controllerInput struct {
-	Name       string
-	Identifier string
-	Type       types.ControllerType `validate:"required"`
-	Actions    []*actionInput
-}
-type actionInput struct {
-	Name              string
-	Caller            string
-	ControllerBinding *types.ControllerBinding
-}
-
-type dockerfileInput struct {
-	AppName string
-}

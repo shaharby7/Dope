@@ -1,5 +1,9 @@
 package types
 
+import (
+	kApiV1 "k8s.io/api/core/v1"
+)
+
 type ProjectConfig struct {
 	DopeVersion  string `validate:"required" yaml:"dopeVersion"`
 	Metadata     ProjectMetadataConfig
@@ -30,58 +34,53 @@ type ControllersConfig struct {
 type ActionConfig struct {
 	Name              string `validate:"required"`
 	Description       string
-	Package           string             `validate:"required"`
-	Ref               string             `validate:"required"`
-	ControllerBinding *ControllerBinding `yaml:"controllerBinding"`
+	Package           string            `validate:"required"`
+	Ref               string            `validate:"required"`
+	ControllerBinding ControllerBinding `yaml:"controllerBinding"`
 }
 
 type EnvConfig struct {
-	Name        string `validate:"required"`
-	Description string
-	Provider    string `validate:"required"`
+	Name     string `validate:"required"`
+	Provider string `validate:"required"`
+	Apps     []AppEnvConfig
 }
 
-// environments:
-//   - name: local
-//     provider: minikube
-//     branch: example
-//     apps:
-//       - name: "app1"
-//         repository: docker.io/shaharby7/app1-local
-//         env:
-//           UGLY_NAMES: "shahar,danny"
-//         resources:
-//           requests:
-//             cpu: 1
-//             memory: 2GB
-//           limits:
-//             cpu: 2
-//             memory: 4GB
-//     dope-essentials:
-//       argo-cd:
-//         enabled: true
-//         redis-ha:
-//           enabled: false
-//         controller:
-//           replicas: 1
-//         server:
-//           replicas: 1
-//         repoServer:
-//           replicas: 1
-//         applicationSet:
-//           replicaCount: 1
-//       argo-workflows:
-//         enabled: true
-//         server:
-//           extraArgs: [--auth-mode=server]
-//           clusterWorkflowTemplates:
-//             enabled: true
-//         controller:
-//           workflowNamespaces:
-//             - dope
-//           rbac:
-//             create: true
-//           clusterWorkflowTemplates:
-//             enabled: true
-//       dope-ci:
-//         enabled: true
+type AppEnvConfig struct {
+	Name     string
+	Registry string
+	Values   AppHelmValues
+}
+
+type AppHelmValues struct {
+	Env       []EnvVar
+	Replicas  uint32
+	Resources ResourceRequirements
+	Debug     DebugOptions
+}
+
+type ResourceRequirements struct {
+	Limits   ResourceList
+	Requests ResourceList
+}
+
+type ResourceList map[ResourceName]ResourceQuantity
+
+type ResourceName string
+
+const (
+	ResourceCPU              ResourceName = "cpu"
+	ResourceMemory           ResourceName = "memory"
+	ResourceStorage          ResourceName = "storage"
+	ResourceEphemeralStorage ResourceName = "ephemeral-storage"
+)
+
+type ResourceQuantity string
+
+type DebugOptions struct {
+	Enabled   bool
+	DebugPort Port
+}
+
+type Port uint32
+
+type EnvVar = kApiV1.EnvVar
