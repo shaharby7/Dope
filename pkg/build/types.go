@@ -4,13 +4,18 @@ import (
 	"github.com/shaharby7/Dope/types"
 )
 
-type FILES string
+type TEMPLATE_FILES string
 
 const (
-	SRC_FILE_MAIN       FILES = "src/main.go"
-	SRC_FILE_CONTROLLER FILES = "src/controllers.go"
-	DOCKERFILE          FILES = "src/Dockerfile"
+	SRC_FILE_MAIN       TEMPLATE_FILES = "src/main.go"
+	SRC_FILE_CONTROLLER TEMPLATE_FILES = "src/controllers.go"
+	DOCKERFILE          TEMPLATE_FILES = "src/Dockerfile"
 )
+
+type BuiltFile struct {
+	Path    string
+	Content string
+}
 
 type mainFileInput struct {
 }

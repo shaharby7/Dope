@@ -16,12 +16,12 @@ const (
 var (
 	//go:embed templates/*
 	files     embed.FS
-	templates map[FILES]*template.Template
+	templates map[TEMPLATE_FILES]*template.Template
 )
 
 func loadTemplates() {
 	if templates == nil {
-		templates = make(map[FILES]*template.Template)
+		templates = make(map[TEMPLATE_FILES]*template.Template)
 	}
 	err := fs.WalkDir(
 		files,
@@ -40,7 +40,7 @@ func loadTemplates() {
 			if err != nil {
 				return fmt.Errorf("could not parse (%s):%w", path, err)
 			}
-			tmplName := FILES(strings.Replace(
+			tmplName := TEMPLATE_FILES(strings.Replace(
 				strings.Replace(path, extension, "", 1),
 				templatesDir+"/",
 				"",
@@ -55,7 +55,7 @@ func loadTemplates() {
 	}
 }
 
-func getTemplate(tmplName FILES) *template.Template {
+func getTemplate(tmplName TEMPLATE_FILES) *template.Template {
 	tmpl := templates[tmplName]
 	if tmpl == nil {
 		panic(fmt.Errorf("could not find template %s", tmplName))

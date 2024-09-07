@@ -5,12 +5,29 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "build example",
+            "name": "build",
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "${workspaceFolder}/main",
-            "cwd": "${workspaceFolder}"
+            "program": "${workspaceFolder}/pkg/cli",
+            "cwd": "${workspaceFolder}",
+            "args": [
+                "build",
+                "-p",
+                "./example/project.dope.yaml",
+                "-d",
+                "./example/hi"
+            ]
+        },
+        {
+            "name": "test pkg",
+            "type": "go",
+            "request": "launch",
+            "mode": "test",
+            "program": "${fileDirname}",
+            "env": {},
+            "args": [],
+            "showLog": true
         },
         {
             "name": "run example",
@@ -20,9 +37,9 @@
             "program": "./example/build/src/app1",
             "cwd": "${workspaceFolder}/example",
             "env": {
-                "DOPE_CONTROLLER":"server1",
-                "DOPE_HTTPSERVER_PORT":"3000",
-                "UGLY_NAMES":"shahar"
+                "DOPE_CONTROLLER": "server1",
+                "DOPE_HTTPSERVER_PORT": "3000",
+                "UGLY_NAMES": "shahar"
             }
         }
     ]
