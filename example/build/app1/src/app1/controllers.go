@@ -20,7 +20,7 @@ var Controller_server1 = controller.NewHTTPServer(
             
 			&types.ActionConfig{
 				Name: "/api/greet",
-				ControllerBinding: &types.ControllerBinding{
+				ControllerBinding: map[string]string{
 					"method":"POST",
 				},
 			},

@@ -9,7 +9,7 @@ func generateRootFiles(
 	dst string,
 	_ *types.ProjectConfig,
 ) ([]*OutputFile, error) {
-	dockerfile, err := generateFileByTemplate[any](
+	dockerfile, err := generateFileByTemplate[any, any](
 		dst, DOCKERFILE, nil,
 	)
 	if err != nil {

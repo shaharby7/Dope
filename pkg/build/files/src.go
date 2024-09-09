@@ -13,7 +13,12 @@ func generateSrcFiles(dst string, config *types.ProjectConfig, appConfig *types.
 	mainFile, err := generateFileByTemplate(
 		appDst,
 		SRC_FILE_MAIN,
-		&mainFileInput{},
+		&FileGenerationInput[*MainFileData, MainFileArgPath]{
+			Params: struct{ Path MainFileArgPath }{
+				Path: MainFileArgPath{App: appConfig.Name},
+			},
+			Data: nil,
+		},
 	)
 	if err != nil {
 		return nil, err
@@ -21,10 +26,15 @@ func generateSrcFiles(dst string, config *types.ProjectConfig, appConfig *types.
 	controllerFile, err := generateFileByTemplate(
 		appDst,
 		SRC_FILE_CONTROLLER,
-		generateControllerInput(
-			config,
-			appConfig,
-		),
+		&FileGenerationInput[*MainControllerFileData, MainFileArgPath]{
+			Params: struct{ Path MainFileArgPath }{
+				Path: MainFileArgPath{App: appConfig.Name},
+			},
+			Data: generateControllerData(
+				config,
+				appConfig,
+			),
+		},
 	)
 	if err != nil {
 		return nil, err
@@ -32,10 +42,10 @@ func generateSrcFiles(dst string, config *types.ProjectConfig, appConfig *types.
 	return []*OutputFile{mainFile, controllerFile}, nil
 }
 
-func generateControllerInput(
+func generateControllerData(
 	config *types.ProjectConfig,
 	appConfig *types.AppConfig,
-) *controllerFileInput {
+) *MainControllerFileData {
 	imports := set.NewSet[string]()
 	controllers := []*controllerInput{}
 	for _, controllerConfig := range appConfig.Controllers {
@@ -61,7 +71,7 @@ func generateControllerInput(
 		controllers = append(controllers, controller)
 	}
 
-	return &controllerFileInput{
+	return &MainControllerFileData{
 		Imports:     imports.ToSlice(),
 		Controllers: controllers,
 	}

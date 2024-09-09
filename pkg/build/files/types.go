@@ -7,20 +7,36 @@ import (
 type TEMPLATE_FILES string
 
 const (
-	SRC_FILE_MAIN       TEMPLATE_FILES = "src/main.go"
-	SRC_FILE_CONTROLLER TEMPLATE_FILES = "src/controllers.go"
+	SRC_FILE_MAIN       TEMPLATE_FILES = "src/{{.App}}/main.go"
+	SRC_FILE_CONTROLLER TEMPLATE_FILES = "src/{{.App}}/controllers.go"
 	DOCKERFILE          TEMPLATE_FILES = "Dockerfile"
 )
+
+// type FileInput struct {
+// 	Name TEMPLATE_FILES
+// 	Template tem
+// }
 
 type OutputFile struct {
 	Path    string
 	Content string
 }
 
-type mainFileInput struct {
+type FileGenerationInput[FileData any, PathArgs any] struct {
+	Params struct {
+		Path PathArgs
+	}
+	Data FileData
 }
 
-type controllerFileInput struct {
+type MainFileData struct {
+}
+
+type MainFileArgPath struct{
+	App string
+}
+
+type MainControllerFileData struct {
 	Imports     []string
 	Controllers []*controllerInput
 }
