@@ -14,9 +14,9 @@ func ensurePath(args ...string) string {
 	return p
 }
 
-func writeFiles(files []*files.OutputFile) error {
+func writeFiles(dst string, files []*files.OutputFile) error {
 	for _, file := range files {
-		err := writeFile(file)
+		err := writeFile(dst, file)
 		if err != nil {
 			return err
 		}
@@ -24,16 +24,17 @@ func writeFiles(files []*files.OutputFile) error {
 	return nil
 }
 
-func writeFile(file *files.OutputFile) error {
-	ensurePath(path.Dir(file.Path))
-	fileRef, err := os.Create(file.Path)
+func writeFile(dst string, file *files.OutputFile) error {
+	absPath := path.Join(dst, file.Path)
+	ensurePath(path.Dir(absPath))
+	fileRef, err := os.Create(absPath)
 	if err != nil {
-		return fmt.Errorf("could not open file %s: %w", file.Path, err)
+		return fmt.Errorf("could not open file %s: %w", absPath, err)
 	}
 	defer fileRef.Close()
 	_, err = fileRef.Write([]byte(file.Content))
 	if err != nil {
-		return fmt.Errorf("could not write file (%s): %w", file.Path, err)
+		return fmt.Errorf("could not write file (%s): %w", absPath, err)
 	}
 	return nil
 }

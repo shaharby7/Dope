@@ -7,7 +7,6 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/shaharby7/Dope/pkg/utils"
-	"github.com/shaharby7/Dope/pkg/utils/set"
 
 	"github.com/shaharby7/Dope/pkg/build/files"
 	"github.com/shaharby7/Dope/types"
@@ -24,7 +23,6 @@ func BuildProject(projPath string, dst string, options BuildOptions) error {
 	appsList := getApplicationsList(config, &options)
 	envsList := getEnvironmentList(config, &options)
 
-
 	outputFiles, err := files.GenerateFiles(
 		dst, config, appsList, envsList,
 	)
@@ -34,7 +32,7 @@ func BuildProject(projPath string, dst string, options BuildOptions) error {
 			err,
 		)
 	}
-	err = writeFiles(outputFiles)
+	err = writeFiles(dst, outputFiles)
 	if err != nil {
 		return fmt.Errorf("could not write files: %w", err)
 	}
@@ -66,15 +64,14 @@ func getApplicationsList(config *types.ProjectConfig, buildOptions *BuildOptions
 	if len(buildOptions.Apps) > 0 {
 		return buildOptions.Apps
 	}
-	return set.NewSet(
-		set.OptionFromSlice(utils.Map(config.Apps, func(app types.AppConfig) string { return app.Name }))).ToSlice()
+	appsList, _ := utils.Map(config.Apps, func(app types.AppConfig) (string, error) { return app.Name, nil })
+	return utils.RemoveDuplicates(appsList)
 }
 
 func getEnvironmentList(config *types.ProjectConfig, buildOptions *BuildOptions) []string {
 	if len(buildOptions.Envs) > 0 {
 		return buildOptions.Apps
 	}
-	return set.NewSet(
-		set.OptionFromSlice(
-			utils.Map(config.Environments, func(env types.EnvConfig) string { return env.Name }))).ToSlice()
+	envsList, _ := utils.Map(config.Environments, func(env types.EnvConfig) (string, error) { return env.Name, nil })
+	return utils.RemoveDuplicates(envsList)
 }

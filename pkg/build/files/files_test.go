@@ -1,8 +1,10 @@
 package files
 
 import (
+	"slices"
 	"testing"
 
+	"github.com/shaharby7/Dope/pkg/utils"
 	"github.com/shaharby7/Dope/types"
 	"github.com/stretchr/testify/assert"
 )
@@ -77,10 +79,13 @@ var (
 	}
 )
 
-func TestHelmFiles(t *testing.T) {
+func Test_HelmFiles(t *testing.T) {
 	files, err := GenerateFiles(
-		DST, &PROJECT_CONFIG, []string{}, []string{},
+		DST, &PROJECT_CONFIG, []string{"test-app"}, []string{"local"},
 	)
 	assert.Nil(t, err)
-	assert.True(t, len(files) > 0) //TODO
+	paths, _ := utils.Map(files, func(file *OutputFile) (string, error) { return file.Path, nil })
+	assert.True(t, slices.Contains(paths, "src/test-app/controllers.go"))
+	assert.True(t, slices.Contains(paths, "src/test-app/main.go"))
+	assert.True(t, slices.Contains(paths, "Dockerfile"))
 }

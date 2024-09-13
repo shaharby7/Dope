@@ -3,16 +3,27 @@ package utils
 import (
 	"fmt"
 	"os"
+	"reflect"
 
 	"github.com/shaharby7/Dope/types"
+
+	"github.com/shaharby7/Dope/pkg/utils/set"
 )
 
-func Map[T, V any](ts []T, fn func(T) V) []V {
+type TEmpty struct{}
+
+var Empty TEmpty = TEmpty{}
+
+func Map[T, V any](ts []T, fn func(T) (V, error)) ([]V, error) {
 	result := make([]V, len(ts))
 	for i, t := range ts {
-		result[i] = fn(t)
+		val, err := fn(t)
+		if err != nil {
+			return nil, err
+		}
+		result[i] = val
 	}
-	return result
+	return result, nil
 }
 
 func Find[T any](ts []T, fn func(T) bool) (bool, *T) {
@@ -24,12 +35,23 @@ func Find[T any](ts []T, fn func(T) bool) (bool, *T) {
 	return false, nil
 }
 
+func RemoveDuplicates[V comparable](vSlice []V) []V {
+	return set.NewSet(
+		set.OptionFromSlice(vSlice),
+	).ToSlice()
+
+}
+
 func Getenv(name types.ENV_VARS, defaultVal string) string {
 	val := os.Getenv(string(name))
 	if val == "" {
 		return defaultVal
 	}
 	return val
+}
+
+func IsEmpty[T any](t T) bool {
+	return reflect.ValueOf(t).IsZero()
 }
 
 func GetFromMapWithDefault[T any](m map[string]T, key string, fallback T) T {

@@ -14,40 +14,35 @@ func GenerateFiles(
 	appsList []string,
 	envsList []string,
 ) ([]*OutputFile, error) {
-	files, err := generateRootFiles(dst, config)
-	if err != nil {
-		return nil, utils.FailedBecause("generate root files", err)
-	}
+	generators := rooFilesGenGen(config)
 	for _, app := range appsList {
 		appConf, err := buildUtils.GetAppConfig(config, app)
 		if err != nil {
-			return files, err
+			return nil, utils.FailedBecause("get app config", err)
 		}
-		srcFiles, err := generateSrcFiles(
-			dst,
+		srcFiles := srcFilesGenGen(
 			config,
 			appConf,
 		)
-		if err != nil {
-			return files, utils.FailedBecause("generating source files", err)
-		}
-		files = append(files, srcFiles...)
+		generators = append(generators, srcFiles...)
 		for _, env := range envsList {
 			appEnvConf, err := buildUtils.GetAppEnvConfig(config, env, app)
 			if err != nil {
-				return files, err
+				return nil, err
 			}
-			helmFiles, err := generateHelmFiles(
-				dst,
+			helmFiles := helmFilesGenGen(
 				config,
 				appConf,
 				appEnvConf,
 			)
-			if err != nil {
-				return files, utils.FailedBecause("generating helm files", err)
-			}
-			files = append(files, helmFiles...)
+			generators = append(generators, helmFiles...)
 		}
+	}
+	files, err := utils.Map(generators, func(g iFileGenerator) (*OutputFile, error) {
+		return g.Generate()
+	})
+	if err != nil {
+		return nil, utils.FailedBecause("generate files", err)
 	}
 	return files, nil
 }

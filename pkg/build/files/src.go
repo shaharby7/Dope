@@ -4,42 +4,31 @@ import (
 	"fmt"
 	"path"
 
+	"github.com/shaharby7/Dope/pkg/utils"
 	"github.com/shaharby7/Dope/pkg/utils/set"
 	"github.com/shaharby7/Dope/types"
 )
 
-func generateSrcFiles(dst string, config *types.ProjectConfig, appConfig *types.AppConfig) ([]*OutputFile, error) {
-	appDst := path.Join(dst, appConfig.Name)
-	mainFile, err := generateFileByTemplate(
-		appDst,
-		SRC_FILE_MAIN,
-		&FileGenerationInput[*MainFileData, MainFileArgPath]{
-			Params: struct{ Path MainFileArgPath }{
-				Path: MainFileArgPath{App: appConfig.Name},
-			},
-			Data: nil,
-		},
+type appPathArgs struct {
+	App string
+}
+
+func srcFilesGenGen(config *types.ProjectConfig, appConfig *types.AppConfig) []iFileGenerator {
+	pathArgs := &appPathArgs{App: appConfig.Name}
+	mainFile := newFileGenerator(
+		templateId_SRC_FILE_MAIN,
+		pathArgs,
+		utils.Empty,
 	)
-	if err != nil {
-		return nil, err
-	}
-	controllerFile, err := generateFileByTemplate(
-		appDst,
-		SRC_FILE_CONTROLLER,
-		&FileGenerationInput[*MainControllerFileData, MainFileArgPath]{
-			Params: struct{ Path MainFileArgPath }{
-				Path: MainFileArgPath{App: appConfig.Name},
-			},
-			Data: generateControllerData(
-				config,
-				appConfig,
-			),
-		},
+	controllerFile := newFileGenerator(
+		templateId_SRC_FILE_CONTROLLER,
+		pathArgs,
+		generateControllerData(
+			config,
+			appConfig,
+		),
 	)
-	if err != nil {
-		return nil, err
-	}
-	return []*OutputFile{mainFile, controllerFile}, nil
+	return []iFileGenerator{mainFile, controllerFile}
 }
 
 func generateControllerData(
