@@ -1,52 +1,41 @@
-package build
+package files
 
 import (
 	"fmt"
 	"path"
 
 	"github.com/shaharby7/Dope/pkg/utils"
+	"github.com/shaharby7/Dope/pkg/utils/set"
 	"github.com/shaharby7/Dope/types"
 )
 
-func buildSrcFiles(dst string, config *types.ProjectConfig, appConfig *types.AppConfig) ([]*BuiltFile, error) {
-	appDst := path.Join(dst, appConfig.Name)
-	mainFile, err := generateFileByTemplate(
-		appDst,
-		SRC_FILE_MAIN,
-		&mainFileInput{},
+type appPathArgs struct {
+	App string
+}
+
+func srcFilesGenGen(config *types.ProjectConfig, appConfig *types.AppConfig) []iFileGenerator {
+	pathArgs := &appPathArgs{App: appConfig.Name}
+	mainFile := newFileGenerator(
+		templateId_SRC_FILE_MAIN,
+		pathArgs,
+		utils.Empty,
 	)
-	if err != nil {
-		return nil, err
-	}
-	controllerFile, err := generateFileByTemplate(
-		appDst,
-		SRC_FILE_CONTROLLER,
-		generateControllerInput(
+	controllerFile := newFileGenerator(
+		templateId_SRC_FILE_CONTROLLER,
+		pathArgs,
+		generateControllerData(
 			config,
 			appConfig,
 		),
 	)
-	if err != nil {
-		return nil, err
-	}
-	dockerFile, err := generateFileByTemplate(
-		appDst,
-		DOCKERFILE,
-		&dockerfileInput{
-			AppName: appConfig.Name,
-		},
-	)
-	if err != nil {
-		return nil, err
-	}
-	return []*BuiltFile{mainFile, controllerFile, dockerFile}, nil
+	return []iFileGenerator{mainFile, controllerFile}
 }
 
-func generateControllerInput(
+func generateControllerData(
 	config *types.ProjectConfig,
 	appConfig *types.AppConfig,
-) *controllerFileInput {
-	imports := utils.NewSet[string]()
+) *MainControllerFileData {
+	imports := set.NewSet[string]()
 	controllers := []*controllerInput{}
 	for _, controllerConfig := range appConfig.Controllers {
 		controller := &controllerInput{
@@ -64,14 +53,14 @@ func generateControllerInput(
 				Caller: fmt.Sprintf(
 					"%s.%s", path.Base(actionConfig.Package), actionConfig.Ref,
 				),
-				ControllerBinding: actionConfig.ControllerBinding,
+				ControllerBinding: &actionConfig.ControllerBinding,
 			}
 			controller.Actions = append(controller.Actions, action)
 		}
 		controllers = append(controllers, controller)
 	}
 
-	return &controllerFileInput{
+	return &MainControllerFileData{
 		Imports:     imports.ToSlice(),
 		Controllers: controllers,
 	}

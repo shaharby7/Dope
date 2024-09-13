@@ -46,7 +46,7 @@ func NewHTTPServer(actions []*types.TypedAction) *HTTPServer {
 	for _, action := range actions {
 		actionConfig := action.Config
 		handler := generateRouteHandler(action)
-		method := utils.GetFromMapWithDefault(*actionConfig.ControllerBinding, "method", "GET")
+		method := utils.GetFromMapWithDefault(actionConfig.ControllerBinding, "method", "GET")
 		router.Handle(
 			method,
 			actionConfig.Name,

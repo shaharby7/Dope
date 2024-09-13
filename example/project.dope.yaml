@@ -33,21 +33,23 @@ environments:
   branch: example
   apps:
   - name: "app1"
-    repository: docker.io/shaharby7/app1-local
-    env:
-    - name: UGLY_NAMES
-      value: "shahar,danny"
-    resources:
-      requests:
-        cpu: 1
-        memory: 2GB
-      limits:
-        cpu: 2
-        memory: 4GB
-    debug:
-      enabled: true
-      port: 4000
-      
+    Registry: docker.io/shaharby7/app1-local
+    values:
+      env:
+      - name: UGLY_NAMES
+        value: "shahar,danny"
+      replicas: 3
+      resources:
+        requests:
+          cpu: 1
+          memory: 2GB
+        limits:
+          cpu: 2
+          memory: 4GB
+      debug:
+        enabled: true
+        port: 4000
+
   dope-essentials:
     argo-cd:
       enabled: true

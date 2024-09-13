@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	d "github.com/shaharby7/Dope/types"
-	// "github.com/shaharby7/dopeexample/types"
 )
 
 type GreetInput struct {
@@ -38,5 +37,3 @@ func Greet(
 		Greet: greet,
 	}, &d.ActionOutputMetadata{HTTPServer: &d.HTTPServerResponseConfig{StatusCode: 200}}, nil
 }
-
-// func CreateTypedAction[In any, Out any](config *ActionConfig, action Action[In, Out]) *TypedAction {

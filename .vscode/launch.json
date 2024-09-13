@@ -16,7 +16,7 @@
                 "-p",
                 "./example/project.dope.yaml",
                 "-d",
-                "./example/hi"
+                "./example/build"
             ]
         },
         {
