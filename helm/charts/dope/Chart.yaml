@@ -24,20 +24,18 @@ version: 0.1.0
 appVersion: "1.16.0"
 
 dependencies:
-  - name: argo-cd
-    version: "6.8.1"
-    repository: "https://argoproj.github.io/argo-helm"
-    condition: providers.argo-cd.managed
-    alias: providers.argo-cd.values
-  - name: argo-workflows
-    version: "0.41.4"
-    repository: "https://argoproj.github.io/argo-helm"
-    condition: providers.argo-workflows.managed
-    alias: providers.argo-workflows.values
-  - name: dope-ci
-    version: "0.1.0"
-    repository: "https://shaharby7.github.io/Dope/helm/charts"
-  # - name: operator
-  #   version: "5.0.14"
-  #   alias: "minio"
-  #   condition: minio.enabled
+- name: argo-cd
+  version: "6.8.1"
+  repository: "https://argoproj.github.io/argo-helm"
+  condition: providers.argo-cd.managed
+- name: argo-workflows
+  version: "0.41.4"
+  repository: "https://argoproj.github.io/argo-helm"
+  condition: providers.argo-workflows.managed
+- name: argo-crds
+  version: "0.1.0"
+  repository: "https://shaharby7.github.io/Dope/helm/charts"
+  condition: providers.argo-cd.managed
+- name: dope-ci
+  version: "0.1.0"
+  repository: "https://shaharby7.github.io/Dope/helm/charts"

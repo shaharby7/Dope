@@ -2,14 +2,14 @@ dependencies:
 - name: argo-cd
   repository: https://argoproj.github.io/argo-helm
   version: 6.8.1
-- name: application-manager
-  repository: https://shaharby7.github.io/Dope/helm/charts
-  version: 0.1.0
 - name: argo-workflows
   repository: https://argoproj.github.io/argo-helm
   version: 0.41.4
+- name: argo-crds
+  repository: https://shaharby7.github.io/Dope/helm/charts
+  version: 0.1.0
 - name: dope-ci
   repository: https://shaharby7.github.io/Dope/helm/charts
   version: 0.1.0
-digest: sha256:9e5c8a8e30e252d68868baff167188e55c97eff59eee0226d66e34a8fb86f9d7
-generated: "2024-05-12T21:30:33.3003554+03:00"
+digest: sha256:8f9ae6895e399b6336cbf883866455bc459601df212efd7ed72f23d7497461e4
+generated: "2024-09-18T23:40:44.369138087+03:00"
