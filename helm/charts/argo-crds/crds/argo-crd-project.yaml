@@ -7,7 +7,6 @@ metadata:
     app.kubernetes.io/name: appprojects.argoproj.io
     app.kubernetes.io/part-of: argocd
   name: appprojects.argoproj.io
-  namespace: {{ .Release.Namespace }}
 spec:
   group: argoproj.io
   names:
