@@ -1,42 +1,55 @@
 apiVersion: v1
 entries:
-  application:
+  app:
   - apiVersion: v2
     appVersion: 0.0.0
-    created: "2024-05-12T22:27:58.952439054+03:00"
+    created: "2024-09-18T23:23:59.076117127+03:00"
     description: A Helm chart for Kubernetes
-    digest: a944e6a349df7f0ffea7fac4ecf372d33fc1a556f7d711c431ab47a5e295275d
-    name: application
+    digest: 5acdfa12f7848056d4d939d77812c64b1c4c52c759d7bbfa4cd94969c58538ce
+    name: app
     type: application
     urls:
-    - https://shaharby7.github.io/Dope/helm/charts/application-0.1.0.tgz
+    - https://shaharby7.github.io/Dope/helm/charts/app-0.1.0.tgz
     version: 0.1.0
-  application-manager:
+  argo-crds:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2024-05-12T22:27:58.952655162+03:00"
+    created: "2024-09-18T23:23:59.089473631+03:00"
     description: A Helm chart for Kubernetes
-    digest: 2e5fc0c77a6475cb8c2ea42c03fce6d6f0ce3a9b4d9f67ce0be09539ad99c48a
-    name: application-manager
-    type: application
+    digest: 3cace5e0dfcca9ef4076305a0001381decb903d4ce0bb31b1b1e6449a68d11f4
+    name: argo-crds
+    type: library
     urls:
-    - https://shaharby7.github.io/Dope/helm/charts/application-manager-0.1.0.tgz
+    - https://shaharby7.github.io/Dope/helm/charts/argo-crds-0.1.0.tgz
     version: 0.1.0
-  applications-list:
+  dope:
   - apiVersion: v2
-    appVersion: 0.0.0
-    created: "2024-05-12T22:27:58.95280123+03:00"
+    appVersion: 1.16.0
+    created: "2024-09-18T23:23:59.103366024+03:00"
+    dependencies:
+    - condition: argo-cd.enabled
+      name: argo-cd
+      repository: https://argoproj.github.io/argo-helm
+      version: 6.8.1
+    - condition: argo-workflows.enabled
+      name: argo-workflows
+      repository: https://argoproj.github.io/argo-helm
+      version: 0.41.4
+    - condition: dope-ci.enabled
+      name: dope-ci
+      repository: https://shaharby7.github.io/Dope/helm/charts
+      version: 0.1.0
     description: A Helm chart for Kubernetes
-    digest: f1b4b1513130a9b11bc52c4f9c40204f0d25cbf7bc612017a2bdfa436f65b7c7
-    name: applications-list
+    digest: 9baf18052528edd9b78aa1eb767c2cfbd0e15f860ed88d454b5b60ae1f573441
+    name: dope
     type: application
     urls:
-    - https://shaharby7.github.io/Dope/helm/charts/applications-list-0.1.0.tgz
+    - https://shaharby7.github.io/Dope/helm/charts/dope-0.1.0.tgz
     version: 0.1.0
   dope-ci:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2024-05-12T22:27:58.952924477+03:00"
+    created: "2024-09-18T23:23:59.103684252+03:00"
     description: A Helm chart for Kubernetes
     digest: 9b6012197912a85a297fd2ad4f356ed6ad6f8d3d3e781c66e42a0936077d0125
     name: dope-ci
@@ -44,27 +57,4 @@ entries:
     urls:
     - https://shaharby7.github.io/Dope/helm/charts/dope-ci-0.1.0.tgz
     version: 0.1.0
-  dope-essentials:
-  - apiVersion: v2
-    appVersion: 1.16.0
-    created: "2024-05-12T22:27:58.963081331+03:00"
-    dependencies:
-    - name: argo-cd
-      repository: https://argoproj.github.io/argo-helm
-      version: 5.27.0
-    - condition: argo-workflows.enabled
-      name: argo-workflows
-      repository: https://argoproj.github.io/argo-helm
-      version: 0.37.1
-    - condition: ci.enabled
-      name: ci
-      repository: https://shaharby7.github.io/Dope/helm/charts
-      version: 0.1.0
-    description: A Helm chart for Kubernetes
-    digest: f10551b34b2c488081b3992af82eeabdb0c18257cbf52ed46683f65d02e15ee4
-    name: dope-essentials
-    type: application
-    urls:
-    - https://shaharby7.github.io/Dope/helm/charts/dope-essentials-0.1.0.tgz
-    version: 0.1.0
-generated: "2024-05-12T22:27:58.951849358+03:00"
+generated: "2024-09-18T23:23:59.075705953+03:00"
