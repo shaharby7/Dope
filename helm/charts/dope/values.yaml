@@ -51,6 +51,8 @@ providers:
 
 
 argo-cd:
+  crds:
+    install: false
   redis-ha:
     enabled: false
   controller:
@@ -63,6 +65,8 @@ argo-cd:
     replicaCount: 1
 
 argo-workflows:
+  crds:
+    install: false
   server:
     extraArgs: [--auth-mode=server]
     clusterWorkflowTemplates:
