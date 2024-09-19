@@ -12,7 +12,7 @@ spec:
     chart: app-of-apps
     targetRevision: 0.1.0
     helm:
-      values:
+      valuesObject:
         appOfApps:
           project: dope
           destination:
@@ -28,7 +28,7 @@ spec:
           spec:
             project: {{ include "appsProjectName" $ }}
             destination:
-              server: https://kubernetes.{{include "appsProjectName" $ }}.svc
+              server: https://kubernetes.default.svc
               namespace: {{ include "appsProjectName" $ }}
             sources:
             - repoURL: 'https://shaharby7.github.io/Dope/helm/charts'

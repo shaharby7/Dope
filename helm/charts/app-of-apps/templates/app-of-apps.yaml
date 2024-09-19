@@ -5,7 +5,7 @@ metadata:
 spec:
   project: {{ .Values.appOfApps.project }}
   destination:
-    server: {{ .Values.appOfApps.destination.server | default "https://kubernetes.default.svc" }}
+    server: https://kubernetes.default.svc
     namespace: {{ .Values.appOfApps.destination.namespace | default "dope" }}
   sources:
   - repoURL: 'https://shaharby7.github.io/Dope/helm/charts'
