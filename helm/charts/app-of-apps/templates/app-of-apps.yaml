@@ -8,7 +8,7 @@ spec:
     server: {{ .Values.appOfApps.destination.server | default "https://kubernetes.default.svc" }}
     namespace: {{ .Values.appOfApps.destination.namespace | default "dope" }}
   sources:
-  - repoURL: 'https://https://shaharby7.github.io/Dope/helm/charts'
+  - repoURL: 'https://shaharby7.github.io/Dope/helm/charts'
     chart: app-of-apps
     targetRevision: 0.1.0
     helm:

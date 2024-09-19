@@ -8,7 +8,7 @@ spec:
     server: https://kubernetes.defualt.svc
     namespace: {{ $.Release.Namespace }}
   sources:
-  - repoURL: 'https://https://shaharby7.github.io/Dope/helm/charts'
+  - repoURL: 'https://shaharby7.github.io/Dope/helm/charts'
     chart: app-of-apps
     targetRevision: 0.1.0
     helm:
@@ -31,7 +31,7 @@ spec:
               server: https://kubernetes.{{include "appsProjectName" $ }}.svc
               namespace: {{ include "appsProjectName" $ }}
             sources:
-            - repoURL: 'https://https://shaharby7.github.io/Dope/helm/charts'
+            - repoURL: 'https://shaharby7.github.io/Dope/helm/charts'
               chart: app
               targetRevision: 0.1.0
               helm:
