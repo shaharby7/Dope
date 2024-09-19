@@ -1,0 +1,3 @@
+{{- range $app := .Values.apps}}
+{{- $app | toYaml }}
+{{- end }}

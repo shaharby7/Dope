@@ -41,18 +41,17 @@ apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
   name: {{ include "appsProjectName" . }}
-  namespace: {{ include "appsProjectName" . }}
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
-  description: One project to rule them all
+  description: Project for regular applications
   # Allow manifests to deploy from any Git repos
   sourceRepos:
   - "*"
   # Only permit applications to deploy to the runspace namespace in the same cluster
   destinations:
-  - namespace: {{ .Release.Namespace }}
-    server: https://kubernetes.{{ .Release.Namespace }}.svc
+  - namespace: {{ include "appsProjectName" . }}
+    server: https://kubernetes.{{ include "appsProjectName" . }}.svc
   # Deny all cluster-scoped resources from being created, except for Namespace
   clusterResourceWhitelist:
   - group: ""

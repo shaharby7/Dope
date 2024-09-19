@@ -1,0 +1,23 @@
+appOfApps:
+  project: dope
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: dope
+
+apps:
+- apiVersion: argoproj.io/v1alpha1
+  kind: Application
+  metadata:
+    name: app-of-apps
+  spec:
+    project: apps
+    destination:
+      server: https://kubernetes.default.svc
+      namespace: apps
+    sources:
+    - repoURL: 'https://https://shaharby7.github.io/Dope/helm/charts'
+      chart: app
+      targetRevision: 0.1.0
+      helm:
+        values:
+          hi: bye

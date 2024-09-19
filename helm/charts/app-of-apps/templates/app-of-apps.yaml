@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: app-of-apps
+spec:
+  project: {{ .Values.appOfApps.project }}
+  destination:
+    server: {{ .Values.appOfApps.destination.server | default "https://kubernetes.default.svc" }}
+    namespace: {{ .Values.appOfApps.destination.namespace | default "dope" }}
+  sources:
+  - repoURL: 'https://https://shaharby7.github.io/Dope/helm/charts'
+    chart: app-of-apps
+    targetRevision: 0.1.0
+    helm:
+      values: {{ .Values | toYaml | nindent 4 }}
