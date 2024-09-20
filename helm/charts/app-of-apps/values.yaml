@@ -15,9 +15,9 @@ apps:
       server: https://kubernetes.default.svc
       namespace: apps
     sources:
-    - repoURL: 'https://https://shaharby7.github.io/Dope/helm/charts'
+    - repoURL: 'https://shaharby7.github.io/Dope/helm/charts'
       chart: app
       targetRevision: 0.1.0
       helm:
-        values:
+        valuesObject:
           hi: bye

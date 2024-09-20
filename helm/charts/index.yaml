@@ -3,7 +3,7 @@ entries:
   app:
   - apiVersion: v2
     appVersion: 0.0.0
-    created: "2024-09-20T02:00:03.807414826+03:00"
+    created: "2024-09-20T12:19:25.24098537+03:00"
     description: A Helm chart for Kubernetes
     digest: 5acdfa12f7848056d4d939d77812c64b1c4c52c759d7bbfa4cd94969c58538ce
     name: app
@@ -14,9 +14,9 @@ entries:
   app-of-apps:
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2024-09-20T02:00:03.807868167+03:00"
+    created: "2024-09-20T12:19:25.241457007+03:00"
     description: One app to sync them all
-    digest: 4ea45ffe882944f4c733f74a8a94a14f5ddc40e671e7d74bda8efe3c3b03c932
+    digest: 19929ada7a33d1644d207f351e102bf0a9097288ca76eb1828e129e92a574e25
     name: app-of-apps
     type: application
     urls:
@@ -24,7 +24,7 @@ entries:
     version: 0.1.1
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2024-09-20T02:00:03.807650478+03:00"
+    created: "2024-09-20T12:19:25.241221254+03:00"
     description: One app to sync them all
     digest: d071b3402a0cfa83ce944781db452c159a9f21a4e8935187b1eabe1df537319c
     name: app-of-apps
@@ -35,7 +35,7 @@ entries:
   argo-crds:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2024-09-20T02:00:03.812002331+03:00"
+    created: "2024-09-20T12:19:25.24480603+03:00"
     description: A Helm chart for Kubernetes
     digest: 88083f46e7fa70d44fb68689a503ed7d5e1e97fdd0e00bd2768b242546500f55
     name: argo-crds
@@ -46,7 +46,7 @@ entries:
   dope:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2024-09-20T02:00:03.825893927+03:00"
+    created: "2024-09-20T12:19:25.258344911+03:00"
     dependencies:
     - condition: providers.argo-cd.managed
       name: argo-cd
@@ -73,7 +73,7 @@ entries:
   dope-ci:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2024-09-20T02:00:03.826047616+03:00"
+    created: "2024-09-20T12:19:25.258490284+03:00"
     description: A Helm chart for Kubernetes
     digest: 9b6012197912a85a297fd2ad4f356ed6ad6f8d3d3e781c66e42a0936077d0125
     name: dope-ci
@@ -81,4 +81,4 @@ entries:
     urls:
     - https://shaharby7.github.io/Dope/helm/charts/dope-ci-0.1.0.tgz
     version: 0.1.0
-generated: "2024-09-20T02:00:03.806581584+03:00"
+generated: "2024-09-20T12:19:25.24057641+03:00"

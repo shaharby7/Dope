@@ -1,48 +1,48 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: app-of-apps
-spec:
-  project: {{ $.Release.Namespace }}
-  destination:
-    server: https://kubernetes.defualt.svc
-    namespace: {{ $.Release.Namespace }}
-  sources:
-  - repoURL: 'https://shaharby7.github.io/Dope/helm/charts'
-    chart: app-of-apps
-    targetRevision: 0.1.0
-    helm:
-      valuesObject:
-        appOfApps:
-          project: dope
-          destination:
-            server: https://kubernetes.default.svc
-            namespace: dope
-        apps:      
-        {{- range $app := .Values.apps}}
-        - apiVersion: argoproj.io/v1alpha1
-          kind: Application
-          metadata:
-            name: {{ $app.name }}
-            namespace: {{ $.Release.Namespace }}
-          spec:
-            project: {{ include "appsProjectName" $ }}
-            destination:
-              server: https://kubernetes.default.svc
-              namespace: {{ include "appsProjectName" $ }}
-            sources:
-            - repoURL: 'https://shaharby7.github.io/Dope/helm/charts'
-              chart: app
-              targetRevision: 0.1.0
-              helm:
-                valueFiles:
-                {{- range $file := list "image" "values" "apps" }}
-                {{- $buildDir :=  default "build" $.Values.project.directories.build }}
-                {{- $environment := $.Values.environment.name }}
-                - {{ printf "$values/%s/helm/%s/%s/%s.yaml" $buildDir $environment $app.name $file  | clean }}
-                {{- end}}
-            - repoURL: {{ $.Values.providers.git.url }}
-              targetRevision: {{ default "main" $.Values.providers.git.ref }}
-              ref: values
-              path: {{ default "main" $.Values.providers.git.path }}
-        {{- end}} 
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: app-of-apps
+# spec:
+#   project: {{ $.Release.Namespace }}
+#   destination:
+#     server: https://kubernetes.defualt.svc
+#     namespace: {{ $.Release.Namespace }}
+#   sources:
+#   - repoURL: 'https://shaharby7.github.io/Dope/helm/charts'
+#     chart: app-of-apps
+#     targetRevision: 0.1.1
+#     helm:
+#       valuesObject:
+#         appOfApps:
+#           project: dope
+#           destination:
+#             server: https://kubernetes.default.svc
+#             namespace: dope
+#         apps:      
+#         {{- range $app := .Values.apps}}
+#         - apiVersion: argoproj.io/v1alpha1
+#           kind: Application
+#           metadata:
+#             name: {{ $app.name }}
+#             namespace: {{ $.Release.Namespace }}
+#           spec:
+#             project: {{ include "appsProjectName" $ }}
+#             destination:
+#               server: https://kubernetes.default.svc
+#               namespace: {{ include "appsProjectName" $ }}
+#             sources:
+#             - repoURL: 'https://shaharby7.github.io/Dope/helm/charts'
+#               chart: app
+#               targetRevision: 0.1.0
+#               helm:
+#                 valueFiles:
+#                 {{- range $file := list "image" "values" "apps" }}
+#                 {{- $buildDir :=  default "build" $.Values.project.directories.build }}
+#                 {{- $environment := $.Values.environment.name }}
+#                 - {{ printf "$values/%s/helm/%s/%s/%s.yaml" $buildDir $environment $app.name $file  | clean }}
+#                 {{- end}}
+#             - repoURL: {{ $.Values.providers.git.url }}
+#               targetRevision: {{ default "main" $.Values.providers.git.ref }}
+#               ref: values
+#               path: {{ default "main" $.Values.providers.git.path }}
+#         {{- end}} 
