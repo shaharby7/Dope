@@ -1,0 +1,6 @@
+apiVersion: v2
+name: reflector
+description: This chart expects to receive list of resources, and to simply create it :)
+type: application
+version: 0.1.0
+appVersion: "1.16.0"
