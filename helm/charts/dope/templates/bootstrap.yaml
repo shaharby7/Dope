@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: app-of-apps
+spec:
+  project: {{ $.Release.Namespace }}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ $.Release.Namespace }}
+  sources:
+  - repoURL: 'https://shaharby7.github.io/Dope/helm/charts'
+    chart: reflector
+    targetRevision: 0.1.0
+    helm:
+      releaseName: app-of-apps
+      valuesObject:
+        resources:      
+        {{- range $app := .Values.apps}}
+        - apiVersion: argoproj.io/v1alpha1
+          kind: Application
+          metadata:
+            name: {{ $app.name }}
+            namespace: {{ $.Release.Namespace }}
+          spec:
+            project: {{ include "appsProjectName" $ }}
+            destination:
+              server: https://kubernetes.default.svc
+              namespace: {{ include "appsProjectName" $ }}
+            sources:
+            - repoURL: 'https://shaharby7.github.io/Dope/helm/charts'
+              chart: app
+              targetRevision: 0.1.0
+              helm:
+                valueFiles:
+                {{- range $file := list "image" "values" "apps" }}
+                {{- $basePath := default "./" $.Values.providers.git.path }}
+                {{- $buildDir :=  default "build" $.Values.project.directories.build }}
+                {{- $environment := $.Values.environment.name }}
+                - {{ printf "$values/%s/%s/helm/%s/%s/%s.yaml" $basePath $buildDir $environment $app.name $file  | clean }}
+                {{- end}}
+            - repoURL: {{ $.Values.providers.git.url }}
+              targetRevision: {{ default "main" $.Values.providers.git.ref }}
+              ref: values
+        {{- end}} 

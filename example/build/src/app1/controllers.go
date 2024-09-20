@@ -4,7 +4,7 @@ import (
 	"github.com/shaharby7/Dope/pkg/runtime/controller"
 	"github.com/shaharby7/Dope/types"
     
-    "github.com/shaharby7/dopeexample/pkg/greeter"
+    "github.com/shaharby7/Dope/example/pkg/greeter"
 )
 
 var controllers = map[string]types.Controller[any]{

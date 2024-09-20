@@ -1,0 +1,67 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: dope
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  description: One project to rule them all
+  sourceRepos:
+  - "*"
+  destinations:
+  - namespace: {{ .Release.Namespace }}
+    server: https://kubernetes.default.svc
+  - namespace: {{ include "appsProjectName" $ }}
+    server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+  - group: ""
+    kind: Namespace
+  namespaceResourceBlacklist:
+  - group: ""
+    kind: ResourceQuota
+  - group: ""
+    kind: LimitRange
+  - group: ""
+    kind: NetworkPolicy
+  roles:
+  - description: Service deployment role
+    groups:
+    - dope
+    name: dope-admin
+    policies:
+    - p, proj:dope:dope-admin, applications, *, {{ .Release.Namespace }}/*, allow
+    - p, proj:dope:dope-admin, applications, *, {{ include "appsProjectName" $ }}/*, allow
+
+
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: {{ include "appsProjectName" . }}
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  description: Project for regular applications
+  sourceRepos:
+  - "*"
+  destinations:
+  - namespace: {{ include "appsProjectName" . }}
+    server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+  - group: ""
+    kind: Namespace
+  namespaceResourceBlacklist:
+  - group: ""
+    kind: ResourceQuota
+  - group: ""
+    kind: LimitRange
+  - group: ""
+    kind: NetworkPolicy
+  roles:
+  - description: Service deployment role
+    groups:
+    - {{ include "appsProjectName" $ }}
+    name: {{ include "appsProjectName" $ }}-admin
+    policies:
+    - p, proj:{{ include "appsProjectName" $ }}:{{ include "appsProjectName" $ }}-admin, applications, *, {{ include "appsProjectName" $ }}/*, allow

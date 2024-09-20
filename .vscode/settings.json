@@ -10,6 +10,7 @@
         "httprouter",
         "julienschmidt",
         "loggable",
+        "minio",
         "SHAHAR",
         "shaharby",
         "Templatefull",

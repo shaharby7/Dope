@@ -1,0 +1,80 @@
+project:
+  name: example
+  version: 0.1.0
+  description: "project example"
+  module: github.com/shaharby7/Dope/example
+  directories:
+    build: ./build1
+
+apps:
+- name: "app1"
+  values:
+    env:
+    - name: UGLY_NAMES
+      value: "shahar,danny"
+    replicas: 3
+    resources:
+      requests:
+        cpu: 1
+        memory: 2GB
+      limits:
+        cpu: 2
+        memory: 4GB
+    debug:
+      enabled: true
+      port: 4000
+
+environment:
+  name: local
+# appsProjectNameOverride: applications
+
+providers:
+  git:
+    url: https://github.com/shaharby7/Dope.git
+    path: example
+    ref: shahar
+  kubernetes:
+    type: minikube
+  docker:
+    registry: docker.io
+    prefix: shaharby7 #TODO: add username and password support
+  storage:
+    type: minio
+    managed: false
+  cd:
+    type: argo-cd
+    managed: false
+    # values:
+  workflows:
+    type: argo-workflows
+    managed: false
+
+
+argo-cd:
+  crds:
+    install: false
+  redis-ha:
+    enabled: false
+  controller:
+    replicas: 1
+  server:
+    replicas: 1
+  repoServer:
+    replicas: 1
+  applicationSet:
+    replicaCount: 1
+
+argo-workflows:
+  crds:
+    install: false
+  server:
+    extraArgs: [--auth-mode=server]
+    clusterWorkflowTemplates:
+      enabled: true
+  controller:
+    workflowNamespaces:
+    - dope
+    rbac:
+      create: true
+    clusterWorkflowTemplates:
+      enabled: true
