@@ -4,7 +4,7 @@ project:
   description: "project example"
   module: github.com/shaharby7/Dope/example
   directories:
-    build: ./build
+    build: ./build1
 
 apps:
 - name: "app1"
@@ -30,7 +30,7 @@ environment:
 
 providers:
   git:
-    url: git@github.com:shaharby7/Dope.git
+    url: https://github.com/shaharby7/Dope.git
     path: example
     ref: shahar
   kubernetes:

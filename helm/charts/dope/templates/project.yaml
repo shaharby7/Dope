@@ -1,73 +1,67 @@
-# apiVersion: argoproj.io/v1alpha1
-# kind: AppProject
-# metadata:
-#   name: dope
-#   # Finalizer that ensures that project is not deleted until it is not referenced by any application
-#   finalizers:
-#   - resources-finalizer.argocd.argoproj.io
-# spec:
-#   description: One project to rule them all
-#   # Allow manifests to deploy from any Git repos
-#   sourceRepos:
-#   - "*"
-#   # Only permit applications to deploy to the runspace namespace in the same cluster
-#   destinations:
-#   - namespace: {{ .Release.Namespace }}
-#     server: https://kubernetes.default.svc
-#   # Deny all cluster-scoped resources from being created, except for Namespace
-#   clusterResourceWhitelist:
-#   - group: ""
-#     kind: Namespace
-#   # Allow all namespaced-scoped resources to be created, except for ResourceQuota, LimitRange, NetworkPolicy
-#   namespaceResourceBlacklist:
-#   - group: ""
-#     kind: ResourceQuota
-#   - group: ""
-#     kind: LimitRange
-#   - group: ""
-#     kind: NetworkPolicy
-#   roles:
-#   - description: Service deployment role
-#     groups:
-#     - dope
-#     name: dope-admin
-#     policies:
-#     - p, proj:dope:dope-admin, applications, *, {{ .Release.Namespace }}/*, allow
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: dope
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  description: One project to rule them all
+  sourceRepos:
+  - "*"
+  destinations:
+  - namespace: {{ .Release.Namespace }}
+    server: https://kubernetes.default.svc
+  - namespace: {{ include "appsProjectName" $ }}
+    server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+  - group: ""
+    kind: Namespace
+  namespaceResourceBlacklist:
+  - group: ""
+    kind: ResourceQuota
+  - group: ""
+    kind: LimitRange
+  - group: ""
+    kind: NetworkPolicy
+  roles:
+  - description: Service deployment role
+    groups:
+    - dope
+    name: dope-admin
+    policies:
+    - p, proj:dope:dope-admin, applications, *, {{ .Release.Namespace }}/*, allow
+    - p, proj:dope:dope-admin, applications, *, {{ include "appsProjectName" $ }}/*, allow
 
 
-# ---
+---
 
-# apiVersion: argoproj.io/v1alpha1
-# kind: AppProject
-# metadata:
-#   name: {{ include "appsProjectName" . }}
-#   finalizers:
-#   - resources-finalizer.argocd.argoproj.io
-# spec:
-#   description: Project for regular applications
-#   # Allow manifests to deploy from any Git repos
-#   sourceRepos:
-#   - "*"
-#   # Only permit applications to deploy to the runspace namespace in the same cluster
-#   destinations:
-#   - namespace: {{ include "appsProjectName" . }}
-#     server: https://kubernetes.default.svc
-#   # Deny all cluster-scoped resources from being created, except for Namespace
-#   clusterResourceWhitelist:
-#   - group: ""
-#     kind: Namespace
-#   # Allow all namespaced-scoped resources to be created, except for ResourceQuota, LimitRange, NetworkPolicy
-#   namespaceResourceBlacklist:
-#   - group: ""
-#     kind: ResourceQuota
-#   - group: ""
-#     kind: LimitRange
-#   - group: ""
-#     kind: NetworkPolicy
-#   roles:
-#   - description: Service deployment role
-#     groups:
-#     - apps
-#     name: apps-admin
-#     policies:
-#     - p, proj:apps:apps-admin, applications, *, apps/*, allow
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: {{ include "appsProjectName" . }}
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  description: Project for regular applications
+  sourceRepos:
+  - "*"
+  destinations:
+  - namespace: {{ include "appsProjectName" . }}
+    server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+  - group: ""
+    kind: Namespace
+  namespaceResourceBlacklist:
+  - group: ""
+    kind: ResourceQuota
+  - group: ""
+    kind: LimitRange
+  - group: ""
+    kind: NetworkPolicy
+  roles:
+  - description: Service deployment role
+    groups:
+    - {{ include "appsProjectName" $ }}
+    name: {{ include "appsProjectName" $ }}-admin
+    policies:
+    - p, proj:{{ include "appsProjectName" $ }}:{{ include "appsProjectName" $ }}-admin, applications, *, {{ include "appsProjectName" $ }}/*, allow

@@ -1,7 +1,7 @@
 dependencies:
 - name: argo-cd
   repository: https://argoproj.github.io/argo-helm
-  version: 6.8.1
+  version: 7.6.1
 - name: argo-workflows
   repository: https://argoproj.github.io/argo-helm
   version: 0.41.4
@@ -11,5 +11,5 @@ dependencies:
 - name: dope-ci
   repository: https://shaharby7.github.io/Dope/helm/charts
   version: 0.1.0
-digest: sha256:8f9ae6895e399b6336cbf883866455bc459601df212efd7ed72f23d7497461e4
-generated: "2024-09-18T23:40:44.369138087+03:00"
+digest: sha256:2a5a19af4d3ae7c07d9e625c2b93f0aa1edc8f6b6650c6c83cd2ebe40a951eed
+generated: "2024-09-20T14:55:23.564092826+03:00"
