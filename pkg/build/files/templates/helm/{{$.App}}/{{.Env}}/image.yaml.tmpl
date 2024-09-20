@@ -1,4 +1,4 @@
 image:
-  repository: docker.io/shaharby7/app1-local
+  repository: {{ .DockerRegistry }}
   pullPolicy: IfNotPresent
-  tag: 3
+  tag: {{ .Tag }}
