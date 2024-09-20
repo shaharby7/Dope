@@ -20,11 +20,17 @@ const (
 	templateId_SRC_FILE_MAIN templateId = iota
 	templateId_SRC_FILE_CONTROLLER
 	templateId_DOCKERFILE
+	templateId_HELM_APPS
+	templateId_HELM_IMAGE
+	templateId_HELM_VALUES
 )
 
 var _TEMPLATES_LIST map[templateId]string = map[templateId]string{
 	templateId_SRC_FILE_MAIN:       "src/{{.App}}/main.go",
 	templateId_SRC_FILE_CONTROLLER: "src/{{.App}}/controllers.go",
+	templateId_HELM_APPS:           "helm/{{$.App}}/{{.Env}}/apps.yaml.tmpl",
+	templateId_HELM_IMAGE:          "helm/{{$.App}}/{{.Env}}/image.yaml.tmpl",
+	templateId_HELM_VALUES:         "helm/{{$.App}}/{{.Env}}/values.yaml.tmpl",
 	templateId_DOCKERFILE:          "Dockerfile",
 }
 
