@@ -3,9 +3,14 @@ project:
   version: 0.1.0
   description: "project example"
   module: github.com/shaharby7/Dope/example
+<<<<<<< HEAD
 
 build:
   path: ./example/build
+=======
+  directories:
+    build: ./build1
+>>>>>>> 15a794341e3ce8cbec64ac1b9defa3854c4590f7
 
 apps:
 - name: "app1"
