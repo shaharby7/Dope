@@ -1,0 +1,15 @@
+env:
+    - name: UGLY_NAMES
+      value: shahar,danny
+      valuefrom: null
+replicas: 3
+resources:
+    limits:
+        cpu: &#34;2&#34;
+        memory: 4GB
+    requests:
+        cpu: &#34;1&#34;
+        memory: 2GB
+debug:
+    enabled: true
+    port: 4000

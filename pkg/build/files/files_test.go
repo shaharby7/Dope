@@ -4,6 +4,7 @@ import (
 	"slices"
 	"testing"
 
+	bTypes "github.com/shaharby7/Dope/pkg/build/types"
 	"github.com/shaharby7/Dope/pkg/utils"
 	"github.com/shaharby7/Dope/types"
 	"github.com/stretchr/testify/assert"
@@ -53,7 +54,7 @@ var (
 					Replicas: REPLICAS,
 					Debug: types.DebugOptions{
 						Enabled:   true,
-						DebugPort: types.Port(4000),
+						Port: types.Port(4000),
 					},
 					Resources: types.ResourceRequirements{
 						Limits: types.ResourceList{
@@ -77,11 +78,18 @@ var (
 			LOCAL_ENV_CONFIG,
 		},
 	}
+	BUILD_METADATA = bTypes.BuildMetadata{
+		GitRef: "123",
+	}
 )
 
 func Test_HelmFiles(t *testing.T) {
 	files, err := GenerateFiles(
-		DST, &PROJECT_CONFIG, []string{"test-app"}, []string{"local"},
+		DST,
+		&PROJECT_CONFIG,
+		&BUILD_METADATA,
+		[]string{"test-app"},
+		[]string{"local"},
 	)
 	assert.Nil(t, err)
 	paths, _ := utils.Map(files, func(file *OutputFile) (string, error) { return file.Path, nil })

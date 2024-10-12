@@ -5,10 +5,6 @@ metadata:
   version: 0.1.0
   description: "project example"
   module: github.com/shaharby7/Dope/example
-  directories:
-    basePath: 
-    build: ./build
-
 
 apps:
 - name: "app1"
@@ -48,9 +44,6 @@ environments:
         enabled: true
         port: 4000
 
-  dope:
-  # appsProjectNameOverride: applications
-
   providers:
     git:
       url: git@github.com:shaharby7/Dope.git
@@ -58,9 +51,6 @@ environments:
       ref: shahar
     kubernetes:
       type: minikube
-    docker:
-      registry: docker.io
-      prefix: shaharby7 #TODO: add username and password support
     storage:
       type: minio
       managed: true

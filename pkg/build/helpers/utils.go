@@ -1,7 +1,8 @@
-package utils
+package helpers
 
 import (
 	"fmt"
+
 	"github.com/shaharby7/Dope/pkg/utils"
 	"github.com/shaharby7/Dope/types"
 )

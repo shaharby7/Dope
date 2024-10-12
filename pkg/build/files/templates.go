@@ -28,17 +28,16 @@ const (
 var _TEMPLATES_LIST map[templateId]string = map[templateId]string{
 	templateId_SRC_FILE_MAIN:       "src/{{.App}}/main.go",
 	templateId_SRC_FILE_CONTROLLER: "src/{{.App}}/controllers.go",
-	templateId_HELM_APPS:           "helm/{{$.App}}/{{.Env}}/apps.yaml.tmpl",
-	templateId_HELM_IMAGE:          "helm/{{$.App}}/{{.Env}}/image.yaml.tmpl",
-	templateId_HELM_VALUES:         "helm/{{$.App}}/{{.Env}}/values.yaml.tmpl",
+	templateId_HELM_IMAGE:          "helm/{{.Env}}/{{.App}}/image.yaml",
+	templateId_HELM_VALUES:         "helm/{{.Env}}/{{.App}}/values.yaml",
 	templateId_DOCKERFILE:          "Dockerfile",
 }
 
 type fileTemplate struct {
-	TemplateId          templateId
-	_pathTemplateString string
-	PathTemplate        template.Template
-	DataTemplate        template.Template
+	TemplateId      templateId
+	Name string
+	PathTemplate    template.Template
+	DataTemplate    template.Template
 }
 
 var (
@@ -61,10 +60,10 @@ func newFileTemplate(templateId templateId, pathTemplate string) *fileTemplate {
 		panic(utils.FailedBecause(fmt.Sprintf("parse file template %s", pathTemplate), err))
 	}
 	return &fileTemplate{
-		TemplateId:          templateId,
-		_pathTemplateString: pathTemplate,
-		PathTemplate:        *parsedPathTemplate,
-		DataTemplate:        *parsedFileTemplate,
+		Name: pathTemplate,
+		TemplateId:      templateId,
+		PathTemplate:    *parsedPathTemplate,
+		DataTemplate:    *parsedFileTemplate,
 	}
 }
 

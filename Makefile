@@ -1,6 +1,6 @@
 .PHONY: prepare
 prepare:
-	./hack/prepare-example.sh
+	./hack/prepare.sh
 
 .PHONY: test
 test: prepare

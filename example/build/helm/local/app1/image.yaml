@@ -1,0 +1,4 @@
+image:
+  repository: 
+  pullPolicy: IfNotPresent
+  tag: 447a75627f3831cb2d4893df86b21495da87b9b0
