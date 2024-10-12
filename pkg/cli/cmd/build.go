@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"github.com/shaharby7/Dope/pkg/build"
+	bTypes "github.com/shaharby7/Dope/pkg/build/types"
 	"github.com/spf13/cobra"
 )
 
@@ -19,7 +20,7 @@ var cmdBuild = &cobra.Command{
 	Short: "build the project",
 	Long:  `builds different stages of the project.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		err := build.BuildProject(projPath, dst, build.BuildOptions{})
+		err := build.BuildProject(projPath, dst, bTypes.BuildOptions{})
 		return err
 	},
 }

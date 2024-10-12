@@ -3,11 +3,11 @@ package utils
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"reflect"
 
-	"github.com/shaharby7/Dope/types"
-
 	"github.com/shaharby7/Dope/pkg/utils/set"
+	"github.com/shaharby7/Dope/types"
 )
 
 type TEmpty struct{}
@@ -64,4 +64,13 @@ func GetFromMapWithDefault[T any](m map[string]T, key string, fallback T) T {
 
 func FailedBecause(failedTo string, err error) error {
 	return fmt.Errorf("\tcould not %s because:%w", failedTo, err)
+}
+
+func GetGitHEADRef() (string, error) {
+	out, err := exec.Command("git", "rev-parse", "HEAD").Output()
+	if err != nil {
+		return "", FailedBecause("getting HEAD commit", err)
+	}
+	commitHash := string(out)
+	return commitHash, nil
 }

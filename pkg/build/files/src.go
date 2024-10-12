@@ -13,14 +13,17 @@ type appPathArgs struct {
 	App string
 }
 
-func srcFilesGenGen(config *types.ProjectConfig, appConfig *types.AppConfig) []iFileGenerator {
+func generateSrcFiles(config *types.ProjectConfig, appConfig *types.AppConfig) ([]*OutputFile, error) {
 	pathArgs := &appPathArgs{App: appConfig.Name}
-	mainFile := newFileGenerator(
+	mainFile, err := generateOutputFile(
 		templateId_SRC_FILE_MAIN,
 		pathArgs,
 		utils.Empty,
 	)
-	controllerFile := newFileGenerator(
+	if err != nil {
+		return nil, err
+	}
+	controllerFile, err := generateOutputFile(
 		templateId_SRC_FILE_CONTROLLER,
 		pathArgs,
 		generateControllerData(
@@ -28,7 +31,10 @@ func srcFilesGenGen(config *types.ProjectConfig, appConfig *types.AppConfig) []i
 			appConfig,
 		),
 	)
-	return []iFileGenerator{mainFile, controllerFile}
+	if err != nil {
+		return nil, err
+	}
+	return []*OutputFile{mainFile, controllerFile}, nil
 }
 
 func generateControllerData(

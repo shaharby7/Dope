@@ -33,10 +33,9 @@ spec:
               helm:
                 valueFiles:
                 {{- range $file := list "image" "values" "apps" }}
-                {{- $basePath := default "./" $.Values.providers.git.path }}
-                {{- $buildDir :=  default "build" $.Values.project.directories.build }}
+                {{- $buildDir :=  default "build" $.Values.build.path }}
                 {{- $environment := $.Values.environment.name }}
-                - {{ printf "$values/%s/%s/helm/%s/%s/%s.yaml" $basePath $buildDir $environment $app.name $file  | clean }}
+                - {{ printf "$values/%s/helm/%s/%s/%s.yaml" $buildDir $environment $app.name $file  | clean }}
                 {{- end}}
             - repoURL: {{ $.Values.providers.git.url }}
               targetRevision: {{ default "main" $.Values.providers.git.ref }}

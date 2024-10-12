@@ -9,25 +9,37 @@ import (
 	"github.com/shaharby7/Dope/pkg/utils"
 
 	"github.com/shaharby7/Dope/pkg/build/files"
+
+	bTypes "github.com/shaharby7/Dope/pkg/build/types"
 	"github.com/shaharby7/Dope/types"
 	"gopkg.in/yaml.v3"
 )
 
 var validate = validator.New(validator.WithRequiredStructEnabled())
 
-func BuildProject(projPath string, dst string, options BuildOptions) error {
+func BuildProject(projPath string, dst string, options bTypes.BuildOptions) error {
+	metadata, err := getBuildMetadata()
+	if err != nil {
+		return utils.FailedBecause(
+			"generate build metadata",
+			err,
+		)
+	}
 	config, err := getConfigByPath(projPath)
 	if err != nil {
-		return fmt.Errorf("could not generate config from file (%s): %w", projPath, err)
+		return utils.FailedBecause(
+			fmt.Sprintf("generate config from file (%s)", projPath),
+			err,
+		)
 	}
 	appsList := getApplicationsList(config, &options)
 	envsList := getEnvironmentList(config, &options)
 
 	outputFiles, err := files.GenerateFiles(
-		dst, config, appsList, envsList,
+		dst, config, metadata, appsList, envsList,
 	)
 	if err != nil {
-		utils.FailedBecause(
+		return utils.FailedBecause(
 			"compile files",
 			err,
 		)
@@ -60,7 +72,7 @@ func getConfigByPath(projectFile string) (*types.ProjectConfig, error) {
 	return config, nil
 }
 
-func getApplicationsList(config *types.ProjectConfig, buildOptions *BuildOptions) []string {
+func getApplicationsList(config *types.ProjectConfig, buildOptions *bTypes.BuildOptions) []string {
 	if len(buildOptions.Apps) > 0 {
 		return buildOptions.Apps
 	}
@@ -68,10 +80,20 @@ func getApplicationsList(config *types.ProjectConfig, buildOptions *BuildOptions
 	return utils.RemoveDuplicates(appsList)
 }
 
-func getEnvironmentList(config *types.ProjectConfig, buildOptions *BuildOptions) []string {
+func getEnvironmentList(config *types.ProjectConfig, buildOptions *bTypes.BuildOptions) []string {
 	if len(buildOptions.Envs) > 0 {
 		return buildOptions.Apps
 	}
 	envsList, _ := utils.Map(config.Environments, func(env types.EnvConfig) (string, error) { return env.Name, nil })
 	return utils.RemoveDuplicates(envsList)
+}
+
+func getBuildMetadata() (*bTypes.BuildMetadata, error) {
+	gitRef, err := utils.GetGitHEADRef()
+	if err != nil {
+		return nil, err
+	}
+	return &bTypes.BuildMetadata{
+		GitRef: gitRef,
+	}, nil
 }

@@ -5,13 +5,13 @@ import (
 	"github.com/shaharby7/Dope/types"
 )
 
-func rooFilesGenGen(
+func generateRootFiles(
 	_ *types.ProjectConfig,
-) []iFileGenerator {
-	dockerfile := newFileGenerator(
+) ([]*OutputFile, error) {
+	dockerfile, err := generateOutputFile(
 		templateId_DOCKERFILE,
 		utils.Empty,
 		utils.Empty,
 	)
-	return []iFileGenerator{dockerfile}
+	return []*OutputFile{dockerfile}, err
 }

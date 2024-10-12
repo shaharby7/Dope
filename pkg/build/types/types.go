@@ -1,4 +1,4 @@
-package build
+package types
 
 type BuildOptions struct {
 	Apps   []string
@@ -12,3 +12,7 @@ const (
 	BuildStage_FILES  BuildStage = "files"
 	BuildStage_DOCKER BuildStage = "docker"
 )
+
+type BuildMetadata struct {
+	GitRef string
+}

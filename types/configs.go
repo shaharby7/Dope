@@ -77,8 +77,8 @@ const (
 type ResourceQuantity string
 
 type DebugOptions struct {
-	Enabled   bool
-	DebugPort Port
+	Enabled bool
+	Port    Port
 }
 
 type Port uint32
