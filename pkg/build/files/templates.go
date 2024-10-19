@@ -3,7 +3,7 @@ package files
 import (
 	"embed"
 	"fmt"
-	"html/template"
+	"text/template"
 	"path"
 
 	"github.com/shaharby7/Dope/pkg/utils"

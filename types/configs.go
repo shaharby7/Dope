@@ -1,9 +1,5 @@
 package types
 
-import (
-	kApiV1 "k8s.io/api/core/v1"
-)
-
 type ProjectConfig struct {
 	DopeVersion  string `validate:"required" yaml:"dopeVersion"`
 	Metadata     ProjectMetadataConfig
@@ -74,13 +70,51 @@ const (
 	ResourceEphemeralStorage ResourceName = "ephemeral-storage"
 )
 
-type ResourceQuantity string
+type ResourceQuantity string 
 
 type DebugOptions struct {
 	Enabled bool
 	Port    Port
 }
 
-type Port uint32
+type EnvVar struct {
+	Name      string        `yaml:"name"`
+	Value     string        `yaml:"value,omitempty"`
+	ValueFrom *EnvVarSource `yaml:"valueFrom,omitempty"`
+}
 
-type EnvVar = kApiV1.EnvVar
+type EnvVarSource struct {
+	FieldRef         *ObjectFieldSelector   `yaml:"fieldRef,omitempty"`
+	ResourceFieldRef *ResourceFieldSelector `yaml:"resourceFieldRef,omitempty"`
+	ConfigMapKeyRef  *ConfigMapKeySelector  `yaml:"configMapKeyRef,omitempty"`
+	SecretKeyRef     *SecretKeySelector     `yaml:"secretKeyRef,omitempty"`
+}
+
+type ObjectFieldSelector struct {
+	APIVersion string `yaml:"apiVersion,omitempty"`
+	FieldPath  string `yaml:"fieldPath"`
+}
+
+type ResourceFieldSelector struct {
+	ContainerName string           `yaml:"containerName,omitempty"`
+	Resource      string           `yaml:"resource"`
+	Divisor       ResourceQuantity `yaml:"divisor,omitempty"`
+}
+
+type ConfigMapKeySelector struct {
+	LocalObjectReference `yaml:",inline"`
+	Key                  string `yaml:"key"`
+	Optional             *bool  `yaml:"optional,omitempty"`
+}
+
+type SecretKeySelector struct {
+	LocalObjectReference `yaml:",inline"`
+	Key                  string `yaml:"key"`
+	Optional             *bool  `yaml:"optional,omitempty"`
+}
+
+type LocalObjectReference struct {
+	Name string `yaml:"name,omitempty"`
+}
+
+type Port uint32

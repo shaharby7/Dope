@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"fmt"
 
-	"html/template"
+	"text/template"
 
 	"github.com/shaharby7/Dope/pkg/utils"
 )
