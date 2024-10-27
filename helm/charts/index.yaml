@@ -3,7 +3,7 @@ entries:
   app:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2024-10-27T20:50:52.969684177+02:00"
+    created: "2024-10-27T22:10:33.461204746+02:00"
     description: A Helm chart for Kubernetes
     digest: e542af27c53fe45ed5a680c74aca0146373700099b444f4e44c973f2fc3a8c90
     name: app
@@ -14,7 +14,7 @@ entries:
   argo-crds:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2024-10-27T20:50:52.972375975+02:00"
+    created: "2024-10-27T22:10:33.464313433+02:00"
     description: A Helm chart for Kubernetes
     digest: 88083f46e7fa70d44fb68689a503ed7d5e1e97fdd0e00bd2768b242546500f55
     name: argo-crds
@@ -25,7 +25,7 @@ entries:
   dope:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2024-10-27T20:50:53.004620833+02:00"
+    created: "2024-10-27T22:10:33.4961969+02:00"
     dependencies:
     - condition: providers.argo-cd.managed
       name: argo-cd
@@ -43,7 +43,7 @@ entries:
       repository: https://shaharby7.github.io/Dope/helm/charts
       version: 0.1.0
     description: A Helm chart for Kubernetes
-    digest: 77eab168532b27c93e5671d2c3833ee1a9dd78d5847ab77950a74d6b46a28fa4
+    digest: 2f99a4d630f56636c7f2d5442afd373746acd0646698b8713328bc512753ae07
     name: dope
     type: application
     urls:
@@ -51,7 +51,7 @@ entries:
     version: 0.1.2
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2024-10-27T20:50:52.990414074+02:00"
+    created: "2024-10-27T22:10:33.480236927+02:00"
     dependencies:
     - condition: providers.argo-cd.managed
       name: argo-cd
@@ -78,7 +78,7 @@ entries:
   dope-ci:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2024-10-27T20:50:53.004765785+02:00"
+    created: "2024-10-27T22:10:33.496337946+02:00"
     description: A Helm chart for Kubernetes
     digest: 9b6012197912a85a297fd2ad4f356ed6ad6f8d3d3e781c66e42a0936077d0125
     name: dope-ci
@@ -89,7 +89,7 @@ entries:
   reflector:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2024-10-27T20:50:53.004903554+02:00"
+    created: "2024-10-27T22:10:33.496700018+02:00"
     description: This chart expects to receive list of resources, and to simply create
       it :)
     digest: 744582e6706232976827b7d9b90bfbbec5a8c2d4d909ef718dae951a11c5f1d3
@@ -98,4 +98,4 @@ entries:
     urls:
     - https://shaharby7.github.io/Dope/helm/charts/reflector-0.1.0.tgz
     version: 0.1.0
-generated: "2024-10-27T20:50:52.969269778+02:00"
+generated: "2024-10-27T22:10:33.460088382+02:00"

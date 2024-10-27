@@ -31,6 +31,7 @@ spec:
               chart: app
               targetRevision: 0.1.0
               helm:
+                releaseName: $app.name
                 valueFiles:
                 {{- range $file := list "image" "values" "controllers" }}
                 {{- $buildDir :=  default "build" $.Values.build.path }}
