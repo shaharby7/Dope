@@ -29,7 +29,7 @@ spec:
             sources:
             - repoURL: 'https://shaharby7.github.io/Dope/helm/charts'
               chart: app
-              targetRevision: 0.1.1
+              targetRevision: 0.1.2
               helm:
                 releaseName: {{ $app.name }}
                 valueFiles:

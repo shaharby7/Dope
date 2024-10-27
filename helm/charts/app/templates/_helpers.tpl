@@ -7,7 +7,7 @@
 Expand the name of the chart.
 */}}
 {{- define "app.name" -}}
-{{- default .Values.appName "unnamed-app" | trunc 63 | trimSuffix "-" }}
+{{- .Values.appName | default "unnamed-app" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
