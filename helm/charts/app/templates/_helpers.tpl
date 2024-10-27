@@ -125,7 +125,7 @@ calculates Env variables for all controllers
 
 {{- define "utils.renderEnvVars" -}}
 {{- range $e := . }}
--   name: {{ $e.name }}
-    value: {{ $e.value }}
+-   name: {{ $e.name | quote }}
+    value: {{ $e.value | quote }}
 {{- end}}
 {{- end}}
