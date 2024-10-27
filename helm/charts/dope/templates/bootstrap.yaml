@@ -32,12 +32,12 @@ spec:
               targetRevision: 0.1.0
               helm:
                 valueFiles:
-                {{- range $file := list "image" "values" "apps" }}
+                {{- range $file := list "image" "values" "controllers" }}
                 {{- $buildDir :=  default "build" $.Values.build.path }}
                 {{- $environment := $.Values.environment.name }}
                 - {{ printf "$values/%s/helm/%s/%s/%s.yaml" $buildDir $environment $app.name $file  | clean }}
                 {{- end}}
+        {{- end}} 
             - repoURL: {{ $.Values.providers.git.url }}
               targetRevision: {{ default "main" $.Values.providers.git.ref }}
               ref: values
-        {{- end}} 

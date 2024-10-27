@@ -8,6 +8,7 @@
         "Errorable",
         "HADAS",
         "httprouter",
+        "HTTPSERVER",
         "julienschmidt",
         "loggable",
         "minio",

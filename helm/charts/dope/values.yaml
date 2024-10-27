@@ -3,32 +3,12 @@ project:
   version: 0.1.0
   description: "project example"
   module: github.com/shaharby7/Dope/example
-<<<<<<< HEAD
 
 build:
-  path: ./example/build
-=======
-  directories:
-    build: ./build1
->>>>>>> 15a794341e3ce8cbec64ac1b9defa3854c4590f7
+  path: ./example/build1
 
 apps:
 - name: "app1"
-  values:
-    env:
-    - name: UGLY_NAMES
-      value: "shahar,danny"
-    replicas: 3
-    resources:
-      requests:
-        cpu: 1
-        memory: 2GB
-      limits:
-        cpu: 2
-        memory: 4GB
-    debug:
-      enabled: true
-      port: 4000
 
 environment:
   name: local

@@ -1,5 +1,6 @@
-apps:
-  app:
+controllers:
+  - name: "server1"
+    type: HTTPServer
     autoscaling:
       enabled: true
       minReplicas: 1

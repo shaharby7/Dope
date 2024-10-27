@@ -37,7 +37,7 @@
             "program": "./example/build/src/app1",
             "cwd": "${workspaceFolder}/example",
             "env": {
-                "DOPE_CONTROLLER": "server1",
+                "DOPE_CONTROLLER_NAME": "server1",
                 "DOPE_HTTPSERVER_PORT": "3000",
                 "UGLY_NAMES": "shahar"
             }
