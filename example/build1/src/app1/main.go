@@ -12,7 +12,7 @@ import (
 func main() {
 	var wg sync.WaitGroup
 	wg.Add(1)
-	controllerName := os.Getenv(string(types.ENV_VAR_CONTROLLER))
+	controllerName := os.Getenv(string(types.ENV_VAR_CONTROLLER_NAME))
 	controller, ok := controllers[controllerName]
 	if !ok {
 		panic(fmt.Sprintf("could not find controller:%s", controllerName))
