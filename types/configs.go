@@ -16,6 +16,7 @@ type ProjectMetadataConfig struct {
 
 type AppConfig struct {
 	Name        string `validate:"required"`
+	Version     string `validate:"required"`
 	Description string
 	Controllers []ControllersConfig
 }
@@ -42,79 +43,43 @@ type EnvConfig struct {
 }
 
 type AppEnvConfig struct {
-	Name     string
-	Registry string
-	Values   AppHelmValues
+	Name                string
+	Registry            string
+	Controllers         []ControllerEnvConfig `yaml:"controllers,omitempty"`
+	ControllersDefaults ControllerEnvConfig   `yaml:"controllerDefaults,omitempty"`
+	Values              AppValues             `yaml:"values,omitempty"`
 }
 
-type AppHelmValues struct {
-	Env       []EnvVar
-	Replicas  uint32
-	Resources ResourceRequirements
-	Debug     DebugOptions
+type ControllerEnvConfig struct {
+	Name      string
+	Env       []EnvVar             `yaml:"env,omitempty"`
+	Replicas  uint32               `yaml:"replicas,omitempty"`
+	Resources ResourceRequirements `yaml:"resources,omitempty"`
+	Debug     DebugOptions         `yaml:"debug,omitempty"`
 }
 
-type ResourceRequirements struct {
-	Limits   ResourceList
-	Requests ResourceList
+type AppValues struct {
+	ServiceAccount   AppValuesServiceAccount `yaml:"serviceAccount"`
+	ImagePullSecrets ImagePullSecret         `yaml:"imagePullSecrets"`
+	Annotations      Annotations             `yaml:"annotations"`
+	Labels           Labels                  `yaml:"labels"`
+	SecurityContext  *SecurityContext        `yaml:"securityContext"`
+	VolumeMounts     []VolumeMounts          `yaml:"volumeMounts"`
+	Volumes          []Volume                `yaml:"volumes"`
+	NodeSelector     NodeSelector            `yaml:"nodeSelector"`
+	Affinity         *Affinity               `yaml:"Affinity"`
 }
 
-type ResourceList map[ResourceName]ResourceQuantity
-
-type ResourceName string
-
-const (
-	ResourceCPU              ResourceName = "cpu"
-	ResourceMemory           ResourceName = "memory"
-	ResourceStorage          ResourceName = "storage"
-	ResourceEphemeralStorage ResourceName = "ephemeral-storage"
-)
-
-type ResourceQuantity string 
+type AppValuesServiceAccount struct {
+	Create      bool              `yaml:"create,omitempty"`
+	Automount   bool              `yaml:"automount,omitempty"`
+	Annotations map[string]string `yaml:"annotations,omitempty"`
+	Name        string            `yaml:"name,omitempty"`
+}
 
 type DebugOptions struct {
 	Enabled bool
 	Port    Port
-}
-
-type EnvVar struct {
-	Name      string        `yaml:"name"`
-	Value     string        `yaml:"value,omitempty"`
-	ValueFrom *EnvVarSource `yaml:"valueFrom,omitempty"`
-}
-
-type EnvVarSource struct {
-	FieldRef         *ObjectFieldSelector   `yaml:"fieldRef,omitempty"`
-	ResourceFieldRef *ResourceFieldSelector `yaml:"resourceFieldRef,omitempty"`
-	ConfigMapKeyRef  *ConfigMapKeySelector  `yaml:"configMapKeyRef,omitempty"`
-	SecretKeyRef     *SecretKeySelector     `yaml:"secretKeyRef,omitempty"`
-}
-
-type ObjectFieldSelector struct {
-	APIVersion string `yaml:"apiVersion,omitempty"`
-	FieldPath  string `yaml:"fieldPath"`
-}
-
-type ResourceFieldSelector struct {
-	ContainerName string           `yaml:"containerName,omitempty"`
-	Resource      string           `yaml:"resource"`
-	Divisor       ResourceQuantity `yaml:"divisor,omitempty"`
-}
-
-type ConfigMapKeySelector struct {
-	LocalObjectReference `yaml:",inline"`
-	Key                  string `yaml:"key"`
-	Optional             *bool  `yaml:"optional,omitempty"`
-}
-
-type SecretKeySelector struct {
-	LocalObjectReference `yaml:",inline"`
-	Key                  string `yaml:"key"`
-	Optional             *bool  `yaml:"optional,omitempty"`
-}
-
-type LocalObjectReference struct {
-	Name string `yaml:"name,omitempty"`
 }
 
 type Port uint32

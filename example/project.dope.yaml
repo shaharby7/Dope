@@ -8,6 +8,7 @@ metadata:
 
 apps:
 - name: "app1"
+  version: 5
   description: "app example"
   controllers:
   - name: "server1"
@@ -29,10 +30,21 @@ environments:
   apps:
   - name: "app1"
     values:
+      serviceAccount:
+        create: true
+        automount: true
+        annotations: {}
+      securityContext: {}
+    controllers:
+    - name: "server1"
       env:
       - name: UGLY_NAMES
         value: "shahar,danny"
       replicas: 3
+    controllersDefaults:
+      env:
+      - name: FORBIDDEN_NAMES
+        value: "nice"
       resources:
         requests:
           cpu: 1
@@ -40,9 +52,6 @@ environments:
         limits:
           cpu: 2
           memory: 4GB
-      debug:
-        enabled: true
-        port: 4000
 
   providers:
     git:

@@ -20,7 +20,6 @@ image:
 
 imagePullSecrets: []
 
-
 controllers:
 - name: "server1"
   description: "http sever controlled by app1"
@@ -29,30 +28,28 @@ controllers:
   - name: UGLY_NAMES
     value: "shahar,danny"
   autoscaling:
-      enabled: true
-      minReplicas: 1
-      maxReplicas: 12
-      targetCPUUtilizationPercentage: 90
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 12
+    targetCPUUtilizationPercentage: 90
   resources:
-      requests:
-        cpu: 2
-        memory: 4Gi
-      limits:
-        cpu: 4
-        memory: 8Gi
+    requests:
+      cpu: 2
+      memory: 4Gi
+    limits:
+      cpu: 4
+      memory: 8Gi
 
-## TODO: support "default" values for controllers on app level 
+annotations: {}
+labels: {}
+#securityContext: {}
+# capabilities:
+#   drop:
+#   - ALL
+# readOnlyRootFilesystem: true
+# runAsNonRoot: true
+# runAsUser: 1000
 
-pod:
-  annotations: {}
-  labels: {}
-  securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
 # Additional volumes on the output Deployment definition.
 volumes: []
 # - name: foo
@@ -61,13 +58,13 @@ volumes: []
 #     optional: false
 
 # Additional volumeMounts on the output Deployment definition.
-volumeMounts: []
-# - name: foo
-#   mountPath: "/etc/foo"
-#   readOnly: true
+volumeMounts:
+- name: foo
+  mountPath: "/etc/foo"
+  readOnly: true
 
 nodeSelector: {}
 
 tolerations: []
 
-affinity: {}
+affinity: null

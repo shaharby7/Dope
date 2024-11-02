@@ -36,7 +36,7 @@ func GenerateFiles(
 			if err != nil {
 				return nil, utils.FailedBecause("get app env config", nil)
 			}
-			f, err := generateHelmFiles(config, metadata, env, appConf, appEnvConf)
+			f, err := generateHelmFiles(config, env, appConf, appEnvConf)
 			if err != nil {
 				return nil, utils.FailedBecause("generate helm files", err)
 			}

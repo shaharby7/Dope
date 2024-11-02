@@ -94,14 +94,22 @@ Controller common labels
 */}}
 {{- define "controller.labels" -}}
 {{ include "app.labels" .root }}
-{{ include "controller.selectorLabels" . }}
+{{ include "controller.controllerOnlySelectorLabels" . }}
 {{- end }}
 
 {{/*
 controller selector labels.
 */}}
 {{- define "controller.selectorLabels" -}}
-{{- include "app.selectorLabels" .root }}
+{{ include "app.selectorLabels" .root }}
+{{ include "controller.controllerOnlySelectorLabels" . }}
+{{- end }}
+
+
+{{/*
+controller selector labels without app selector labels.
+*/}}
+{{- define "controller.controllerOnlySelectorLabels" -}}
 app.kubernetes.io/controller: {{ include "controller.name" . }}
 {{- end }}
 
