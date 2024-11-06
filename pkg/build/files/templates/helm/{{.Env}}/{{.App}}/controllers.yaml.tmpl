@@ -1,0 +1,4 @@
+controllers:
+{{- range $contoller := . }}
+{{ $contoller | indent 2 }}
+{{- end}}

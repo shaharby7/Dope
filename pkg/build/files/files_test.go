@@ -53,13 +53,13 @@ var (
 						},
 					},
 					Replicas: REPLICAS,
-					Debug: types.DebugOptions{
+					Debug: &types.DebugOptions{
 						Enabled: true,
 						Port:    types.Port(4000),
 					},
-					Resources: types.ResourceRequirements{
-						Limits: types.ResourceList{
-							types.ResourceCPU: "100m",
+					Resources: &types.ResourceRequirements{
+						Limits: &types.ResourceList{
+							types.ResourceCPU: "100",
 						},
 					},
 				},

@@ -17,11 +17,11 @@ func generateOutputFile[TFileData any, TPathArgs any](
 	dataArgs TFileData,
 ) (*OutputFile, error) {
 	fileTemplate := getTemplate(templateId)
-	path, err := applyTemplateSafe(&fileTemplate.PathTemplate, pathArgs)
+	path, err := applyTemplateSafe(&fileTemplate.PathTemplate, fileTemplate.Name, pathArgs)
 	if err != nil {
 		return nil, utils.FailedBecause(fmt.Sprintf("generate file path from generator %s", fileTemplate.Name), err)
 	}
-	data, err := applyTemplateSafe(&fileTemplate.DataTemplate, dataArgs)
+	data, err := applyTemplateSafe(&fileTemplate.DataTemplate, fileTemplate.Name, dataArgs)
 	if err != nil {
 		return nil, utils.FailedBecause(fmt.Sprintf("generate file path from generator %s", fileTemplate.Name), err)
 	}
@@ -31,13 +31,13 @@ func generateOutputFile[TFileData any, TPathArgs any](
 	}, nil
 }
 
-func applyTemplateSafe(template *template.Template, args any) (*bytes.Buffer, error) {
-	var path bytes.Buffer
+func applyTemplateSafe(template *template.Template, templateName string, args any) (*bytes.Buffer, error) {
+	var result bytes.Buffer
 	var err error
 	if utils.IsEmpty(args) {
-		err = template.Execute(&path, EMPTY_TEMPLATE_INPUT)
+		err = template.ExecuteTemplate(&result, templateName, EMPTY_TEMPLATE_INPUT)
 	} else {
-		err = template.Execute(&path, args)
+		err = template.ExecuteTemplate(&result, templateName, args)
 	}
-	return &path, err
+	return &result, err
 }

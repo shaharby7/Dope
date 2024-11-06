@@ -34,17 +34,23 @@ environments:
         create: true
         automount: true
         annotations: {}
-      securityContext: {}
     controllers:
     - name: "server1"
       env:
-      - name: UGLY_NAMES
+      - name: UGLY_NAMES # overrides the value from the defaults
         value: "shahar,danny"
+      - name: FAMOUS_NAMES # creates new env var for this controller only
+        value: "donald"
       replicas: 3
+      resources:
+        requests:
+          cpu: 0.1 # overrides the default value only for requests.cpu
     controllersDefaults:
       env:
       - name: FORBIDDEN_NAMES
         value: "nice"
+      - name: UGLY_NAMES
+        value: "shahar"
       resources:
         requests:
           cpu: 1
@@ -82,7 +88,7 @@ environments:
       managed: true
       values:
         server:
-          extraArgs: [--auth-mode=server]
+          extraArgs: [ --auth-mode=server ]
           clusterWorkflowTemplates:
             enabled: true
         controller:

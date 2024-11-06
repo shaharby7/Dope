@@ -1,0 +1,18 @@
+controllers:
+  name: server1
+  env:
+    - name: UGLY_NAMES
+      value: shahar,danny
+    - name: FAMOUS_NAMES
+      value: donald
+    - name: FORBIDDEN_NAMES
+      value: nice
+  replicas: 3
+  resources:
+    limits:
+      cpu: "2"
+      memory: 4GB
+    requests:
+      cpu: "0.1"
+      memory: 2GB
+  

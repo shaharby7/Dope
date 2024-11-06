@@ -54,8 +54,8 @@ type ImagePullSecret struct {
 }
 
 type ResourceRequirements struct {
-	Limits   ResourceList
-	Requests ResourceList
+	Limits   *ResourceList `yaml:"limits,omitempty"`
+	Requests *ResourceList `yaml:"requests,omitempty"`
 }
 
 type ResourceList map[ResourceName]ResourceQuantity

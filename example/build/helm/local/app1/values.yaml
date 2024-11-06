@@ -1,25 +1,13 @@
 appName: app1
 
 serviceAccount:
-    create: true
-    automount: true
+  create: true
+  automount: true
 imagePullSecrets:
-    name: ""
+  name: ""
 annotations: {}
 labels: {}
-securityContext:
-    capabilities: null
-    privileged: null
-    selinuxoptions: null
-    windowsoptions: null
-    runasuser: null
-    runasgroup: null
-    runasnonroot: null
-    readonlyrootfilesystem: null
-    allowprivilegeescalation: null
-    procmount: null
-    seccompprofile: null
-    apparmorprofile: null
+securityContext: null
 volumeMounts: []
 volumes: []
 nodeSelector: {}

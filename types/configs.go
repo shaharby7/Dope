@@ -46,7 +46,7 @@ type AppEnvConfig struct {
 	Name                string
 	Registry            string
 	Controllers         []ControllerEnvConfig `yaml:"controllers,omitempty"`
-	ControllersDefaults ControllerEnvConfig   `yaml:"controllerDefaults,omitempty"`
+	ControllersDefaults ControllerEnvConfig   `yaml:"controllersDefaults,omitempty"`
 	Values              AppValues             `yaml:"values,omitempty"`
 }
 
@@ -54,8 +54,8 @@ type ControllerEnvConfig struct {
 	Name      string
 	Env       []EnvVar             `yaml:"env,omitempty"`
 	Replicas  uint32               `yaml:"replicas,omitempty"`
-	Resources ResourceRequirements `yaml:"resources,omitempty"`
-	Debug     DebugOptions         `yaml:"debug,omitempty"`
+	Resources *ResourceRequirements `yaml:"resources,omitempty"`
+	Debug     *DebugOptions         `yaml:"debug,omitempty"`
 }
 
 type AppValues struct {
@@ -63,11 +63,11 @@ type AppValues struct {
 	ImagePullSecrets ImagePullSecret         `yaml:"imagePullSecrets"`
 	Annotations      Annotations             `yaml:"annotations"`
 	Labels           Labels                  `yaml:"labels"`
-	SecurityContext  *SecurityContext        `yaml:"securityContext"`
+	SecurityContext  *SecurityContext        `yaml:"securityContext,flow"`
 	VolumeMounts     []VolumeMounts          `yaml:"volumeMounts"`
 	Volumes          []Volume                `yaml:"volumes"`
 	NodeSelector     NodeSelector            `yaml:"nodeSelector"`
-	Affinity         *Affinity               `yaml:"Affinity"`
+	Affinity         *Affinity               `yaml:"Affinity,flow"`
 }
 
 type AppValuesServiceAccount struct {

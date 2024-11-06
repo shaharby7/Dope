@@ -1,7 +1,11 @@
 package helpers
 
 import (
+	"bytes"
 	"fmt"
+	"io"
+
+	"gopkg.in/yaml.v3"
 
 	"github.com/shaharby7/Dope/pkg/utils"
 	"github.com/shaharby7/Dope/types"
@@ -48,4 +52,20 @@ func GetAppEnvConfig(config *types.ProjectConfig, envName string, appName string
 		return conf, nil
 	}
 	return nil, fmt.Errorf("could not find config for app %s in env %s", appName, envName)
+}
+
+func EncodeYamlWithIndent(object any, indent int) (string, error) {
+	var b bytes.Buffer
+	writer := io.Writer(&b)
+	encoder := yaml.NewEncoder(writer)
+	encoder.SetIndent(indent)
+	err := encoder.Encode(object)
+	if err != nil {
+		return "", err
+	}
+	err = encoder.Close()
+	if err != nil {
+		return "", err
+	}
+	return b.String(), nil
 }
