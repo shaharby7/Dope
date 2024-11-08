@@ -17,3 +17,4 @@ const (
 )
 
 const HTTPSERVER_DEFAULT_PORT = 3000
+const DOPE_DEFAULT_PORT = 4000

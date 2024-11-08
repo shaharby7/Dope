@@ -100,8 +100,10 @@ func _generateAppControllersFile(
 	controllersStrings, err := utils.Map(
 		appEnvConfig.Controllers,
 		func(controller types.ControllerEnvConfig) (string, error) {
-			addControllerDefaults(&controller, &appEnvConfig.ControllersDefaults)
-			controllerString, err := helpers.EncodeYamlWithIndent(controller, 1)
+			controllerConfig, _ := helpers.GetControllerConfig(controller.Name, appConfig)
+			addControllerDefaults(&controller, controllerConfig, &appEnvConfig.ControllersDefaults)
+			addDopeEnvVars(&controller, controllerConfig, appConfig)
+			controllerString, err := helpers.EncodeYamlWithIndent([]types.ControllerEnvConfig{controller}, 1)
 			if err != nil {
 				return "", utils.FailedBecause(
 					fmt.Sprintf("marshal yaml for app %s, env %s", appConfig.Name, appEnvConfig.Name),
@@ -122,19 +124,21 @@ func _generateAppControllersFile(
 }
 
 func addControllerDefaults(
-	controller *types.ControllerEnvConfig,
+	controllerEnvConfig *types.ControllerEnvConfig,
+	controllerConfig *types.ControllerConfig,
 	defaults *types.ControllerEnvConfig,
 ) {
-	addControllerEnvDefaults(controller, defaults)
-	if controller.Resources == nil {
-		controller.Resources = &types.ResourceRequirements{}
+	controllerEnvConfig.PopulatedType_ = controllerConfig.Type
+	addControllerEnvDefaults(controllerEnvConfig, defaults)
+	if controllerEnvConfig.Resources == nil {
+		controllerEnvConfig.Resources = &types.ResourceRequirements{}
 	}
 	if defaults.Resources == nil {
 		defaults.Resources = &types.ResourceRequirements{}
 	}
-	addResourcesDefaults(controller.Resources, defaults.Resources)
-	if controller.Replicas == 0 && defaults.Replicas != 0 {
-		controller.Replicas = defaults.Replicas
+	addResourcesDefaults(controllerEnvConfig.Resources, defaults.Resources)
+	if controllerEnvConfig.Replicas == 0 && defaults.Replicas != 0 {
+		controllerEnvConfig.Replicas = defaults.Replicas
 	}
 }
 
@@ -178,4 +182,36 @@ func addResourcesDefaults(main *types.ResourceRequirements, defaults *types.Reso
 			}
 		}
 	}
+}
+
+func addDopeEnvVars(
+	controllerEnvConfig *types.ControllerEnvConfig,
+	controllerConfig *types.ControllerConfig,
+	appConfig *types.AppConfig,
+) {
+	dopeEnvVars := []types.EnvVar{
+		{
+			Name:  string(types.ENV_VAR_CONTROLLER_TYPE),
+			Value: string(controllerConfig.Type),
+		},
+		{
+			Name:  string(types.ENV_VAR_CONTROLLER_NAME),
+			Value: controllerConfig.Name,
+		},
+		{
+			Name:  string(types.ENV_VAR_APP_NAME),
+			Value: appConfig.Name,
+		},
+		{
+			Name:  string(types.ENV_VAR_DOPE_PORT),
+			Value: fmt.Sprintf("%d", types.DOPE_DEFAULT_PORT),
+		},
+	}
+	if controllerConfig.Type == types.CONTROLLER_TYPE_HTTPSERVER {
+		dopeEnvVars = append(dopeEnvVars, types.EnvVar{
+			Name:  string(types.ENV_VAR_HTTPSERVER_PORT),
+			Value: fmt.Sprintf("%d", types.HTTPSERVER_DEFAULT_PORT),
+		})
+	}
+	controllerEnvConfig.Env = append(controllerEnvConfig.Env, dopeEnvVars...)
 }

@@ -18,13 +18,13 @@ type AppConfig struct {
 	Name        string `validate:"required"`
 	Version     string `validate:"required"`
 	Description string
-	Controllers []ControllersConfig
+	Controllers []ControllerConfig
 }
 
-type ControllersConfig struct {
+type ControllerConfig struct {
 	Name        string `validate:"required"`
 	Description string
-	Type        ControllerType `validate:"required"`
+	Type        CONTROLLER_TYPE `validate:"required"`
 	Actions     []ActionConfig
 }
 
@@ -51,16 +51,17 @@ type AppEnvConfig struct {
 }
 
 type ControllerEnvConfig struct {
-	Name      string
-	Env       []EnvVar             `yaml:"env,omitempty"`
-	Replicas  uint32               `yaml:"replicas,omitempty"`
-	Resources *ResourceRequirements `yaml:"resources,omitempty"`
-	Debug     *DebugOptions         `yaml:"debug,omitempty"`
+	Name           string
+	Env            []EnvVar              `yaml:"env,omitempty"`
+	Replicas       uint32                `yaml:"replicas,omitempty"`
+	Resources      *ResourceRequirements `yaml:"resources,omitempty"`
+	Debug          *DebugOptions         `yaml:"debug,omitempty"`
+	PopulatedType_ CONTROLLER_TYPE       `yaml:"type,omitempty"`
 }
 
 type AppValues struct {
 	ServiceAccount   AppValuesServiceAccount `yaml:"serviceAccount"`
-	ImagePullSecrets ImagePullSecret         `yaml:"imagePullSecrets"`
+	ImagePullSecrets *ImagePullSecret        `yaml:"imagePullSecrets"`
 	Annotations      Annotations             `yaml:"annotations"`
 	Labels           Labels                  `yaml:"labels"`
 	SecurityContext  *SecurityContext        `yaml:"securityContext,flow"`

@@ -19,7 +19,7 @@ var (
 	APP_CONFIG             = &types.AppConfig{
 		Name:        "test-app",
 		Description: "test-app-description",
-		Controllers: []types.ControllersConfig{
+		Controllers: []types.ControllerConfig{
 			{
 				Name:        "test-controller",
 				Description: "test-controller-description",

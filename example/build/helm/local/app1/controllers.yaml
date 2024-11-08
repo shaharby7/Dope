@@ -1,18 +1,29 @@
 controllers:
-  name: server1
-  env:
-    - name: UGLY_NAMES
-      value: shahar,danny
-    - name: FAMOUS_NAMES
-      value: donald
-    - name: FORBIDDEN_NAMES
-      value: nice
-  replicas: 3
-  resources:
-    limits:
-      cpu: "2"
-      memory: 4GB
-    requests:
-      cpu: "0.1"
-      memory: 2GB
+  - name: server1
+    env:
+      - name: UGLY_NAMES
+        value: shahar,danny
+      - name: FAMOUS_NAMES
+        value: donald
+      - name: FORBIDDEN_NAMES
+        value: nice
+      - name: DOPE_CONTROLLER_TYPE
+        value: HTTPServer
+      - name: DOPE_CONTROLLER_NAME
+        value: server1
+      - name: DOPE_APP_NAME
+        value: app1
+      - name: DOPE_DOPE_PORT
+        value: "4000"
+      - name: DOPE_HTTPSERVER_PORT
+        value: "3000"
+    replicas: 3
+    resources:
+      limits:
+        cpu: "2"
+        memory: 4GB
+      requests:
+        cpu: "0.1"
+        memory: 2GB
+    type: HTTPServer
   

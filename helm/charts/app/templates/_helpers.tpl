@@ -77,7 +77,7 @@ create a unique controller short name
 */}}
 {{- define "controller.name" -}}
 {{ $appname := include "app.name" .root }}
-{{- printf "%s-%s" $appname .controller.name | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-%s" $appname .name | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
@@ -86,7 +86,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "controller.fullname" -}}
 {{ $appfullname := include "app.fullname" .root }}
-{{- printf "%s-%s" $appfullname .controller.name | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-%s" $appfullname .name | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
@@ -112,23 +112,6 @@ controller selector labels without app selector labels.
 {{- define "controller.controllerOnlySelectorLabels" -}}
 app.kubernetes.io/controller: {{ include "controller.name" . }}
 {{- end }}
-
-{{/*
-calculates Env variables for all controllers
-*/}}
-{{- define "controller.env" -}}
-{{- $dopeEnv := list 
-(dict "name" "DOPE_CONTROLLER_NAME" "value" .controller.name)
-(dict "name" "DOPE_CONTROLLER_TYPE" "value" .controller.type)
-(dict "name" "DOPE_APP_NAME" "value" .root.Values.appName)
-(dict "name" "DOPE_DOPE_PORT" "value" (include "const.ports.DOPE_DEFAULT" . ))
--}}
-{{- if eq .controller.type "HTTPServer" }}
-{{- $dopeEnv = append $dopeEnv (dict "name" "ENV_VAR_HTTPSERVER_PORT" "value" (include "const.ports.HTTP_DEFAULT" . )) }}
-{{- end }}
-{{- include "utils.renderEnvVars" $dopeEnv }}
-{{- include "utils.renderEnvVars" .controller.env }}
-{{- end -}}
 
 
 {{- define "utils.renderEnvVars" -}}
