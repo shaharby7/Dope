@@ -29,6 +29,7 @@ environments:
 - name: local
   apps:
   - name: "app1"
+    registry: "shaharby7/app1-local"
     values:
       serviceAccount:
         create: true

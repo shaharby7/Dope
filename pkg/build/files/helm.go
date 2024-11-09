@@ -26,7 +26,7 @@ func generateHelmFiles(
 ) ([]*OutputFile, error) {
 	pathArgs := &helmPathArgs{App: appConfig.Name, Env: env}
 	imageDataInput := &imageData{
-		Registry: appEnvConfig.Registry,
+		Registry: appEnvConfig.Registry, // TODO: add registry as a provider and not form string 
 		Tag:      appConfig.Version,
 	}
 	imageFile, err := generateOutputFile(
