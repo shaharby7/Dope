@@ -17,7 +17,7 @@ type MainControllerFileData struct {
 type controllerInput struct {
 	Name       string
 	Identifier string
-	Type       types.ControllerType `validate:"required"`
+	Type       types.CONTROLLER_TYPE `validate:"required"`
 	Actions    []*actionInput
 }
 

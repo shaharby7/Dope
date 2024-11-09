@@ -29,15 +29,16 @@ spec:
             sources:
             - repoURL: 'https://shaharby7.github.io/Dope/helm/charts'
               chart: app
-              targetRevision: 0.1.0
+              targetRevision: 0.1.6
               helm:
+                releaseName: {{ $app.name }}
                 valueFiles:
-                {{- range $file := list "image" "values" "apps" }}
+                {{- range $file := list "image" "values" "controllers" }}
                 {{- $buildDir :=  default "build" $.Values.build.path }}
                 {{- $environment := $.Values.environment.name }}
                 - {{ printf "$values/%s/helm/%s/%s/%s.yaml" $buildDir $environment $app.name $file  | clean }}
                 {{- end}}
+        {{- end}} 
             - repoURL: {{ $.Values.providers.git.url }}
               targetRevision: {{ default "main" $.Values.providers.git.ref }}
               ref: values
-        {{- end}} 

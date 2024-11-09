@@ -8,12 +8,12 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-type ControllerType string
+type CONTROLLER_TYPE string
 
 // enums
 const (
-	HTTPServer ControllerType = "HTTPServer"
-	Command    ControllerType = "Command"
+	CONTROLLER_TYPE_HTTPSERVER CONTROLLER_TYPE = "HTTPServer"
+	CONTROLLER_TYPE_COMMAND    CONTROLLER_TYPE = "Command"
 )
 
 // base types

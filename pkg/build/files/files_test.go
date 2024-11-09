@@ -11,14 +11,15 @@ import (
 )
 
 var (
-	EXAMPLE_PATH        = "./"
-	DST                 = "./build/"
-	REPLICAS     uint32 = uint32(3)
-	UGLY_NAMES          = "SHAHAR,HADAS"
-	APP_CONFIG          = &types.AppConfig{
+	EXAMPLE_PATH           = "./"
+	DST                    = "./build/"
+	REPLICAS        uint32 = uint32(3)
+	UGLY_NAMES             = "SHAHAR,HADAS"
+	FORBIDDEN_NAMES        = "MENASHE"
+	APP_CONFIG             = &types.AppConfig{
 		Name:        "test-app",
 		Description: "test-app-description",
-		Controllers: []types.ControllersConfig{
+		Controllers: []types.ControllerConfig{
 			{
 				Name:        "test-controller",
 				Description: "test-controller-description",
@@ -44,7 +45,7 @@ var (
 			{
 				Registry: "docker.io/shaharby7/hi!",
 				Name:     "test-app",
-				Values: types.AppHelmValues{
+				ControllersDefaults: types.ControllerEnvConfig{
 					Env: []types.EnvVar{
 						{
 							Name:  "UGLY_NAMES",
@@ -52,13 +53,24 @@ var (
 						},
 					},
 					Replicas: REPLICAS,
-					Debug: types.DebugOptions{
-						Enabled:   true,
-						Port: types.Port(4000),
+					Debug: &types.DebugOptions{
+						Enabled: true,
+						Port:    types.Port(4000),
 					},
-					Resources: types.ResourceRequirements{
-						Limits: types.ResourceList{
-							types.ResourceCPU: "100m",
+					Resources: &types.ResourceRequirements{
+						Limits: &types.ResourceList{
+							types.ResourceCPU: "100",
+						},
+					},
+				},
+				Controllers: []types.ControllerEnvConfig{
+					{
+						Name: "test-controller",
+						Env: []types.EnvVar{
+							{
+								Name:  "FORBIDDEN_NAMES",
+								Value: FORBIDDEN_NAMES,
+							},
 						},
 					},
 				},

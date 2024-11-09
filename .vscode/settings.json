@@ -1,6 +1,7 @@
 {
     "cSpell.words": [
         "actionables",
+        "automount",
         "cicd",
         "controllables",
         "Controllerserver",
@@ -8,6 +9,7 @@
         "Errorable",
         "HADAS",
         "httprouter",
+        "HTTPSERVER",
         "julienschmidt",
         "loggable",
         "minio",

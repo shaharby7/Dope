@@ -1,14 +1,13 @@
-env:
-    - name: UGLY_NAMES
-      value: shahar,danny
-replicas: 3
-resources:
-    limits:
-        cpu: "2"
-        memory: 4GB
-    requests:
-        cpu: "1"
-        memory: 2GB
-debug:
-    enabled: true
-    port: 4000
+appName: app1
+
+serviceAccount:
+  create: true
+  automount: true
+imagePullSecrets: null
+annotations: {}
+labels: {}
+securityContext: null
+volumeMounts: []
+volumes: []
+nodeSelector: {}
+Affinity: null

@@ -19,6 +19,7 @@ type GreetOutput struct {
 }
 
 var UGLY_NAMES = strings.Split(os.Getenv("UGLY_NAMES"), ",")
+var FORBIDDEN_NAMES = strings.Split(os.Getenv("FORBIDDEN_NAMES"), ",")
 
 func Greet(
 	ctx context.Context, input *GreetInput, controllerPayload *d.ActionInputMetadata,
@@ -27,6 +28,9 @@ func Greet(
 	*d.ActionOutputMetadata,
 	error,
 ) {
+	if slices.Contains(FORBIDDEN_NAMES, input.Name) {
+		return nil, nil, fmt.Errorf("cannot great %s, it is a forbidden name", input.Name)
+	}
 	greet := ""
 	if slices.Contains(UGLY_NAMES, input.Name) {
 		greet = fmt.Sprintf("I will not greet you %s!", input.Name)

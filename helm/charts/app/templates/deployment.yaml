@@ -1,41 +1,42 @@
-{{- range $app, $val := .Values.apps }}
+{{- range $controller := .Values.controllers }}
 ---
+{{- $includeValues := dict "root" $ "controller" $controller }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "app.fullname" $ }}
+  name: {{ include "controller.fullname" $includeValues }}
   labels:
-    {{- include "app.labels" $ | nindent 4 }}
+    {{- include "controller.labels" $includeValues | nindent 4 }}
 spec:
-  {{- if not .autoscaling.enabled }}
-  replicas: {{ .replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
-      {{- include "app.selectorLabels" $ | nindent 6 }}
+      {{- include "controller.selectorLabels" $includeValues | nindent 6 }}
+  {{- if not ($controller.autoscaling).enabled }}
+  replicas: {{ $controller.replicas }}
+  {{- end }}
   template:
     metadata:
-      {{- with .podAnnotations }}
+      {{- with $.Values.annotations }}
       annotations:
         {{- toYaml $ | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "app.labels" $ | nindent 8 }}
-        {{- with .podLabels }}
+        {{- include "controller.labels" $includeValues | nindent 8 }}
+        {{- with $.Values.labels }}
         {{- toYaml $ | nindent 8 }}
         {{- end }}
     spec:
-      {{- with .imagePullSecrets }}
+      {{- with $.Values.imagePullSecrets }}
       imagePullSecrets:
-        {{- toYaml $ | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "app.serviceAccountName" $ }}
       securityContext:
-        {{- toYaml .podSecurityContext | nindent 8 }}
+        {{- toYaml $.Values.securityContext | nindent 8 }}
       containers:
-        - name: {{ $.Chart.Name }}
+        - name: {{ include "controller.fullname" $includeValues }}
           securityContext:
-            {{- toYaml .securityContext | nindent 12 }}
+            {{- toYaml $.Values.securityContext | nindent 12 }}
           image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
           imagePullPolicy: {{ $.Values.image.pullPolicy }}
           ports:
@@ -51,47 +52,26 @@ spec:
               path: /
               port: http
           resources:
-            {{- toYaml .resources | nindent 12 }}
-          {{- with .volumeMounts }}
+            {{- toYaml $controller.resources | nindent 12 }}
+          {{- with $.Values.volumeMounts }}
           volumeMounts:
-            {{- toYaml $ | nindent 12 }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- if or $.Values.env .env -}}
-          {{- $mergedEnv := mergeOverwrite ($.Values.env | default (dict)) (.env | default (dict)) }}
-          env:
-          - name: DOPE_CONTROLLER
-            value: "server1"
-          - name: DOPE_HTTPSERVER_PORT
-            value: "3000"
-          {{ range $key, $value := $mergedEnv }}
-          - name: {{ $key }}
-            {{- if kindIs "map" $value }}
-            {{- toYaml $value | nindent 12 }}
-            {{- else }}
-            value: {{ $value | quote }}
-            {{- end }}
-          {{- end }}
-          {{ else }}
-          env:
-          - name: DOPE_CONTROLLER
-            value: "server1"
-          - name: DOPE_HTTPSERVER_PORT
-            value: "3000"
-          {{- end }}
-      {{- with .volumes }}
+          env: {{- toYaml $controller.env | nindent 12 }}
+      {{- with $.Values.volumes }}
       volumes:
-        {{- toYaml $ | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .nodeSelector }}
+      {{- with $.Values.nodeSelector }}
       nodeSelector:
-        {{- toYaml $ | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .affinity }}
+      {{- with $.Values.affinity }}
       affinity:
-        {{- toYaml $ | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .tolerations }}
+      {{- with $.Values.tolerations }}
       tolerations:
-        {{- toYaml $ | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
 {{- end }}

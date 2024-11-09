@@ -3,10 +3,10 @@ package files
 import (
 	"embed"
 	"fmt"
-	"text/template"
 	"path"
+	"text/template"
 
-	"github.com/shaharby7/Dope/pkg/utils"
+	sprig "github.com/Masterminds/sprig/v3"
 )
 
 const (
@@ -23,6 +23,7 @@ const (
 	templateId_HELM_APPS
 	templateId_HELM_IMAGE
 	templateId_HELM_VALUES
+	templateId_HELM_CONTROLLERS
 )
 
 var _TEMPLATES_LIST map[templateId]string = map[templateId]string{
@@ -30,14 +31,15 @@ var _TEMPLATES_LIST map[templateId]string = map[templateId]string{
 	templateId_SRC_FILE_CONTROLLER: "src/{{.App}}/controllers.go",
 	templateId_HELM_IMAGE:          "helm/{{.Env}}/{{.App}}/image.yaml",
 	templateId_HELM_VALUES:         "helm/{{.Env}}/{{.App}}/values.yaml",
+	templateId_HELM_CONTROLLERS:    "helm/{{.Env}}/{{.App}}/controllers.yaml",
 	templateId_DOCKERFILE:          "Dockerfile",
 }
 
 type fileTemplate struct {
-	TemplateId      templateId
-	Name string
-	PathTemplate    template.Template
-	DataTemplate    template.Template
+	TemplateId   templateId
+	Name         string
+	PathTemplate template.Template
+	DataTemplate template.Template
 }
 
 var (
@@ -46,24 +48,24 @@ var (
 )
 
 func newFileTemplate(templateId templateId, pathTemplate string) *fileTemplate {
-	parsedPathTemplate, err := template.New(pathTemplate).Parse(pathTemplate)
-	if err != nil {
-		panic(utils.FailedBecause(fmt.Sprintf("parse path template %s", pathTemplate), err))
-	}
 	dataTemplateFullPath := path.Join(
 		_TEMPLATES_DIRECTORY, fmt.Sprintf("%s.%s", pathTemplate, _TEMPLATE_EXTENSION),
 	)
-	parsedFileTemplate, err := template.ParseFS(
-		osFiles, dataTemplateFullPath,
+	associated := path.Base(dataTemplateFullPath)
+	parsedPathTemplate := template.Must(
+		template.New(associated).Funcs(sprig.FuncMap()).Parse(pathTemplate),
 	)
-	if err != nil {
-		panic(utils.FailedBecause(fmt.Sprintf("parse file template %s", pathTemplate), err))
-	}
+	parsedFileTemplate := template.Must(
+		template.New(associated).Funcs(sprig.FuncMap()).ParseFS(
+			osFiles,
+			dataTemplateFullPath,
+		),
+	)
 	return &fileTemplate{
-		Name: pathTemplate,
-		TemplateId:      templateId,
-		PathTemplate:    *parsedPathTemplate,
-		DataTemplate:    *parsedFileTemplate,
+		Name:         path.Base(dataTemplateFullPath),
+		TemplateId:   templateId,
+		PathTemplate: *parsedPathTemplate,
+		DataTemplate: *parsedFileTemplate,
 	}
 }
 

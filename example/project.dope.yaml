@@ -8,6 +8,7 @@ metadata:
 
 apps:
 - name: "app1"
+  version: 6
   description: "app example"
   controllers:
   - name: "server1"
@@ -28,21 +29,36 @@ environments:
 - name: local
   apps:
   - name: "app1"
+    registry: "shaharby7/app1-local"
     values:
+      serviceAccount:
+        create: true
+        automount: true
+        annotations: {}
+    controllers:
+    - name: "server1"
       env:
-      - name: UGLY_NAMES
+      - name: UGLY_NAMES # overrides the value from the defaults
         value: "shahar,danny"
+      - name: FAMOUS_NAMES # creates new env var for this controller only
+        value: "donald"
       replicas: 3
       resources:
         requests:
-          cpu: 1
-          memory: 2GB
+          cpu: 1 # overrides the default value only for requests.cpu
+    controllersDefaults:
+      env:
+      - name: FORBIDDEN_NAMES
+        value: "nice"
+      - name: UGLY_NAMES
+        value: "shahar"
+      resources:
+        requests:
+          cpu: 2
+          memory: "2Gi"
         limits:
           cpu: 2
-          memory: 4GB
-      debug:
-        enabled: true
-        port: 4000
+          memory: "4Gi"
 
   providers:
     git:
@@ -73,7 +89,7 @@ environments:
       managed: true
       values:
         server:
-          extraArgs: [--auth-mode=server]
+          extraArgs: [ --auth-mode=server ]
           clusterWorkflowTemplates:
             enabled: true
         controller:
