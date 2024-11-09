@@ -77,7 +77,7 @@ create a unique controller short name
 */}}
 {{- define "controller.name" -}}
 {{ $appname := include "app.name" .root }}
-{{- printf "%s-%s" $appname .name | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-%s" $appname .controller.name | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
@@ -86,7 +86,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "controller.fullname" -}}
 {{ $appfullname := include "app.fullname" .root }}
-{{- printf "%s-%s" $appfullname .name | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-%s" $appfullname .controller.name | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*

@@ -54,10 +54,10 @@ environments:
       resources:
         requests:
           cpu: 2
-          memory: 2GB
+          memory: "2Gi"
         limits:
           cpu: 2
-          memory: 4GB
+          memory: "4Gi"
 
   providers:
     git:

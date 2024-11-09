@@ -5,7 +5,7 @@ project:
   module: github.com/shaharby7/Dope/example
 
 build:
-  path: ./example/build1
+  path: ./example/build
 
 apps:
 - name: "app1"

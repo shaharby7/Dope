@@ -21,9 +21,9 @@ controllers:
     resources:
       limits:
         cpu: "2"
-        memory: 4GB
+        memory: 4Gi
       requests:
         cpu: "1"
-        memory: 2GB
+        memory: 2Gi
     type: HTTPServer
   
