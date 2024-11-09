@@ -11,8 +11,8 @@ spec:
   selector:
     matchLabels:
       {{- include "controller.selectorLabels" $includeValues | nindent 6 }}
-  {{- if not (and $controller.autoscaling $controller.autoscaling.enabled) }}
-  replicas: {{ $controller.replicaCount }}
+  {{- if not ($controller.autoscaling).enabled }}
+  replicas: {{ $controller.replicas }}
   {{- end }}
   template:
     metadata:

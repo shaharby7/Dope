@@ -27,11 +27,12 @@ controllers:
   env:
   - name: UGLY_NAMES
     value: "shahar,danny"
-  autoscaling:
-    enabled: true
-    minReplicas: 1
-    maxReplicas: 12
-    targetCPUUtilizationPercentage: 90
+  # autoscaling:
+  #   enabled: true
+  #   minReplicas: 1
+  #   maxReplicas: 12
+  #   targetCPUUtilizationPercentage: 90
+  replicas: 2
   resources:
     requests:
       cpu: 2
