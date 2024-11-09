@@ -8,7 +8,7 @@ metadata:
 
 apps:
 - name: "app1"
-  version: 5
+  version: 6
   description: "app example"
   controllers:
   - name: "server1"
@@ -44,7 +44,7 @@ environments:
       replicas: 3
       resources:
         requests:
-          cpu: 0.1 # overrides the default value only for requests.cpu
+          cpu: 1 # overrides the default value only for requests.cpu
     controllersDefaults:
       env:
       - name: FORBIDDEN_NAMES
@@ -53,7 +53,7 @@ environments:
         value: "shahar"
       resources:
         requests:
-          cpu: 1
+          cpu: 2
           memory: 2GB
         limits:
           cpu: 2
