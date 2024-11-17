@@ -1,0 +1,101 @@
+dopeVersion: 0.0.1
+
+metadata:
+  name: example
+  version: 0.1.0
+  description: "project example"
+  module: github.com/shaharby7/Dope/example
+
+apps:
+- name: "app1"
+  version: 6
+  description: "app example"
+  controllers:
+  - name: "server1"
+    description: "http sever controlled by app1"
+    type: HTTPServer
+    actions:
+    - name: "/api/greet"
+      description: "Great anyone who wants"
+      package: pkg/greeter
+      ref: Greet
+      controllerBinding:
+        method: POST
+  requirements:
+    env:
+    - "UGLY_NAMES"
+
+environments:
+- name: local
+  apps:
+  - name: "app1"
+    registry: "shaharby7/app1-local"
+    values:
+      serviceAccount:
+        create: true
+        automount: true
+        annotations: {}
+    controllers:
+    - name: "server1"
+      env:
+      - name: UGLY_NAMES # overrides the value from the defaults
+        value: "shahar,danny"
+      - name: FAMOUS_NAMES # creates new env var for this controller only
+        value: "donald"
+      replicas: 3
+      resources:
+        requests:
+          cpu: 1 # overrides the default value only for requests.cpu
+    controllersDefaults:
+      env:
+      - name: FORBIDDEN_NAMES
+        value: "nice"
+      - name: UGLY_NAMES
+        value: "shahar"
+      resources:
+        requests:
+          cpu: 2
+          memory: "2Gi"
+        limits:
+          cpu: 2
+          memory: "4Gi"
+
+  providers:
+    git:
+      url: git@github.com:shaharby7/Dope.git
+      path: example
+      ref: shahar
+    kubernetes:
+      type: minikube
+    storage:
+      type: minio
+      managed: true
+    cd:
+      type: argo-cd
+      managed: true
+      values:
+        redis-ha:
+          enabled: false
+        controller:
+          replicas: 1
+        server:
+          replicas: 1
+        repoServer:
+          replicas: 1
+        applicationSet:
+          replicaCount: 1
+    workflows:
+      type: argo-workflows
+      managed: true
+      values:
+        server:
+          extraArgs: [ --auth-mode=server ]
+          clusterWorkflowTemplates:
+            enabled: true
+        controller:
+          workflowNamespaces:
+          - dope
+          rbac:
+            create: true
+          clusterWorkflowTemplates:
+            enabled: true
