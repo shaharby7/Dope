@@ -4,6 +4,8 @@ import (
 	"fmt"
 
 	"github.com/shaharby7/Dope/pkg/build/helpers"
+
+	configHelpers "github.com/shaharby7/Dope/pkg/config/helpers"
 	"github.com/shaharby7/Dope/pkg/utils"
 	"github.com/shaharby7/Dope/types"
 )
@@ -26,7 +28,7 @@ func generateHelmFiles(
 ) ([]*OutputFile, error) {
 	pathArgs := &helmPathArgs{App: appConfig.Name, Env: env}
 	imageDataInput := &imageData{
-		Registry: appEnvConfig.Registry, // TODO: add registry as a provider and not form string 
+		Registry: appEnvConfig.Registry, // TODO: add registry as a provider and not form string
 		Tag:      appConfig.Version,
 	}
 	imageFile, err := generateOutputFile(
@@ -100,7 +102,7 @@ func _generateAppControllersFile(
 	controllersStrings, err := utils.Map(
 		appEnvConfig.Controllers,
 		func(controller types.ControllerEnvConfig) (string, error) {
-			controllerConfig, _ := helpers.GetControllerConfig(controller.Name, appConfig)
+			controllerConfig, _ := configHelpers.GetControllerConfig(controller.Name, appConfig)
 			addControllerDefaults(&controller, controllerConfig, &appEnvConfig.ControllersDefaults)
 			addDopeEnvVars(&controller, controllerConfig, appConfig)
 			controllerString, err := helpers.EncodeYamlWithIndent([]types.ControllerEnvConfig{controller}, 1)
@@ -163,7 +165,7 @@ func addResourcesDefaults(main *types.ResourceRequirements, defaults *types.Reso
 	if main.Limits == nil {
 		main.Limits = &types.ResourceList{}
 	}
-	if defaults != nil {
+	if defaults != nil && defaults.Limits != nil {
 		for defaultK, defaultVal := range *defaults.Limits {
 			_, ok := (*main.Limits)[defaultK]
 			if !ok {
@@ -174,7 +176,7 @@ func addResourcesDefaults(main *types.ResourceRequirements, defaults *types.Reso
 	if main.Requests == nil {
 		main.Requests = &types.ResourceList{}
 	}
-	if defaults != nil {
+	if defaults != nil && defaults.Requests != nil {
 		for defaultK, defaultVal := range *defaults.Requests {
 			_, ok := (*main.Requests)[defaultK]
 			if !ok {

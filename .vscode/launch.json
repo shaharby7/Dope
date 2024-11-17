@@ -14,7 +14,7 @@
             "args": [
                 "build",
                 "-p",
-                "./example/project.dope.yaml",
+                "./example/.dope",
                 "-d",
                 "./example/build"
             ]

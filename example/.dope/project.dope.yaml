@@ -1,0 +1,10 @@
+api: Dope/V1
+type: Project
+name: example
+description: "project example"
+values:
+  dopeVersion: 0.0.1
+  module: github.com/shaharby7/Dope/example
+  versioning:
+    granularity: "app" # "app | project"
+    version: 0.0.1

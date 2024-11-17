@@ -1,0 +1,20 @@
+api: Dope/V1
+type: App
+name: "myapp"
+description: "example app"
+values:
+  version: 6
+  controllers:
+  - name: "server1"
+    description: "http sever controlled by app1"
+    type: HTTPServer
+    actions:
+    - name: "/api/greet"
+      description: "Great anyone who wants"
+      package: pkg/greeter
+      ref: Greet
+      controllerBinding:
+        method: POST
+  requirements:
+    env:
+    - "UGLY_NAMES"

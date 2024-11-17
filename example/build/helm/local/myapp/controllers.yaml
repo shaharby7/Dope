@@ -12,7 +12,7 @@ controllers:
       - name: DOPE_CONTROLLER_NAME
         value: server1
       - name: DOPE_APP_NAME
-        value: app1
+        value: myapp
       - name: DOPE_DOPE_PORT
         value: "4000"
       - name: DOPE_HTTPSERVER_PORT
