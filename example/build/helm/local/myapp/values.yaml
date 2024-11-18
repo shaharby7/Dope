@@ -1,4 +1,4 @@
-appName: app1
+appName: myapp
 
 serviceAccount:
   create: true

@@ -38,7 +38,7 @@ var (
 			},
 		},
 	}
-	LOCAL_ENV_CONFIG = types.EnvConfig{
+	LOCAL_ENV_CONFIG = &types.EnvConfig{
 		Name:     "local",
 		Provider: "minikube",
 		Apps: []types.AppEnvConfig{
@@ -79,14 +79,16 @@ var (
 	}
 	PROJECT_CONFIG = types.ProjectConfig{
 		DopeVersion: "0.1.0",
-		Metadata: types.ProjectMetadataConfig{
-			Name:        "test",
-			Version:     "0.1.0",
-			Module:      "shahar.com/hi!",
-			Description: "test description",
+		Name:        "test",
+		Module:      "shahar.com/hi!",
+		Description: "test description",
+		Versioning: &types.ProjectVersioningOptions{
+			Granularity: types.VERSIONING_GRANULARITY_LEVEL_APP,
 		},
-		Apps: []types.AppConfig{*APP_CONFIG},
-		Environments: []types.EnvConfig{
+		Apps: []*types.AppConfig{
+			APP_CONFIG,
+		},
+		Environments: []*types.EnvConfig{
 			LOCAL_ENV_CONFIG,
 		},
 	}

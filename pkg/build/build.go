@@ -2,22 +2,19 @@ package build
 
 import (
 	"fmt"
-	"os"
-	"path/filepath"
-
-	"github.com/go-playground/validator/v10"
-	"github.com/shaharby7/Dope/pkg/utils"
 
 	"github.com/shaharby7/Dope/pkg/build/files"
-
 	bTypes "github.com/shaharby7/Dope/pkg/build/types"
+	"github.com/shaharby7/Dope/pkg/config"
+	"github.com/shaharby7/Dope/pkg/utils"
 	"github.com/shaharby7/Dope/types"
-	"gopkg.in/yaml.v3"
 )
 
-var validate = validator.New(validator.WithRequiredStructEnabled())
-
-func BuildProject(projPath string, dst string, options bTypes.BuildOptions) error {
+func BuildProject(
+	projPath string,
+	dst string,
+	options bTypes.BuildOptions,
+) error {
 	metadata, err := getBuildMetadata()
 	if err != nil {
 		return utils.FailedBecause(
@@ -25,7 +22,7 @@ func BuildProject(projPath string, dst string, options bTypes.BuildOptions) erro
 			err,
 		)
 	}
-	config, err := getConfigByPath(projPath)
+	config, err := config.ReadConfig(projPath)
 	if err != nil {
 		return utils.FailedBecause(
 			fmt.Sprintf("generate config from file (%s)", projPath),
@@ -51,32 +48,11 @@ func BuildProject(projPath string, dst string, options bTypes.BuildOptions) erro
 	return nil
 }
 
-func getConfigByPath(projectFile string) (*types.ProjectConfig, error) {
-	config := &types.ProjectConfig{}
-	path, err := filepath.Abs(projectFile)
-	if err != nil {
-		return config, fmt.Errorf("config validation error: %w", err)
-	}
-	content, err := os.ReadFile(path)
-	if err != nil {
-		return config, fmt.Errorf("config validation error: %w", err)
-	}
-	err = yaml.Unmarshal(content, &config)
-	if err != nil {
-		return config, fmt.Errorf("config validation error: %w", err)
-	}
-	err = validate.Struct(config)
-	if err != nil {
-		return config, fmt.Errorf("config validation error: %w", err)
-	}
-	return config, nil
-}
-
 func getApplicationsList(config *types.ProjectConfig, buildOptions *bTypes.BuildOptions) []string {
 	if len(buildOptions.Apps) > 0 {
 		return buildOptions.Apps
 	}
-	appsList, _ := utils.Map(config.Apps, func(app types.AppConfig) (string, error) { return app.Name, nil })
+	appsList, _ := utils.Map(config.Apps, func(app *types.AppConfig) (string, error) { return app.Name, nil })
 	return utils.RemoveDuplicates(appsList)
 }
 
@@ -84,7 +60,7 @@ func getEnvironmentList(config *types.ProjectConfig, buildOptions *bTypes.BuildO
 	if len(buildOptions.Envs) > 0 {
 		return buildOptions.Apps
 	}
-	envsList, _ := utils.Map(config.Environments, func(env types.EnvConfig) (string, error) { return env.Name, nil })
+	envsList, _ := utils.Map(config.Environments, func(env *types.EnvConfig) (string, error) { return env.Name, nil })
 	return utils.RemoveDuplicates(envsList)
 }
 

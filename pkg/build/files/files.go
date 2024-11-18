@@ -1,8 +1,8 @@
 package files
 
 import (
-	"github.com/shaharby7/Dope/pkg/build/helpers"
 	bTypes "github.com/shaharby7/Dope/pkg/build/types"
+	configHelpers "github.com/shaharby7/Dope/pkg/config/helpers"
 	"github.com/shaharby7/Dope/pkg/utils"
 	"github.com/shaharby7/Dope/types"
 )
@@ -22,7 +22,7 @@ func GenerateFiles(
 	}
 	files = append(files, f...)
 	for _, app := range appsList {
-		appConf, err := helpers.GetAppConfig(config, app)
+		appConf, err := configHelpers.GetAppConfig(config, app)
 		if err != nil {
 			return nil, utils.FailedBecause("get app config", nil)
 		}
@@ -32,9 +32,9 @@ func GenerateFiles(
 		}
 		files = append(files, f...)
 		for _, env := range envsList {
-			appEnvConf, err := helpers.GetAppEnvConfig(config, env, app)
+			appEnvConf, err := configHelpers.GetAppEnvConfig(config, env, app)
 			if err != nil {
-				return nil, utils.FailedBecause("get app env config", nil)
+				return nil, utils.FailedBecause("get app env config", err)
 			}
 			f, err := generateHelmFiles(config, env, appConf, appEnvConf)
 			if err != nil {

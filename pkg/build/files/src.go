@@ -52,7 +52,7 @@ func generateControllerData(
 		}
 		for _, actionConfig := range controllerConfig.Actions {
 			imports.Add(
-				path.Join(config.Metadata.Module, actionConfig.Package),
+				path.Join(config.Module, actionConfig.Package),
 			)
 			action := &actionInput{
 				Name: actionConfig.Name,
