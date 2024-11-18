@@ -44,12 +44,6 @@ const (
 	VERSIONING_GRANULARITY_LEVEL_APP     VERSIONING_GRANULARITY_LEVELS = "app"
 )
 
-// dopeVersion: 0.0.1
-// module: github.com/shaharby7/Dope/example
-// versioning:
-//   granularity: "app" # "app | project"
-//   version: 0.0.1
-
 type AppConfig struct {
 	Name        string `validate:"required" yaml:"name"`
 	Description string `yaml:"description"`
@@ -73,9 +67,9 @@ type ActionConfig struct {
 }
 
 type EnvConfig struct {
-	Name        string `validate:"required" yaml:"name"`
-	Description string `yaml:"description"`
-	Provider    string `validate:"required"`
+	Name        string              `validate:"required" yaml:"name"`
+	Description string              `yaml:"description"`
+	Providers   *EnvProvidersConfig `validate:"required" yaml:"providers,omitempty"`
 	Apps        []AppEnvConfig
 }
 
@@ -121,3 +115,39 @@ type DebugOptions struct {
 	Enabled bool
 	Port    Port
 }
+
+type EnvProvidersConfig struct {
+	Git *struct {
+		Url  string `validate:"required" yaml:"url"`
+		Path string `validate:"required" yaml:"path"`
+		Ref  string `validate:"required" yaml:"ref"`
+	} `validate:"required" yaml:"git"`
+	Kubernetes *struct {
+		Type K8S_PROVIDERS `validate:"required" yaml:"type"`
+	}
+	Docker *struct {
+		Registry string `validate:"required" yaml:"registry"`
+		Prefix   string `validate:"required" yaml:"prefix"`
+	} `validate:"required" yaml:"docker"`
+	Storage *struct {
+		Managed bool   `validate:"required" yaml:"managed"`
+		Url     string `yaml:"url"`
+	} `validate:"required" yaml:"storage"`
+	Cd *struct {
+		Type    CD_PROVIDERS `validate:"required" yaml:"type"`
+		Managed bool         `validate:"required" yaml:"managed"`
+		Values  *any         `yaml:"values"`
+	} `validate:"required" yaml:"cd"`
+}
+
+type K8S_PROVIDERS string
+
+const (
+	K8S_PROVIDERS_MINIKUBE K8S_PROVIDERS = "minikube"
+)
+
+type CD_PROVIDERS string
+
+const (
+	CD_PROVIDERS_ARGO CD_PROVIDERS = "argo-cd"
+)

@@ -90,7 +90,7 @@ $ helm repo add dope https://shaharby7.github.io/Dope/helm/charts
 
 8. Deploy your application!:
 ```shell
-$ helm install greater dope/application -f ./build/helm/values/local/greater/values.yaml -f ./build/helm/values/local/greater/image.yaml -f ./build/helm/values/local/greater/apps.yaml
+helm install dope dope/dope -n dope -f ./example/build/helm/local/dope/values.yaml  --create-namespace
 ```
 
 9. Review your deployment and get your greetings! (#todo)

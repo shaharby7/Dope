@@ -6,6 +6,8 @@ import (
 	"github.com/shaharby7/Dope/pkg/build/helpers"
 
 	configHelpers "github.com/shaharby7/Dope/pkg/config/helpers"
+
+	bTypes "github.com/shaharby7/Dope/pkg/build/types"
 	"github.com/shaharby7/Dope/pkg/utils"
 	"github.com/shaharby7/Dope/types"
 )
@@ -20,7 +22,7 @@ type imageData struct {
 	Tag      string
 }
 
-func generateHelmFiles(
+func generateAppHelmFiles(
 	_ *types.ProjectConfig,
 	env string,
 	appConfig *types.AppConfig,
@@ -216,4 +218,62 @@ func addDopeEnvVars(
 		})
 	}
 	controllerEnvConfig.Env = append(controllerEnvConfig.Env, dopeEnvVars...)
+}
+
+type tHelmDopeValues struct {
+	Project      *types.ProjectConfig      `yaml:"project,omitempty"`
+	Build        *tHelmDopeValuesBuild     `yaml:"build,omitempty"`
+	Apps         []*tHelmDopeValuesApp     `yaml:"apps,omitempty"`
+	Providers    *types.EnvProvidersConfig `yaml:"providers,omitempty"`
+	ArgoCdValues *any                      `yaml:"argo-cd,omitempty"`
+}
+
+type tHelmDopeValuesBuild struct {
+	Path string `yaml:"path"`
+}
+
+type tHelmDopeValuesApp struct {
+	Name string `yaml:"name"`
+}
+
+func generateHelmDopeValuesFile(metadata *bTypes.BuildMetadata, config *types.ProjectConfig, envConf *types.EnvConfig) ([]*OutputFile, error) {
+	appList, _ := utils.Map(
+		config.Apps,
+		func(app *types.AppConfig) (*tHelmDopeValuesApp, error) {
+			return &tHelmDopeValuesApp{
+				Name: app.Name,
+			}, nil
+		},
+	)
+	values := &tHelmDopeValues{
+		Project: &types.ProjectConfig{
+			Name:        config.Name,
+			Description: config.Description,
+			Module:      config.Module,
+			Versioning:  config.Versioning,
+		},
+		Build: &tHelmDopeValuesBuild{
+			Path: metadata.BuildPath,
+		},
+		Apps:      appList,
+		Providers: envConf.Providers,
+	}
+	if envConf.Providers != nil &&
+		envConf.Providers.Cd != nil &&
+		envConf.Providers.Cd.Managed {
+		values.ArgoCdValues = envConf.Providers.Cd.Values
+	}
+	yaml, err := helpers.EncodeYamlWithIndent(values, 1)
+	if err != nil {
+		return nil, utils.FailedBecause(
+			fmt.Sprintf("marshal yaml for dope values, env %s", envConf.Name),
+			err,
+		)
+	}
+	f, err := generateOutputFile(
+		templateId_HELM_DOPE_VALUES,
+		struct{ Env string }{Env: envConf.Name},
+		string(yaml),
+	)
+	return []*OutputFile{f}, err
 }

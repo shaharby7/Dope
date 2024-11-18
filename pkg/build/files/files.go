@@ -21,10 +21,21 @@ func GenerateFiles(
 		return nil, utils.FailedBecause("generate root files", err)
 	}
 	files = append(files, f...)
+	for _, env := range envsList {
+		envConf, err := configHelpers.GetEnvConfig(config, env)
+		if err != nil {
+			return nil, err
+		}
+		f, err := generateHelmDopeValuesFile(metadata, config, envConf)
+		if err != nil {
+			return nil, utils.FailedBecause("generate helm dope values file", err)
+		}
+		files = append(files, f...)
+	}
 	for _, app := range appsList {
 		appConf, err := configHelpers.GetAppConfig(config, app)
 		if err != nil {
-			return nil, utils.FailedBecause("get app config", nil)
+			return nil, err
 		}
 		f, err := generateSrcFiles(config, appConf)
 		if err != nil {
@@ -34,11 +45,11 @@ func GenerateFiles(
 		for _, env := range envsList {
 			appEnvConf, err := configHelpers.GetAppEnvConfig(config, env, app)
 			if err != nil {
-				return nil, utils.FailedBecause("get app env config", err)
+				return nil, err
 			}
-			f, err := generateHelmFiles(config, env, appConf, appEnvConf)
+			f, err := generateAppHelmFiles(config, env, appConf, appEnvConf)
 			if err != nil {
-				return nil, utils.FailedBecause("generate helm files", err)
+				return nil, utils.FailedBecause("generate helm values files", err)
 			}
 			files = append(files, f...)
 		}

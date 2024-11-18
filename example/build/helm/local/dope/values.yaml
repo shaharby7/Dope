@@ -1,0 +1,52 @@
+project:
+  name: example
+  description: project example
+  dopeVersion: ""
+  module: github.com/shaharby7/Dope/example
+  versioning:
+    granularity: app
+    version: 0.0.1
+build:
+  path: ./example/build
+apps:
+  - name: myapp
+providers:
+  git:
+    url: https://github.com/shaharby7/Dope.git
+    path: example
+    ref: shahar
+  kubernetes:
+    type: minikube
+  docker: null
+  storage:
+    managed: true
+    url: ""
+  cd:
+    type: argo-cd
+    managed: true
+    values:
+      applicationSet:
+        replicaCount: 1
+      controller:
+        replicas: 1
+      crds:
+        install: false
+      redis-ha:
+        enabled: false
+      repoServer:
+        replicas: 1
+      server:
+        replicas: 1
+argo-cd:
+  applicationSet:
+    replicaCount: 1
+  controller:
+    replicas: 1
+  crds:
+    install: false
+  redis-ha:
+    enabled: false
+  repoServer:
+    replicas: 1
+  server:
+    replicas: 1

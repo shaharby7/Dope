@@ -39,8 +39,8 @@ var (
 		},
 	}
 	LOCAL_ENV_CONFIG = &types.EnvConfig{
-		Name:     "local",
-		Provider: "minikube",
+		Name:      "local",
+		Providers: &types.EnvProvidersConfig{},
 		Apps: []types.AppEnvConfig{
 			{
 				Registry: "docker.io/shaharby7/hi!",

@@ -15,7 +15,7 @@ func BuildProject(
 	dst string,
 	options bTypes.BuildOptions,
 ) error {
-	metadata, err := getBuildMetadata()
+	metadata, err := getBuildMetadata(dst)
 	if err != nil {
 		return utils.FailedBecause(
 			"generate build metadata",
@@ -64,12 +64,13 @@ func getEnvironmentList(config *types.ProjectConfig, buildOptions *bTypes.BuildO
 	return utils.RemoveDuplicates(envsList)
 }
 
-func getBuildMetadata() (*bTypes.BuildMetadata, error) {
+func getBuildMetadata(buildPath string) (*bTypes.BuildMetadata, error) {
 	gitRef, err := utils.GetGitHEADRef()
 	if err != nil {
 		return nil, err
 	}
 	return &bTypes.BuildMetadata{
-		GitRef: gitRef,
+		GitRef:    gitRef,
+		BuildPath: buildPath,
 	}, nil
 }
