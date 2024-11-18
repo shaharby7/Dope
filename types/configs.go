@@ -81,6 +81,7 @@ type EnvConfig struct {
 
 type AppEnvConfig struct {
 	Name                string `validate:"required" yaml:"name"`
+	AppName             string `validate:"required" yaml:"appName"`
 	Description         string `yaml:"description"`
 	Registry            string
 	Controllers         []ControllerEnvConfig `yaml:"controllers,omitempty"`

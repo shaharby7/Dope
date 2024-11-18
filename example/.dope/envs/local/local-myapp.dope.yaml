@@ -1,6 +1,6 @@
 api: Dope/V1
 type: AppEnv
-name: "myapp"
+name: "local-myapp"
 binding:
   env: local
   app: "myapp"

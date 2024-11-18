@@ -41,7 +41,7 @@ func GetAppEnvConfig(config *types.ProjectConfig, envName string, appName string
 	ok, conf := utils.Find(
 		env.Apps,
 		func(e types.AppEnvConfig) bool {
-			return e.Name == appName
+			return e.AppName == appName
 		},
 	)
 	if ok {
