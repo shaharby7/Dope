@@ -14,5 +14,6 @@ const (
 )
 
 type BuildMetadata struct {
-	GitRef string
+	GitRef    string
+	BuildPath string
 }

@@ -24,6 +24,7 @@ const (
 	templateId_HELM_IMAGE
 	templateId_HELM_VALUES
 	templateId_HELM_CONTROLLERS
+	templateId_HELM_DOPE_VALUES
 )
 
 var _TEMPLATES_LIST map[templateId]string = map[templateId]string{
@@ -32,6 +33,7 @@ var _TEMPLATES_LIST map[templateId]string = map[templateId]string{
 	templateId_HELM_IMAGE:          "helm/{{.Env}}/{{.App}}/image.yaml",
 	templateId_HELM_VALUES:         "helm/{{.Env}}/{{.App}}/values.yaml",
 	templateId_HELM_CONTROLLERS:    "helm/{{.Env}}/{{.App}}/controllers.yaml",
+	templateId_HELM_DOPE_VALUES:    "helm/{{.Env}}/dope/values.yaml",
 	templateId_DOCKERFILE:          "Dockerfile",
 }
 

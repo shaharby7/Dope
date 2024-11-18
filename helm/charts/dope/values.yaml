@@ -1,8 +1,11 @@
 project:
   name: example
-  version: 0.1.0
   description: "project example"
+  dopeVersion: 0.0.1
   module: github.com/shaharby7/Dope/example
+  versioning:
+    granularity: "app" # "app | project"
+    version: 0.0.1
 
 build:
   path: ./example/build
@@ -29,12 +32,10 @@ providers:
     managed: false
   cd:
     type: argo-cd
-    managed: false
-    # values:
+    managed: true
   workflows:
     type: argo-workflows
     managed: false
-
 
 argo-cd:
   crds:
@@ -50,17 +51,17 @@ argo-cd:
   applicationSet:
     replicaCount: 1
 
-argo-workflows:
-  crds:
-    install: false
-  server:
-    extraArgs: [--auth-mode=server]
-    clusterWorkflowTemplates:
-      enabled: true
-  controller:
-    workflowNamespaces:
-    - dope
-    rbac:
-      create: true
-    clusterWorkflowTemplates:
-      enabled: true
+# argo-workflows:
+#   crds:
+#     install: false
+#   server:
+#     extraArgs: [ --auth-mode=server ]
+#     clusterWorkflowTemplates:
+#       enabled: true
+#   controller:
+#     workflowNamespaces:
+#     - dope
+#     rbac:
+#       create: true
+#     clusterWorkflowTemplates:
+#       enabled: true
