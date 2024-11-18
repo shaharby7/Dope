@@ -12,7 +12,7 @@ apps:
   - name: myapp
 providers:
   git:
-    url: git@github.com:shaharby7/Dope.git
+    url: https://github.com/shaharby7/Dope.git
     path: example
     ref: shahar
   kubernetes:
@@ -29,6 +29,8 @@ providers:
         replicaCount: 1
       controller:
         replicas: 1
+      crds:
+        install: false
       redis-ha:
         enabled: false
       repoServer:
@@ -40,6 +42,8 @@ argo-cd:
     replicaCount: 1
   controller:
     replicas: 1
+  crds:
+    install: false
   redis-ha:
     enabled: false
   repoServer:
