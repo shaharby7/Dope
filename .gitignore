@@ -24,3 +24,5 @@ go.work
 **/__debug_bin*
 example/staging/**
 !**/.gitkeep
+
+dope_config

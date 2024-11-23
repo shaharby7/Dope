@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 )
 
-func ReadConfig(projectPath string) (*t.ProjectConfig, error) {
-	path, err := filepath.Abs(projectPath)
+func ReadConfig(dopePath string) (*t.ProjectConfig, error) {
+	path, err := filepath.Abs(dopePath)
 	if err != nil {
 		return nil, fmt.Errorf("config validation error: %w", err)
 	}
