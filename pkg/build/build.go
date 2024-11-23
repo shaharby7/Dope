@@ -11,7 +11,7 @@ import (
 )
 
 func BuildProject(
-	projPath string,
+	dopePath string,
 	dst string,
 	options bTypes.BuildOptions,
 ) error {
@@ -22,10 +22,10 @@ func BuildProject(
 			err,
 		)
 	}
-	config, err := config.ReadConfig(projPath)
+	config, err := config.ReadConfig(dopePath)
 	if err != nil {
 		return utils.FailedBecause(
-			fmt.Sprintf("generate config from file (%s)", projPath),
+			fmt.Sprintf("generate config from file (%s)", dopePath),
 			err,
 		)
 	}
