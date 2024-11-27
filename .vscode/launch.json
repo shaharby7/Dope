@@ -13,7 +13,7 @@
             "cwd": "${workspaceFolder}",
             "args": [
                 "create",
-                "alsdjf",
+                "project",
                 "--verbose"
                 // "build",
                 // "-p",

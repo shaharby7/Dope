@@ -3,9 +3,11 @@ package files
 import (
 	"fmt"
 
-	"github.com/shaharby7/Dope/pkg/build/helpers"
+	yamlUtils "github.com/shaharby7/Dope/pkg/utils/yaml"
 
 	configHelpers "github.com/shaharby7/Dope/pkg/config/helpers"
+
+	fsUtils "github.com/shaharby7/Dope/pkg/utils/fs"
 
 	bTypes "github.com/shaharby7/Dope/pkg/build/types"
 	"github.com/shaharby7/Dope/pkg/utils"
@@ -27,7 +29,7 @@ func generateAppHelmFiles(
 	env string,
 	appConfig *types.AppConfig,
 	appEnvConfig *types.AppEnvConfig,
-) ([]*OutputFile, error) {
+) ([]*fsUtils.OutputFile, error) {
 	pathArgs := &helmPathArgs{App: appConfig.Name, Env: env}
 	imageDataInput := &imageData{
 		Registry: appEnvConfig.Registry, // TODO: add registry as a provider and not form string
@@ -57,7 +59,7 @@ func generateAppHelmFiles(
 	if err != nil {
 		return nil, err
 	}
-	return []*OutputFile{
+	return []*fsUtils.OutputFile{
 		imageFile,
 		valuesFile,
 		controllersFile,
@@ -73,8 +75,8 @@ func _generateAppValuesFile(
 	pathArgs *helmPathArgs,
 	appConfig *types.AppConfig,
 	appEnvConfig *types.AppEnvConfig,
-) (*OutputFile, error) {
-	appValues, err := helpers.EncodeYamlWithIndent(appEnvConfig.Values, 1)
+) (*fsUtils.OutputFile, error) {
+	appValues, err := yamlUtils.EncodeYamlWithIndent(appEnvConfig.Values, 1)
 	if err != nil {
 		return nil, utils.FailedBecause(
 			fmt.Sprintf("marshal yaml for app %s, env %s", appConfig.Name, appEnvConfig.Name),
@@ -100,14 +102,14 @@ func _generateAppControllersFile(
 	pathArgs *helmPathArgs,
 	appConfig *types.AppConfig,
 	appEnvConfig *types.AppEnvConfig,
-) (*OutputFile, error) {
+) (*fsUtils.OutputFile, error) {
 	controllersStrings, err := utils.Map(
 		appEnvConfig.Controllers,
 		func(controller types.ControllerEnvConfig) (string, error) {
 			controllerConfig, _ := configHelpers.GetControllerConfig(controller.Name, appConfig)
 			addControllerDefaults(&controller, controllerConfig, &appEnvConfig.ControllersDefaults)
 			addDopeEnvVars(&controller, controllerConfig, appConfig)
-			controllerString, err := helpers.EncodeYamlWithIndent([]types.ControllerEnvConfig{controller}, 1)
+			controllerString, err := yamlUtils.EncodeYamlWithIndent([]types.ControllerEnvConfig{controller}, 1)
 			if err != nil {
 				return "", utils.FailedBecause(
 					fmt.Sprintf("marshal yaml for app %s, env %s", appConfig.Name, appEnvConfig.Name),
@@ -236,7 +238,7 @@ type tHelmDopeValuesApp struct {
 	Name string `yaml:"name"`
 }
 
-func generateHelmDopeValuesFile(metadata *bTypes.BuildMetadata, config *types.ProjectConfig, envConf *types.EnvConfig) ([]*OutputFile, error) {
+func generateHelmDopeValuesFile(metadata *bTypes.BuildMetadata, config *types.ProjectConfig, envConf *types.EnvConfig) ([]*fsUtils.OutputFile, error) {
 	appList, _ := utils.Map(
 		config.Apps,
 		func(app *types.AppConfig) (*tHelmDopeValuesApp, error) {
@@ -263,7 +265,7 @@ func generateHelmDopeValuesFile(metadata *bTypes.BuildMetadata, config *types.Pr
 		envConf.Providers.Cd.Managed {
 		values.ArgoCdValues = envConf.Providers.Cd.Values
 	}
-	yaml, err := helpers.EncodeYamlWithIndent(values, 1)
+	yaml, err := yamlUtils.EncodeYamlWithIndent(values, 1)
 	if err != nil {
 		return nil, utils.FailedBecause(
 			fmt.Sprintf("marshal yaml for dope values, env %s", envConf.Name),
@@ -275,5 +277,5 @@ func generateHelmDopeValuesFile(metadata *bTypes.BuildMetadata, config *types.Pr
 		struct{ Env string }{Env: envConf.Name},
 		string(yaml),
 	)
-	return []*OutputFile{f}, err
+	return []*fsUtils.OutputFile{f}, err
 }

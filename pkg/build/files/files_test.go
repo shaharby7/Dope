@@ -8,6 +8,8 @@ import (
 	"github.com/shaharby7/Dope/pkg/utils"
 	"github.com/shaharby7/Dope/types"
 	"github.com/stretchr/testify/assert"
+
+	fsUtils "github.com/shaharby7/Dope/pkg/utils/fs"
 )
 
 var (
@@ -44,7 +46,7 @@ var (
 		Apps: []types.AppEnvConfig{
 			{
 				Registry: "docker.io/shaharby7/hi!",
-				Name:     "test-app",
+				AppName:     "test-app",
 				ControllersDefaults: types.ControllerEnvConfig{
 					Env: []types.EnvVar{
 						{
@@ -106,7 +108,7 @@ func Test_HelmFiles(t *testing.T) {
 		[]string{"local"},
 	)
 	assert.Nil(t, err)
-	paths, _ := utils.Map(files, func(file *OutputFile) (string, error) { return file.Path, nil })
+	paths, _ := utils.Map(files, func(file *fsUtils.OutputFile) (string, error) { return file.Path, nil })
 	assert.True(t, slices.Contains(paths, "src/test-app/controllers.go"))
 	assert.True(t, slices.Contains(paths, "src/test-app/main.go"))
 	assert.True(t, slices.Contains(paths, "Dockerfile"))

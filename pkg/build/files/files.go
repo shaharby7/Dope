@@ -2,7 +2,10 @@ package files
 
 import (
 	bTypes "github.com/shaharby7/Dope/pkg/build/types"
+
 	configHelpers "github.com/shaharby7/Dope/pkg/config/helpers"
+
+	fsUtils "github.com/shaharby7/Dope/pkg/utils/fs"
 	"github.com/shaharby7/Dope/pkg/utils"
 	"github.com/shaharby7/Dope/types"
 )
@@ -13,8 +16,8 @@ func GenerateFiles(
 	metadata *bTypes.BuildMetadata,
 	appsList []string,
 	envsList []string,
-) ([]*OutputFile, error) {
-	files := make([]*OutputFile, 0)
+) ([]*fsUtils.OutputFile, error) {
+	files := make([]*fsUtils.OutputFile, 0)
 
 	f, err := generateRootFiles(config)
 	if err != nil {
