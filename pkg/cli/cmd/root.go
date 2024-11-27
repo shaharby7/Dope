@@ -32,8 +32,8 @@ func init() {
 	viper.SetDefault(string(CONF_VARS_DOPE_PATH), ".dope")
 
 	cmdRoot.PersistentFlags().StringVarP(&cmdPersistentFlags_dst, "destination", "d", "./build", "destination of the build files")
-	viper.BindPFlag("destination", cmdRoot.PersistentFlags().Lookup("destination"))
-	viper.SetDefault("destination", "./build")
+	viper.BindPFlag(string(CONF_VARS_DST), cmdRoot.PersistentFlags().Lookup("destination"))
+	viper.SetDefault(string(CONF_VARS_DST), "./build")
 
 	viper.SetConfigName(_DEFAULT_DOPE_CONFIG_NAME)
 	viper.AddConfigPath(".")

@@ -5,8 +5,10 @@ import (
 
 	"github.com/shaharby7/Dope/pkg/build/files"
 	bTypes "github.com/shaharby7/Dope/pkg/build/types"
+
 	"github.com/shaharby7/Dope/pkg/config"
 	"github.com/shaharby7/Dope/pkg/utils"
+	fsUtils "github.com/shaharby7/Dope/pkg/utils/fs"
 	"github.com/shaharby7/Dope/types"
 )
 
@@ -41,7 +43,7 @@ func BuildProject(
 			err,
 		)
 	}
-	err = writeFiles(dst, outputFiles)
+	err = fsUtils.WriteFiles(dst, outputFiles)
 	if err != nil {
 		return fmt.Errorf("could not write files: %w", err)
 	}

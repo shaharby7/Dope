@@ -7,6 +7,8 @@ import (
 	"text/template"
 
 	"github.com/shaharby7/Dope/pkg/utils"
+
+	fsUtils "github.com/shaharby7/Dope/pkg/utils/fs"
 )
 
 var EMPTY_TEMPLATE_INPUT *struct{ A string } = &struct{ A string }{A: "A"}
@@ -15,7 +17,7 @@ func generateOutputFile[TFileData any, TPathArgs any](
 	templateId templateId,
 	pathArgs TPathArgs,
 	dataArgs TFileData,
-) (*OutputFile, error) {
+) (*fsUtils.OutputFile, error) {
 	fileTemplate := getTemplate(templateId)
 	path, err := applyTemplateSafe(&fileTemplate.PathTemplate, fileTemplate.Name, pathArgs)
 	if err != nil {
@@ -25,7 +27,7 @@ func generateOutputFile[TFileData any, TPathArgs any](
 	if err != nil {
 		return nil, utils.FailedBecause(fmt.Sprintf("generate file path from generator %s", fileTemplate.Name), err)
 	}
-	return &OutputFile{
+	return &fsUtils.OutputFile{
 		Path:    path.String(),
 		Content: data.String(),
 	}, nil

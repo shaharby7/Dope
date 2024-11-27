@@ -5,6 +5,8 @@ import (
 	"path"
 
 	"github.com/shaharby7/Dope/pkg/utils"
+
+	fsUtils "github.com/shaharby7/Dope/pkg/utils/fs"
 	"github.com/shaharby7/Dope/pkg/utils/set"
 	"github.com/shaharby7/Dope/types"
 )
@@ -13,7 +15,7 @@ type appPathArgs struct {
 	App string
 }
 
-func generateSrcFiles(config *types.ProjectConfig, appConfig *types.AppConfig) ([]*OutputFile, error) {
+func generateSrcFiles(config *types.ProjectConfig, appConfig *types.AppConfig) ([]*fsUtils.OutputFile, error) {
 	pathArgs := &appPathArgs{App: appConfig.Name}
 	mainFile, err := generateOutputFile(
 		templateId_SRC_FILE_MAIN,
@@ -34,7 +36,7 @@ func generateSrcFiles(config *types.ProjectConfig, appConfig *types.AppConfig) (
 	if err != nil {
 		return nil, err
 	}
-	return []*OutputFile{mainFile, controllerFile}, nil
+	return []*fsUtils.OutputFile{mainFile, controllerFile}, nil
 }
 
 func generateControllerData(

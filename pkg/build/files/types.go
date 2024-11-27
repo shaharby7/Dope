@@ -4,11 +4,6 @@ import (
 	"github.com/shaharby7/Dope/types"
 )
 
-type OutputFile struct {
-	Path    string
-	Content string
-}
-
 type MainControllerFileData struct {
 	Imports     []string
 	Controllers []*controllerInput

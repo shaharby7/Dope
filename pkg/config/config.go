@@ -3,6 +3,8 @@ package config
 import (
 	t "github.com/shaharby7/Dope/types"
 
+	yamlUtils "github.com/shaharby7/Dope/pkg/utils/yaml"
+
 	"fmt"
 	"path/filepath"
 )
@@ -17,4 +19,8 @@ func ReadConfig(dopePath string) (*t.ProjectConfig, error) {
 		return nil, err
 	}
 	return generateDopeConfigFromDopeObjByTypes(*dopeObjectsByTypes)
+}
+
+func WriteConfig(path string, config *t.DopeObjectFile[any]) error {
+	return yamlUtils.WriteYaml(path, config)
 }

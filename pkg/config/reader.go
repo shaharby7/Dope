@@ -66,7 +66,7 @@ func generateDopeConfigFromDopeObjByTypes(
 		if err != nil {
 			return nil, err
 		}
-		appEnvConfig.AppName = appEnv.Binding.App
+		appEnvConfig.AppName = *appEnv.Binding.App
 		env.Apps = append(env.Apps, appEnvConfig)
 	}
 	return &config, nil
@@ -76,19 +76,19 @@ func getEnvByAppEnvBinding(appEnv *sDopeObjectFile, config t.ProjectConfig) (*t.
 	if appEnv.Binding == nil {
 		return nil, fmt.Errorf("no binding found for AppEnv %s", appEnv.Name)
 	}
-	if appEnv.Binding.App == "" {
+	if appEnv.Binding.App == nil {
 		return nil, fmt.Errorf("no app binding found for AppEnv %s", appEnv.Name)
 	}
-	if appEnv.Binding.Env == "" {
+	if appEnv.Binding.Env == nil {
 		return nil, fmt.Errorf("no env binding found for AppEnv %s", appEnv.Name)
 	}
-	env, err := helpers.GetEnvConfig(&config, appEnv.Binding.Env)
+	env, err := helpers.GetEnvConfig(&config, *appEnv.Binding.Env)
 	if err != nil {
-		return nil, fmt.Errorf("app %s was declared for env %s, but no such env defined", appEnv.Binding.App, appEnv.Binding.Env)
+		return nil, fmt.Errorf("app %s was declared for env %s, but no such env defined", *appEnv.Binding.App, *appEnv.Binding.Env)
 	}
-	_, err = helpers.GetAppConfig(&config, appEnv.Binding.App)
+	_, err = helpers.GetAppConfig(&config, *appEnv.Binding.App)
 	if err != nil {
-		return nil, fmt.Errorf("app %s was declared for env %s, but no such app defined", appEnv.Binding.App, appEnv.Binding.Env)
+		return nil, fmt.Errorf("app %s was declared for env %s, but no such app defined", *appEnv.Binding.App, *appEnv.Binding.Env)
 	}
 	return env, nil
 }

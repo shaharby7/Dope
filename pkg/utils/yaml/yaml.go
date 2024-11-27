@@ -1,8 +1,10 @@
-package helpers
+package yaml
 
 import (
 	"bytes"
 	"io"
+
+	fsUtils "github.com/shaharby7/Dope/pkg/utils/fs"
 
 	"gopkg.in/yaml.v3"
 )
@@ -21,4 +23,16 @@ func EncodeYamlWithIndent(object any, indent int) (string, error) {
 		return "", err
 	}
 	return b.String(), nil
+}
+
+func WriteYaml(path string, object any) error {
+	str, err := EncodeYamlWithIndent(object, 0)
+	if err != nil {
+		return err
+	}
+	oFile := &fsUtils.OutputFile{
+		Path:    "",
+		Content: str,
+	}
+	return oFile.WriteFile(path)
 }

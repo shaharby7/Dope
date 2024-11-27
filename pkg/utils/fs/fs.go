@@ -1,22 +1,29 @@
-package build
+package fs
 
 import (
 	"fmt"
 	"os"
 	"path"
-
-	"github.com/shaharby7/Dope/pkg/build/files"
 )
 
-func ensurePath(args ...string) string {
+type OutputFile struct {
+	Path    string
+	Content string
+}
+
+func (o *OutputFile) WriteFile(basePath string) error {
+	return WriteFile(basePath, o)
+}
+
+func EnsurePath(args ...string) string {
 	p := path.Join(args...)
 	os.MkdirAll(p, os.ModePerm)
 	return p
 }
 
-func writeFiles(dst string, files []*files.OutputFile) error {
+func WriteFiles(basePath string, files []*OutputFile) error {
 	for _, file := range files {
-		err := writeFile(dst, file)
+		err := WriteFile(basePath, file)
 		if err != nil {
 			return err
 		}
@@ -24,9 +31,9 @@ func writeFiles(dst string, files []*files.OutputFile) error {
 	return nil
 }
 
-func writeFile(dst string, file *files.OutputFile) error {
-	absPath := path.Join(dst, file.Path)
-	ensurePath(path.Dir(absPath))
+func WriteFile(basePath string, file *OutputFile) error {
+	absPath := path.Join(basePath, file.Path)
+	EnsurePath(path.Dir(absPath))
 	fileRef, err := os.Create(absPath)
 	if err != nil {
 		return fmt.Errorf("could not open file %s: %w", absPath, err)

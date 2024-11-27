@@ -10,16 +10,17 @@ const (
 )
 
 type DopeObjectFile[Obj any] struct {
-	Api         string             `validate:"required" yaml:"api"`
-	Type        DOPE_OBJECTS       `validate:"required" yaml:"type"`
-	Name        string             `validate:"required" yaml:"name"`
-	Description string             `yaml:"description,omitempty"`
-	Binding     *DopeObjectBinding `yaml:"binding,omitempty"`
-	Values      Obj                `yaml:"values,omitempty"`
+	Api         string                 `validate:"required" yaml:"api"`
+	Type        DOPE_OBJECTS           `validate:"required" yaml:"type"`
+	Name        string                 `validate:"required" yaml:"name"`
+	Description string                 `yaml:"description,omitempty"`
+	Binding     *DopeObjectFileBinding `yaml:"binding,omitempty"`
+	Values      Obj                    `yaml:"values,omitempty"`
 }
-type DopeObjectBinding struct {
-	Env string `yaml:"env,omitempty"`
-	App string `yaml:"app,omitempty"`
+
+type DopeObjectFileBinding struct {
+	Env *string `yaml:"env,omitempty"`
+	App *string `yaml:"app,omitempty"`
 }
 
 type ProjectConfig struct {
