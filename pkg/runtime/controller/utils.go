@@ -3,11 +3,13 @@ package controller
 import (
 	"context"
 	"fmt"
-	"github.com/shaharby7/Dope/types"
 	"reflect"
+
+	v1 "github.com/shaharby7/Dope/pkg/config/V1"
+	"github.com/shaharby7/Dope/types"
 )
 
-func CreateTypedAction[In any, Out any](config *types.ActionConfig, action types.Action[In, Out]) *types.TypedAction {
+func CreateTypedAction[In any, Out any](config *v1.ActionConfig, action types.Action[In, Out]) *types.TypedAction {
 	cb := func(
 		ctx context.Context,
 		input any,

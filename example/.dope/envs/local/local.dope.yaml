@@ -1,4 +1,4 @@
-api: Dope/V1
+api: Dope
 type: Env
 name: local
 description: "local deployment example"

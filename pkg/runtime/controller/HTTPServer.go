@@ -33,7 +33,7 @@ func NewHTTPServer(actions []*types.TypedAction) *HTTPServer {
 
 	router := httprouter.New()
 	port := utils.Getenv(
-		types.ENV_VAR_HTTPSERVER_PORT,
+		string(types.ENV_VAR_HTTPSERVER_PORT),
 		fmt.Sprint(types.HTTPSERVER_DEFAULT_PORT),
 	)
 	config := &HTTPServerConfig{

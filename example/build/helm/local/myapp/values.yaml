@@ -1,13 +1,41 @@
 appName: myapp
 
-serviceAccount:
-  create: true
-  automount: true
-imagePullSecrets: null
-annotations: {}
-labels: {}
-securityContext: null
-volumeMounts: []
-volumes: []
-nodeSelector: {}
-Affinity: null
+description: ""
+registry: shaharby7/app1-local
+controllers:
+  - name: server1
+    env:
+      - name: UGLY_NAMES
+        value: shahar,danny
+      - name: FAMOUS_NAMES
+        value: donald
+    replicas: 3
+    resources:
+      requests:
+        cpu: "1"
+controllersDefaults:
+  name: ""
+  env:
+    - name: FORBIDDEN_NAMES
+      value: nice
+    - name: UGLY_NAMES
+      value: shahar
+  resources:
+    limits:
+      cpu: "2"
+      memory: 4Gi
+    requests:
+      cpu: "2"
+      memory: 2Gi
+values:
+  serviceAccount:
+    create: true
+    automount: true
+  imagePullSecrets: null
+  annotations: {}
+  labels: {}
+  securityContext: null
+  volumeMounts: []
+  volumes: []
+  nodeSelector: {}
+  Affinity: null

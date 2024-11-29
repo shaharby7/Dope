@@ -52,7 +52,7 @@ var cmdCreate = &cobra.Command{
 			utils.FailedBecause("values binding", err)
 		}
 		obj := &types.DopeObjectFile[any]{
-			Api:         "Dope/V1",
+			Api:         "V1",
 			Type:        objType,
 			Name:        name,
 			Description: description,

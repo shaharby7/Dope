@@ -5,11 +5,13 @@ import (
 
 	"github.com/shaharby7/Dope/pkg/build/files"
 	bTypes "github.com/shaharby7/Dope/pkg/build/types"
+	v1 "github.com/shaharby7/Dope/pkg/config/V1"
+	"github.com/shaharby7/Dope/pkg/config/entity"
 
 	"github.com/shaharby7/Dope/pkg/config"
+	configHelpers "github.com/shaharby7/Dope/pkg/config/helpers"
 	"github.com/shaharby7/Dope/pkg/utils"
 	fsUtils "github.com/shaharby7/Dope/pkg/utils/fs"
-	"github.com/shaharby7/Dope/types"
 )
 
 func BuildProject(
@@ -24,18 +26,18 @@ func BuildProject(
 			err,
 		)
 	}
-	config, err := config.ReadConfig(dopePath)
+	eTree, err := config.LoadEntitiesTree(dopePath)
 	if err != nil {
 		return utils.FailedBecause(
 			fmt.Sprintf("generate config from file (%s)", dopePath),
 			err,
 		)
 	}
-	appsList := getApplicationsList(config, &options)
-	envsList := getEnvironmentList(config, &options)
+	appsList := getApplicationsList(eTree, &options)
+	envsList := getEnvironmentList(eTree, &options)
 
 	outputFiles, err := files.GenerateFiles(
-		dst, config, metadata, appsList, envsList,
+		dst, eTree, metadata, appsList, envsList,
 	)
 	if err != nil {
 		return utils.FailedBecause(
@@ -50,20 +52,24 @@ func BuildProject(
 	return nil
 }
 
-func getApplicationsList(config *types.ProjectConfig, buildOptions *bTypes.BuildOptions) []string {
+func getApplicationsList(eTree *config.EntitiesTree, buildOptions *bTypes.BuildOptions) []string {
 	if len(buildOptions.Apps) > 0 {
 		return buildOptions.Apps
 	}
-	appsList, _ := utils.Map(config.Apps, func(app *types.AppConfig) (string, error) { return app.Name, nil })
-	return utils.RemoveDuplicates(appsList)
+	return getEntitiesNamesListByType(eTree, v1.DOPE_CORE_TYPES_APP)
 }
 
-func getEnvironmentList(config *types.ProjectConfig, buildOptions *bTypes.BuildOptions) []string {
+func getEnvironmentList(eTree *config.EntitiesTree, buildOptions *bTypes.BuildOptions) []string {
 	if len(buildOptions.Envs) > 0 {
 		return buildOptions.Apps
 	}
-	envsList, _ := utils.Map(config.Environments, func(env *types.EnvConfig) (string, error) { return env.Name, nil })
-	return utils.RemoveDuplicates(envsList)
+	return getEntitiesNamesListByType(eTree, v1.DOPE_CORE_TYPES_ENV)
+}
+
+func getEntitiesNamesListByType(eTree *config.EntitiesTree, t v1.DOPE_CORE_TYPES) []string {
+	apps := configHelpers.GetCoreEntitiesByType(*eTree, t)
+	appsList, _ := utils.Map(apps, func(e *entity.Entity) (string, error) { return e.Name, nil })
+	return utils.RemoveDuplicates(appsList)
 }
 
 func getBuildMetadata(buildPath string) (*bTypes.BuildMetadata, error) {

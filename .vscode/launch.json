@@ -12,14 +12,14 @@
             "program": "${workspaceFolder}/pkg/cli",
             "cwd": "${workspaceFolder}",
             "args": [
-                "create",
-                "project",
-                "--verbose"
-                // "build",
-                // "-p",
-                // "./example/.dope",
-                // "-d",
-                // "./example/build"
+                // "create",
+                // "project",
+                // "--verbose"
+                "build",
+                "-p",
+                "./example/.dope",
+                "-d",
+                "./example/build"
             ]
         },
         {

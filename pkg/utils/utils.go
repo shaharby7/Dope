@@ -7,7 +7,6 @@ import (
 	"reflect"
 
 	"github.com/shaharby7/Dope/pkg/utils/set"
-	"github.com/shaharby7/Dope/types"
 )
 
 type TEmpty struct{}
@@ -42,8 +41,8 @@ func RemoveDuplicates[V comparable](vSlice []V) []V {
 
 }
 
-func Getenv(name types.ENV_VARS, defaultVal string) string {
-	val := os.Getenv(string(name))
+func Getenv(name string, defaultVal string) string {
+	val := os.Getenv(name)
 	if val == "" {
 		return defaultVal
 	}
