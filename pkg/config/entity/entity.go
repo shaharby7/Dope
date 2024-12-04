@@ -9,6 +9,7 @@ import (
 	"gopkg.in/yaml.v3"
 
 	vp "github.com/go-playground/validator/v10"
+	yamlUtils "github.com/shaharby7/Dope/pkg/utils/yaml"
 )
 
 var validator *vp.Validate
@@ -29,14 +30,14 @@ type Entity struct {
 	// entity.EntityTypeManifest identifier
 	Type string `validate:"required" yaml:"type"`
 	// Some entities can only live in the context of other entities, of other types. Binding would instruct Dope how to relate between the entities
-	Binding []*EntityBind `yaml:"binding,omitempty"`
+	Binding EntityBind `yaml:"binding,omitempty"`
 	// Values of the entity.
 	Values any `yaml:"values,omitempty"`
 
 	// Pointer to the `entity.EntityTypeManifest` that was inferred from the Api and Type.
 	EntityTypeManifest *EntityTypeManifest
 	// EntityTypeUniqueIdentifier
-	EntityTypeUniqueIdentifier EntityTypeUniqueIdentifier
+	EntityTypeUniqueIdentifier EntityTypeUniqueIdentifier `yaml:""`
 }
 
 func LoadEntity(path string, validate bool) (*Entity, error) {
@@ -67,11 +68,11 @@ func GetEntityValues[T any](e *Entity) *T {
 func (e *Entity) UnmarshalYAML(node *yaml.Node) error {
 	var err error
 	partial := &struct {
-		Api         string        `yaml:"api"`
-		Name        string        `yaml:"name"`
-		Type        string        `yaml:"type"`
-		Description string        `yaml:"description"`
-		Binding     []*EntityBind `yaml:"binding,omitempty"`
+		Api         string     `yaml:"api"`
+		Name        string     `yaml:"name"`
+		Type        string     `yaml:"type"`
+		Description string     `yaml:"description"`
+		Binding     EntityBind `yaml:"binding,omitempty"`
 	}{}
 	if err := node.Decode(&partial); err != nil {
 		return utils.FailedBecause("infer type of entity", err)
@@ -101,9 +102,23 @@ func (e *Entity) UnmarshalYAML(node *yaml.Node) error {
 }
 
 // `entity.EntityBind` instructs Dope to create a relation between this entity to other entity
-type EntityBind struct {
-	// entity.EntityTypeManifest identifier
-	Type string `validate:"required" yaml:"type"`
-	// Entity identifier
-	Name string `validate:"required" yaml:"name"`
+type EntityBind map[string]string
+
+func WriteEntity(path string, e *Entity) error {
+	toWrite := struct {
+		Api         string     `yaml:"api"`
+		Type        string     `yaml:"type"`
+		Name        string     `yaml:"name"`
+		Description string     `yaml:"description"`
+		Binding     EntityBind `yaml:"binding,omitempty"`
+		Values      any        `yaml:"values,omitempty"`
+	}{
+		Api:         e.Api,
+		Type:        e.Type,
+		Name:        e.Name,
+		Description: e.Description,
+		Binding:     e.Binding,
+		Values:      e.Values,
+	}
+	return yamlUtils.WriteYaml(path, toWrite)
 }

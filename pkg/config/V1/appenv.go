@@ -8,10 +8,15 @@ import (
 )
 
 var AppEnvManifest = &entity.EntityTypeManifest{
-	Name:            "AppEnv",
-	Aliases:         []string{"appenv"},
-	BindingSettings: nil,
-	ValuesType:      reflect.TypeOf(AppEnvConfig{}),
+	Name: "AppEnv",
+	BindingSettings: &entity.BindingSettings{
+		Must: []string{"Env", "App"},
+	},
+	ValuesType: reflect.TypeOf(AppEnvConfig{}),
+	CliOptions: &entity.CliOptions{
+		Aliases:      []string{"appenv"},
+		PathTemplate: "envs/{{.Binding.Env}}/apps",
+	},
 }
 
 type AppEnvConfig struct {
@@ -54,8 +59,6 @@ type DebugOptions struct {
 	Enabled bool
 	Port    Port
 }
-
-
 
 type Port uint32
 

@@ -6,6 +6,7 @@ toolchain go1.22.6
 
 require (
 	github.com/Masterminds/sprig/v3 v3.3.0
+	github.com/go-playground/validator/v10 v10.23.0
 	github.com/julienschmidt/httprouter v1.3.0
 	github.com/manifoldco/promptui v0.9.0
 	github.com/spf13/cobra v1.8.1
@@ -28,7 +29,6 @@ require (
 	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
-	github.com/go-playground/validator/v10 v10.23.0 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/google/gofuzz v1.2.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect

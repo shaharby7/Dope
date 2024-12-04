@@ -8,9 +8,12 @@ import (
 
 var AppManifest = &entity.EntityTypeManifest{
 	Name:            "App",
-	Aliases:         []string{"app", "application"},
 	BindingSettings: nil,
 	ValuesType:      reflect.TypeOf(AppConfig{}),
+	CliOptions: &entity.CliOptions{
+		Aliases:      []string{"app", "application"},
+		PathTemplate: "general/apps/{{.Name}}",
+	},
 }
 
 type AppConfig struct {

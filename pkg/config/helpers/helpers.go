@@ -48,21 +48,8 @@ func GetAppEnvConfig(eTree *config.EntitiesTree, envName string, appName string)
 	ok, conf := utils.Find(
 		GetCoreEntitiesByType(*eTree, v1.DOPE_CORE_TYPES_APPENV),
 		func(e *entity.Entity) bool {
-			boundedToApp := false
-			boundedToEnv := false
-			for _, b := range e.Binding {
-				switch b.Type {
-				case string(v1.DOPE_CORE_TYPES_APP):
-					if b.Name == appName {
-						boundedToApp = true
-					}
-				case string(v1.DOPE_CORE_TYPES_ENV):
-					if b.Name == envName {
-						boundedToEnv = true
-					}
-				}
-			}
-			return boundedToApp && boundedToEnv
+			return e.Binding[string(v1.DOPE_CORE_TYPES_APP)] == appName &&
+				e.Binding[string(v1.DOPE_CORE_TYPES_ENV)] == envName
 		},
 	)
 	if ok {

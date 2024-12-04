@@ -2,10 +2,8 @@ api: Dope
 type: AppEnv
 name: "local-myapp"
 binding:
-- type: Env
-  name: local
-- type: App
-  name: myapp
+  Env: local
+  App: myapp
 values:
   registry: "shaharby7/app1-local"
   values:

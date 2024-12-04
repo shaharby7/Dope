@@ -7,8 +7,6 @@ import (
 
 	v1 "github.com/shaharby7/Dope/pkg/config/V1"
 	"github.com/shaharby7/Dope/pkg/config/entity"
-	yamlUtils "github.com/shaharby7/Dope/pkg/utils/yaml"
-	t "github.com/shaharby7/Dope/types"
 )
 
 type TypedEntitiesList []*entity.Entity
@@ -23,8 +21,6 @@ func init() {
 	entity.LoadEntityTypeManifest(DOPE_CORE_API, v1.EnvManifest)
 	entity.LoadEntityTypeManifest(DOPE_CORE_API, v1.AppEnvManifest)
 }
-
-
 
 func LoadEntitiesTree(dopePath string) (*EntitiesTree, error) {
 	path, err := filepath.Abs(dopePath)
@@ -42,7 +38,7 @@ func LoadEntitiesTree(dopePath string) (*EntitiesTree, error) {
 				return nil
 			}
 			e, err := entity.LoadEntity(path, true)
- 			if err != nil {
+			if err != nil {
 				panic(err)
 			}
 			typedEntitiesList, ok := entitiesTree[e.EntityTypeUniqueIdentifier]
@@ -55,8 +51,4 @@ func LoadEntitiesTree(dopePath string) (*EntitiesTree, error) {
 		},
 	)
 	return &entitiesTree, err
-}
-
-func WriteConfig(path string, config *t.DopeObjectFile[any]) error {
-	return yamlUtils.WriteYaml(path, config)
 }

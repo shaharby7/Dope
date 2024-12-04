@@ -12,12 +12,12 @@ import (
 type EntityTypeManifest struct {
 	// Entity name
 	Name string `validate:"required" yaml:"name"`
-	// Would be used to refer by cli tool
-	Aliases []string `validate:"required" yaml:"aliases"`
 	// Defines what other entities can/must this entity be bind to
 	BindingSettings *BindingSettings `yaml:"bindingSettings,omitempty"`
 	// Defines what are the values this entity expects to receive
 	ValuesType reflect.Type `validate:"required"`
+	// instructs the cli how it interact with the entity type (for example, for the "create" command)
+	CliOptions *CliOptions `yaml:"cliOptions"`
 }
 
 // Defines what other entities can/must this entity be bind to
@@ -26,6 +26,13 @@ type BindingSettings struct {
 	Must []string
 	// Dope build will not throw error if the entity would be bind to other entity of this type
 	Might []string
+}
+
+type CliOptions struct {
+	// Would be used to refer by cli tool
+	Aliases []string `validate:"required" yaml:"aliases"`
+	// Would be used to compose a default path in the `.dope` dir for resource creation
+	PathTemplate string
 }
 
 type EntityTypeUniqueIdentifier string
@@ -39,6 +46,14 @@ func LoadEntityTypeManifest(api string, entityManifest *EntityTypeManifest) {
 		panic(fmt.Errorf("cannot load `entity.EntityTypeManifest` %s twice", id))
 	}
 	KnownEntityTypes[id] = entityManifest
+	for _, aliases := range entityManifest.CliOptions.Aliases {
+		uniqueAlias := GenerateTypeUniqueIdentifier(api, aliases)
+		_, ok := KnownEntityTypes[uniqueAlias]
+		if ok {
+			panic(fmt.Errorf("aliases collision for entity %s", uniqueAlias))
+		}
+		KnownEntityTypes[uniqueAlias] = entityManifest
+	}
 }
 
 func GetEntityTypeManifest(api string, name string) (*EntityTypeManifest, error) {

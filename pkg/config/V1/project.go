@@ -8,9 +8,12 @@ import (
 
 var ProjectManifest = &entity.EntityTypeManifest{
 	Name:            "Project",
-	Aliases:         []string{"project", "proj"},
 	BindingSettings: nil,
 	ValuesType:      reflect.TypeOf(ProjectConfig{}),
+	CliOptions: &entity.CliOptions{
+		Aliases:      []string{"project", "proj"},
+		PathTemplate: "./",
+	},
 }
 
 type ProjectConfig struct {

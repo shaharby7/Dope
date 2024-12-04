@@ -8,9 +8,12 @@ import (
 
 var EnvManifest = &entity.EntityTypeManifest{
 	Name:            "Env",
-	Aliases:         []string{"environment", "env"},
 	BindingSettings: nil,
 	ValuesType:      reflect.TypeOf(EnvConfig{}),
+	CliOptions: &entity.CliOptions{
+		Aliases:      []string{"environment", "env"},
+		PathTemplate: "envs/{{.Name}}",
+	},
 }
 
 type EnvConfig struct {
