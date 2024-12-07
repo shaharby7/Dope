@@ -1,7 +1,7 @@
 package files
 
 import (
-	v1 "github.com/shaharby7/Dope/pkg/config/V1"
+	v1 "github.com/shaharby7/Dope/pkg/entities/V1"
 )
 
 type MainControllerFileData struct {

@@ -5,11 +5,11 @@ import (
 
 	"github.com/shaharby7/Dope/pkg/build/files"
 	bTypes "github.com/shaharby7/Dope/pkg/build/types"
-	v1 "github.com/shaharby7/Dope/pkg/config/V1"
-	"github.com/shaharby7/Dope/pkg/config/entity"
+	"github.com/shaharby7/Dope/pkg/entities"
+	v1 "github.com/shaharby7/Dope/pkg/entities/V1"
+	"github.com/shaharby7/Dope/pkg/entities/entity"
+	entitiesHelpers "github.com/shaharby7/Dope/pkg/entities/helpers"
 
-	"github.com/shaharby7/Dope/pkg/config"
-	configHelpers "github.com/shaharby7/Dope/pkg/config/helpers"
 	"github.com/shaharby7/Dope/pkg/utils"
 	fsUtils "github.com/shaharby7/Dope/pkg/utils/fs"
 )
@@ -26,7 +26,7 @@ func BuildProject(
 			err,
 		)
 	}
-	eTree, err := config.LoadEntitiesTree(dopePath)
+	eTree, err := entities.LoadEntitiesTree(dopePath)
 	if err != nil {
 		return utils.FailedBecause(
 			fmt.Sprintf("generate config from file (%s)", dopePath),
@@ -52,22 +52,22 @@ func BuildProject(
 	return nil
 }
 
-func getApplicationsList(eTree *config.EntitiesTree, buildOptions *bTypes.BuildOptions) []string {
+func getApplicationsList(eTree *entities.EntitiesTree, buildOptions *bTypes.BuildOptions) []string {
 	if len(buildOptions.Apps) > 0 {
 		return buildOptions.Apps
 	}
 	return getEntitiesNamesListByType(eTree, v1.DOPE_CORE_TYPES_APP)
 }
 
-func getEnvironmentList(eTree *config.EntitiesTree, buildOptions *bTypes.BuildOptions) []string {
+func getEnvironmentList(eTree *entities.EntitiesTree, buildOptions *bTypes.BuildOptions) []string {
 	if len(buildOptions.Envs) > 0 {
 		return buildOptions.Apps
 	}
 	return getEntitiesNamesListByType(eTree, v1.DOPE_CORE_TYPES_ENV)
 }
 
-func getEntitiesNamesListByType(eTree *config.EntitiesTree, t v1.DOPE_CORE_TYPES) []string {
-	apps := configHelpers.GetCoreEntitiesByType(*eTree, t)
+func getEntitiesNamesListByType(eTree *entities.EntitiesTree, t v1.DOPE_CORE_TYPES) []string {
+	apps := entitiesHelpers.GetCoreEntitiesByType(*eTree, t)
 	appsList, _ := utils.Map(apps, func(e *entity.Entity) (string, error) { return e.Name, nil })
 	return utils.RemoveDuplicates(appsList)
 }

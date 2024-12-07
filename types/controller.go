@@ -6,10 +6,8 @@ import (
 	"sync"
 
 	"github.com/julienschmidt/httprouter"
-	v1 "github.com/shaharby7/Dope/pkg/config/V1"
+	v1 "github.com/shaharby7/Dope/pkg/entities/V1"
 )
-
-
 
 // base types
 type Controller[ActionConfig any] interface {

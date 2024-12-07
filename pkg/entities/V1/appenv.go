@@ -3,7 +3,7 @@ package v1
 import (
 	"reflect"
 
-	"github.com/shaharby7/Dope/pkg/config/entity"
+	"github.com/shaharby7/Dope/pkg/entities/entity"
 	k8score "k8s.io/kubernetes/pkg/apis/core"
 )
 

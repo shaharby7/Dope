@@ -5,7 +5,7 @@ package files
 // 	"testing"
 
 // 	bTypes "github.com/shaharby7/Dope/pkg/build/types"
-// 	v1 "github.com/shaharby7/Dope/pkg/config/V1"
+// 	v1 "github.com/shaharby7/Dope/pkg/entities/V1"
 // 	"github.com/shaharby7/Dope/pkg/utils"
 // 	"github.com/stretchr/testify/assert"
 

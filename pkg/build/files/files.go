@@ -2,9 +2,9 @@ package files
 
 import (
 	bTypes "github.com/shaharby7/Dope/pkg/build/types"
-	"github.com/shaharby7/Dope/pkg/config"
+	"github.com/shaharby7/Dope/pkg/entities"
 
-	configHelpers "github.com/shaharby7/Dope/pkg/config/helpers"
+	configHelpers "github.com/shaharby7/Dope/pkg/entities/helpers"
 
 	"github.com/shaharby7/Dope/pkg/utils"
 	fsUtils "github.com/shaharby7/Dope/pkg/utils/fs"
@@ -12,7 +12,7 @@ import (
 
 func GenerateFiles(
 	dst string,
-	eTree *config.EntitiesTree,
+	eTree *entities.EntitiesTree,
 	metadata *bTypes.BuildMetadata,
 	appsList []string,
 	envsList []string,
