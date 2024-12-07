@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/shaharby7/Dope/pkg/runtime/controller"
 	"github.com/shaharby7/Dope/types"
+	v1 "github.com/shaharby7/Dope/pkg/entities/V1"
     {{ range $index, $import := .Imports }}
     "{{ $import }}"{{ end }}
 )
@@ -18,7 +19,7 @@ var {{ $controller.Identifier }} = controller.New{{ $controller.Type }}(
 	[]*types.TypedAction{
 		controller.CreateTypedAction(
             {{ range $index, $action := $controller.Actions }}
-			&types.ActionConfig{
+			&v1.ActionConfig{
 				Name: "{{ $action.Name }}",
 				ControllerBinding: map[string]string{
 					{{ range $key, $value := $action.ControllerBinding }}"{{$key}}":"{{$value}}",{{ end }}
