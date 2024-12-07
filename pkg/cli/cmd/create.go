@@ -6,10 +6,10 @@ import (
 	"text/template"
 
 	"github.com/Masterminds/sprig/v3"
-	"github.com/shaharby7/Dope/pkg/config/entity"
-	"github.com/shaharby7/Dope/pkg/utils"
+	"github.com/shaharby7/Dope/pkg/entities/entity"
 
-	"github.com/shaharby7/Dope/pkg/config"
+	"github.com/shaharby7/Dope/pkg/entities"
+	"github.com/shaharby7/Dope/pkg/utils"
 
 	cliUtils "github.com/shaharby7/Dope/pkg/cli/cmd/utils"
 
@@ -31,7 +31,7 @@ var cmdCreate = &cobra.Command{
 			return utils.FailedBecause("infer dope object type", err)
 		}
 		createdEntity := &entity.Entity{
-			Api:                config.DOPE_CORE_API,
+			Api:                entities.DOPE_CORE_API,
 			Type:               entityManifest.Name,
 			EntityTypeManifest: entityManifest,
 		}
@@ -68,7 +68,7 @@ func getObjectManifest(args []string) (*entity.EntityTypeManifest, error) {
 		return nil, fmt.Errorf("could not create command can only be executed with with argument, found %d", len(args))
 	}
 	name := args[0]
-	return entity.GetEntityTypeManifest(config.DOPE_CORE_API, name)
+	return entity.GetEntityTypeManifest(entities.DOPE_CORE_API, name)
 }
 
 func getObjectBinding(e *entity.Entity) (entity.EntityBind, error) {

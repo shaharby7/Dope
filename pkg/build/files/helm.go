@@ -3,13 +3,13 @@ package files
 import (
 	"fmt"
 
-	"github.com/shaharby7/Dope/pkg/config"
+	"github.com/shaharby7/Dope/pkg/entities"
 	yamlUtils "github.com/shaharby7/Dope/pkg/utils/yaml"
 	"github.com/shaharby7/Dope/types"
 
-	v1 "github.com/shaharby7/Dope/pkg/config/V1"
-	"github.com/shaharby7/Dope/pkg/config/entity"
-	configHelpers "github.com/shaharby7/Dope/pkg/config/helpers"
+	v1 "github.com/shaharby7/Dope/pkg/entities/V1"
+	"github.com/shaharby7/Dope/pkg/entities/entity"
+	configHelpers "github.com/shaharby7/Dope/pkg/entities/helpers"
 
 	fsUtils "github.com/shaharby7/Dope/pkg/utils/fs"
 
@@ -28,7 +28,7 @@ type imageData struct {
 }
 
 func generateAppHelmFiles(
-	_ *config.EntitiesTree,
+	_ *entities.EntitiesTree,
 	env string,
 	appEntity *entity.Entity,
 	appEnvEntity *entity.Entity,
@@ -246,7 +246,7 @@ type tHelmDopeValuesApp struct {
 
 func generateHelmDopeValuesFile(
 	metadata *bTypes.BuildMetadata,
-	eTree *config.EntitiesTree,
+	eTree *entities.EntitiesTree,
 	project *entity.Entity,
 	env *entity.Entity,
 ) ([]*fsUtils.OutputFile, error) {

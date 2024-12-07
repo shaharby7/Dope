@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"path"
 
-	v1 "github.com/shaharby7/Dope/pkg/config/V1"
-	"github.com/shaharby7/Dope/pkg/config/entity"
+	v1 "github.com/shaharby7/Dope/pkg/entities/V1"
+	"github.com/shaharby7/Dope/pkg/entities/entity"
 	"github.com/shaharby7/Dope/pkg/utils"
 
 	fsUtils "github.com/shaharby7/Dope/pkg/utils/fs"

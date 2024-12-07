@@ -1,12 +1,12 @@
-package config
+package entities
 
 import (
 	"fmt"
 	"io/fs"
 	"path/filepath"
 
-	v1 "github.com/shaharby7/Dope/pkg/config/V1"
-	"github.com/shaharby7/Dope/pkg/config/entity"
+	v1 "github.com/shaharby7/Dope/pkg/entities/V1"
+	"github.com/shaharby7/Dope/pkg/entities/entity"
 )
 
 type TypedEntitiesList []*entity.Entity

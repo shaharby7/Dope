@@ -8,7 +8,7 @@ import (
 )
 
 // `entity.EntityTypeManifest` is am abstraction of the information required for Dope to work with each Entity type.
-// Project, App, Env etc. all implements a EntityTypeManifest (see github.com/shaharby7/Dope/pkg/config/V1)
+// Project, App, Env etc. all implements a EntityTypeManifest (see github.com/shaharby7/Dope/pkg/entities/V1)
 type EntityTypeManifest struct {
 	// Entity name
 	Name string `validate:"required" yaml:"name"`
