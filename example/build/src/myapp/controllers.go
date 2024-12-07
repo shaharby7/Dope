@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/shaharby7/Dope/pkg/runtime/controller"
 	"github.com/shaharby7/Dope/types"
+	v1 "github.com/shaharby7/Dope/pkg/entities/V1"
     
     "github.com/shaharby7/Dope/example/pkg/greeter"
 )
@@ -18,7 +19,7 @@ var Controller_server1 = controller.NewHTTPServer(
 	[]*types.TypedAction{
 		controller.CreateTypedAction(
             
-			&types.ActionConfig{
+			&v1.ActionConfig{
 				Name: "/api/greet",
 				ControllerBinding: map[string]string{
 					"method":"POST",
