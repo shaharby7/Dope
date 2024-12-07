@@ -3,14 +3,25 @@ package helpers
 import (
 	"fmt"
 
+	"github.com/shaharby7/Dope/pkg/config"
+	v1 "github.com/shaharby7/Dope/pkg/config/V1"
+	"github.com/shaharby7/Dope/pkg/config/entity"
 	"github.com/shaharby7/Dope/pkg/utils"
-	"github.com/shaharby7/Dope/types"
 )
 
-func GetEnvConfig(config *types.ProjectConfig, envName string) (*types.EnvConfig, error) {
+func GetProject(eTree *config.EntitiesTree) (*entity.Entity, error) {
+	projects := GetCoreEntitiesByType(*eTree, v1.DOPE_CORE_TYPES_PROJECT)
+	project := projects[0]
+	if project == nil {
+		return nil, fmt.Errorf("could not find project config")
+	}
+	return project, nil
+}
+
+func GetEnv(eTree *config.EntitiesTree, envName string) (*entity.Entity, error) {
 	ok, conf := utils.Find(
-		config.Environments,
-		func(e *types.EnvConfig) bool {
+		GetCoreEntitiesByType(*eTree, v1.DOPE_CORE_TYPES_ENV),
+		func(e *entity.Entity) bool {
 			return e.Name == envName
 		},
 	)
@@ -20,10 +31,10 @@ func GetEnvConfig(config *types.ProjectConfig, envName string) (*types.EnvConfig
 	return nil, fmt.Errorf("could not find configuration for env %s", envName)
 }
 
-func GetAppConfig(config *types.ProjectConfig, appName string) (*types.AppConfig, error) {
+func GetApp(eTree *config.EntitiesTree, appName string) (*entity.Entity, error) {
 	ok, conf := utils.Find(
-		config.Apps,
-		func(e *types.AppConfig) bool {
+		GetCoreEntitiesByType(*eTree, v1.DOPE_CORE_TYPES_APP),
+		func(e *entity.Entity) bool {
 			return e.Name == appName
 		},
 	)
@@ -33,32 +44,36 @@ func GetAppConfig(config *types.ProjectConfig, appName string) (*types.AppConfig
 	return nil, fmt.Errorf("could not find configuration for app %s", appName)
 }
 
-func GetAppEnvConfig(config *types.ProjectConfig, envName string, appName string) (*types.AppEnvConfig, error) {
-	env, err := GetEnvConfig(config, envName)
-	if err != nil {
-		return nil, err
-	}
+func GetAppEnvConfig(eTree *config.EntitiesTree, envName string, appName string) (*entity.Entity, error) {
 	ok, conf := utils.Find(
-		env.Apps,
-		func(e types.AppEnvConfig) bool {
-			return e.AppName == appName
+		GetCoreEntitiesByType(*eTree, v1.DOPE_CORE_TYPES_APPENV),
+		func(e *entity.Entity) bool {
+			return e.Binding[string(v1.DOPE_CORE_TYPES_APP)] == appName &&
+				e.Binding[string(v1.DOPE_CORE_TYPES_ENV)] == envName
 		},
 	)
 	if ok {
-		return conf, nil
+		return *conf, nil
 	}
 	return nil, fmt.Errorf("could not find config for app %s in env %s", appName, envName)
 }
 
-func GetControllerConfig(controllerName string, appConfig *types.AppConfig) (*types.ControllerConfig, error) {
+func GetControllerConfig(controllerName string, appEntity *entity.Entity) (*v1.ControllerConfig, error) {
+	appConfig := entity.GetEntityValues[v1.AppConfig](appEntity)
 	ok, conf := utils.Find(
 		appConfig.Controllers,
-		func(c types.ControllerConfig) bool {
+		func(c v1.ControllerConfig) bool {
 			return c.Name == controllerName
 		},
 	)
 	if ok {
 		return conf, nil
 	}
-	return nil, fmt.Errorf("could not find config for controller %s within app %s", controllerName, appConfig.Name)
+	return nil, fmt.Errorf("could not find config for controller %s within app %s", controllerName, appEntity.Name)
+}
+
+func GetCoreEntitiesByType(eTree config.EntitiesTree, t v1.DOPE_CORE_TYPES) config.TypedEntitiesList {
+	id := entity.GenerateTypeUniqueIdentifier(config.DOPE_CORE_API, string(t))
+	res := eTree[id]
+	return res
 }

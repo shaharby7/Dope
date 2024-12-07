@@ -1,15 +1,14 @@
 package files
 
 import (
+	"github.com/shaharby7/Dope/pkg/config"
 	"github.com/shaharby7/Dope/pkg/utils"
 
 	fsUtils "github.com/shaharby7/Dope/pkg/utils/fs"
-	"github.com/shaharby7/Dope/types"
-
 )
 
 func generateRootFiles(
-	_ *types.ProjectConfig,
+	_ *config.EntitiesTree,
 ) ([]*fsUtils.OutputFile, error) {
 	dockerfile, err := generateOutputFile(
 		templateId_DOCKERFILE,

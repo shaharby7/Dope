@@ -6,15 +6,10 @@ import (
 	"sync"
 
 	"github.com/julienschmidt/httprouter"
+	v1 "github.com/shaharby7/Dope/pkg/config/V1"
 )
 
-type CONTROLLER_TYPE string
 
-// enums
-const (
-	CONTROLLER_TYPE_HTTPSERVER CONTROLLER_TYPE = "HTTPServer"
-	CONTROLLER_TYPE_COMMAND    CONTROLLER_TYPE = "Command"
-)
 
 // base types
 type Controller[ActionConfig any] interface {
@@ -31,12 +26,11 @@ type Action[In any, Out any] func(
 	error,
 )
 
-type ControllerBinding map[string]string
 type TypedAction struct {
 	Callback Action[any, any]
 	In       reflect.Type
 	Out      reflect.Type
-	Config   *ActionConfig
+	Config   *v1.ActionConfig
 }
 
 // configs

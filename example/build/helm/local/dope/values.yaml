@@ -1,7 +1,5 @@
 project:
-  name: example
-  description: project example
-  dopeVersion: ""
+  dopeVersion: 0.0.1
   module: github.com/shaharby7/Dope/example
   versioning:
     granularity: app
@@ -17,7 +15,6 @@ providers:
     ref: shahar
   kubernetes:
     type: minikube
-  docker: null
   storage:
     managed: true
     url: ""

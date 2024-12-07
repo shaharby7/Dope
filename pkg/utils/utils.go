@@ -1,13 +1,14 @@
 package utils
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"os/exec"
 	"reflect"
+	"text/template"
 
 	"github.com/shaharby7/Dope/pkg/utils/set"
-	"github.com/shaharby7/Dope/types"
 )
 
 type TEmpty struct{}
@@ -42,8 +43,8 @@ func RemoveDuplicates[V comparable](vSlice []V) []V {
 
 }
 
-func Getenv(name types.ENV_VARS, defaultVal string) string {
-	val := os.Getenv(string(name))
+func Getenv(name string, defaultVal string) string {
+	val := os.Getenv(name)
 	if val == "" {
 		return defaultVal
 	}
@@ -74,3 +75,16 @@ func GetGitHEADRef() (string, error) {
 	commitHash := string(out)
 	return commitHash, nil
 }
+
+func ApplyTemplateSafe(template *template.Template, templateName string, args any) (*bytes.Buffer, error) {
+	var result bytes.Buffer
+	var err error
+	if IsEmpty(args) {
+		err = template.ExecuteTemplate(&result, templateName, EMPTY_TEMPLATE_INPUT)
+	} else {
+		err = template.ExecuteTemplate(&result, templateName, args)
+	}
+	return &result, err
+}
+
+var EMPTY_TEMPLATE_INPUT *struct{ A string } = &struct{ A string }{A: "A"}

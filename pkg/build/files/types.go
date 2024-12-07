@@ -1,7 +1,7 @@
 package files
 
 import (
-	"github.com/shaharby7/Dope/types"
+	v1 "github.com/shaharby7/Dope/pkg/config/V1"
 )
 
 type MainControllerFileData struct {
@@ -12,12 +12,12 @@ type MainControllerFileData struct {
 type controllerInput struct {
 	Name       string
 	Identifier string
-	Type       types.CONTROLLER_TYPE `validate:"required"`
+	Type       v1.CONTROLLER_TYPE `validate:"required"`
 	Actions    []*actionInput
 }
 
 type actionInput struct {
 	Name              string
 	Caller            string
-	ControllerBinding *types.ControllerBinding
+	ControllerBinding *v1.ControllerBinding
 }

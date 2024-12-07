@@ -4,18 +4,19 @@ import (
 	"fmt"
 	"path"
 
+	v1 "github.com/shaharby7/Dope/pkg/config/V1"
+	"github.com/shaharby7/Dope/pkg/config/entity"
 	"github.com/shaharby7/Dope/pkg/utils"
 
 	fsUtils "github.com/shaharby7/Dope/pkg/utils/fs"
 	"github.com/shaharby7/Dope/pkg/utils/set"
-	"github.com/shaharby7/Dope/types"
 )
 
 type appPathArgs struct {
 	App string
 }
 
-func generateSrcFiles(config *types.ProjectConfig, appConfig *types.AppConfig) ([]*fsUtils.OutputFile, error) {
+func generateSrcFiles(config *entity.Entity, appConfig *entity.Entity) ([]*fsUtils.OutputFile, error) {
 	pathArgs := &appPathArgs{App: appConfig.Name}
 	mainFile, err := generateOutputFile(
 		templateId_SRC_FILE_MAIN,
@@ -40,11 +41,13 @@ func generateSrcFiles(config *types.ProjectConfig, appConfig *types.AppConfig) (
 }
 
 func generateControllerData(
-	config *types.ProjectConfig,
-	appConfig *types.AppConfig,
+	project *entity.Entity,
+	app *entity.Entity,
 ) *MainControllerFileData {
 	imports := set.NewSet[string]()
 	controllers := []*controllerInput{}
+	appConfig := entity.GetEntityValues[v1.AppConfig](app)
+	config := entity.GetEntityValues[v1.ProjectConfig](project)
 	for _, controllerConfig := range appConfig.Controllers {
 		controller := &controllerInput{
 			Name:       controllerConfig.Name,

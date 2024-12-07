@@ -2,55 +2,60 @@ package files
 
 import (
 	bTypes "github.com/shaharby7/Dope/pkg/build/types"
+	"github.com/shaharby7/Dope/pkg/config"
 
 	configHelpers "github.com/shaharby7/Dope/pkg/config/helpers"
 
-	fsUtils "github.com/shaharby7/Dope/pkg/utils/fs"
 	"github.com/shaharby7/Dope/pkg/utils"
-	"github.com/shaharby7/Dope/types"
+	fsUtils "github.com/shaharby7/Dope/pkg/utils/fs"
 )
 
 func GenerateFiles(
 	dst string,
-	config *types.ProjectConfig,
+	eTree *config.EntitiesTree,
 	metadata *bTypes.BuildMetadata,
 	appsList []string,
 	envsList []string,
 ) ([]*fsUtils.OutputFile, error) {
 	files := make([]*fsUtils.OutputFile, 0)
 
-	f, err := generateRootFiles(config)
+	f, err := generateRootFiles(eTree)
 	if err != nil {
 		return nil, utils.FailedBecause("generate root files", err)
 	}
 	files = append(files, f...)
+
+	project, err := configHelpers.GetProject(eTree)
+	if err != nil {
+		return nil, err
+	}
 	for _, env := range envsList {
-		envConf, err := configHelpers.GetEnvConfig(config, env)
+		envEntity, err := configHelpers.GetEnv(eTree, env)
 		if err != nil {
 			return nil, err
 		}
-		f, err := generateHelmDopeValuesFile(metadata, config, envConf)
+		f, err := generateHelmDopeValuesFile(metadata, eTree, project, envEntity)
 		if err != nil {
 			return nil, utils.FailedBecause("generate helm dope values file", err)
 		}
 		files = append(files, f...)
 	}
 	for _, app := range appsList {
-		appConf, err := configHelpers.GetAppConfig(config, app)
+		appConf, err := configHelpers.GetApp(eTree, app)
 		if err != nil {
 			return nil, err
 		}
-		f, err := generateSrcFiles(config, appConf)
+		f, err := generateSrcFiles(project, appConf)
 		if err != nil {
 			return nil, utils.FailedBecause("generate src files", err)
 		}
 		files = append(files, f...)
 		for _, env := range envsList {
-			appEnvConf, err := configHelpers.GetAppEnvConfig(config, env, app)
+			appEnvConf, err := configHelpers.GetAppEnvConfig(eTree, env, app)
 			if err != nil {
 				return nil, err
 			}
-			f, err := generateAppHelmFiles(config, env, appConf, appEnvConf)
+			f, err := generateAppHelmFiles(eTree, env, appConf, appEnvConf)
 			if err != nil {
 				return nil, utils.FailedBecause("generate helm values files", err)
 			}
