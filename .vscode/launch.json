@@ -13,7 +13,7 @@
             "cwd": "${workspaceFolder}",
             "args": [
                 "create",
-                "env",
+                "project",
                 "--verbose"
                 // "build",
                 // "-p",

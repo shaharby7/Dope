@@ -3,16 +3,15 @@ package cmd
 import (
 	"fmt"
 	"path"
-	"text/template"
+	"slices"
 
-	"github.com/Masterminds/sprig/v3"
-	"github.com/shaharby7/Dope/pkg/config/entity"
 	"github.com/shaharby7/Dope/pkg/utils"
 
 	"github.com/shaharby7/Dope/pkg/config"
 
 	cliUtils "github.com/shaharby7/Dope/pkg/cli/cmd/utils"
 
+	"github.com/shaharby7/Dope/types"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -26,93 +25,116 @@ var cmdCreate = &cobra.Command{
 	Short: "create new dope object",
 	Long:  `use the create command to add new dope objects`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		entityManifest, err := getObjectManifest(args)
+		objType, err := getObjectType(args)
 		if err != nil {
-			return utils.FailedBecause("infer dope object type", err)
+			utils.FailedBecause("infer dope object type", err)
 		}
-		createdEntity := &entity.Entity{
-			Api:                config.DOPE_CORE_API,
-			Type:               entityManifest.Name,
-			EntityTypeManifest: entityManifest,
-		}
-		createdEntity.Name, err = cliUtils.GetInputString("Name", true)
+		name, err := cliUtils.GetInputString("Name")
 		if err != nil {
-			return utils.FailedBecause("getting name", err)
+			utils.FailedBecause("getting name", err)
 		}
-		createdEntity.Description, err = cliUtils.GetInputString("Description", false)
+		description, err := cliUtils.GetInputString("Description")
 		if err != nil {
-			return utils.FailedBecause("getting description", err)
+			utils.FailedBecause("getting description", err)
 		}
-		createdEntity.Binding, err = getObjectBinding(createdEntity)
+		binding, err := getObjectBinding(objType)
 		if err != nil {
 			utils.FailedBecause("getting binding", err)
 		}
-		values, err := getObjectValues(createdEntity)
+		objPath := inferObjPath(
+			viper.GetString(string(CONF_VARS_DOPE_PATH)),
+			name,
+			objType,
+			binding,
+		)
+		values, err := getObjectValues(objType)
 		if err != nil {
 			utils.FailedBecause("values binding", err)
 		}
-		createdEntity.Values = values
-		entityPath, err := inferObjPath(
-			createdEntity,
-		)
-		if err != nil {
-			return err
+		obj := &types.DopeObjectFile[any]{
+			Api:         "Dope/V1",
+			Type:        objType,
+			Name:        name,
+			Description: description,
+			Binding:     binding,
+			Values:      values,
 		}
-		fmt.Println(entityPath)
-		return entity.WriteEntity(entityPath, createdEntity)
+		fmt.Println(objPath)
+		return config.WriteConfig(objPath, obj)
 	},
 }
 
-func getObjectManifest(args []string) (*entity.EntityTypeManifest, error) {
+func getObjectType(args []string) (types.DOPE_OBJECTS, error) {
 	if (len(args)) != 1 {
-		return nil, fmt.Errorf("could not create command can only be executed with with argument, found %d", len(args))
+		return "", fmt.Errorf("could not create command can only be executed with with argument, found %d", len(args))
 	}
-	name := args[0]
-	return entity.GetEntityTypeManifest(config.DOPE_CORE_API, name)
+	switch args[0] { // TODO: use config object types
+	case "app":
+		return types.DOPE_OBJECT_APP, nil
+	case "env":
+		return types.DOPE_OBJECT_ENV, nil
+	case "appenv":
+		return types.DOPE_OBJECT_APP_ENV, nil
+	case "project":
+		return types.DOPE_OBJECT_PROJECT, nil
+	default:
+		return "", fmt.Errorf("could not infer object type, expected known dope object name, found:%s", args[0])
+	}
 }
 
-func getObjectBinding(e *entity.Entity) (entity.EntityBind, error) {
-	manifest := e.EntityTypeManifest
-	res := entity.EntityBind{}
-	if manifest.BindingSettings == nil {
-		return res, nil
-	}
-	for _, bindType := range manifest.BindingSettings.Must {
-		bindName, err := cliUtils.GetInputString(bindType, true)
+func getObjectBinding(objType types.DOPE_OBJECTS) (*types.DopeObjectFileBinding, error) {
+	res := &types.DopeObjectFileBinding{}
+	if slices.Contains([]types.DOPE_OBJECTS{types.DOPE_OBJECT_APP_ENV}, objType) {
+		env, err := cliUtils.GetInputString("Env binding")
 		if err != nil {
-			return nil, err
+			return nil, utils.FailedBecause("getting env binding", err)
 		}
-		res[bindType] = bindName
+		res.Env = &env
 	}
-	for _, bindType := range manifest.BindingSettings.Might {
-		bindName, err := cliUtils.GetInputString(bindType, false)
+	if slices.Contains([]types.DOPE_OBJECTS{types.DOPE_OBJECT_APP_ENV}, objType) {
+		app, err := cliUtils.GetInputString("App binding")
 		if err != nil {
-			return nil, err
+			return nil, utils.FailedBecause("getting app binding", err)
 		}
-		res[bindType] = bindName
+		res.App = &app
+	}
+	if (&types.DopeObjectFileBinding{} == res) {
+		return nil, nil
 	}
 	return res, nil
 }
 
-func inferObjPath(
-	entity *entity.Entity,
-) (string, error) {
-	entityManifest := entity.EntityTypeManifest
-	templateName := entityManifest.Name
-	parsedPathTemplate := template.Must( // TODO: pre-parse template
-		template.New(templateName).Funcs(sprig.FuncMap()).Parse(entityManifest.CliOptions.PathTemplate),
-	)
-	buff, err := utils.ApplyTemplateSafe(parsedPathTemplate, templateName, entity)
-	if err != nil {
-		return "", utils.FailedBecause(fmt.Sprintf("infer path for entity %s", entity.Name), err)
+func inferObjPath(dst string, name string, objType types.DOPE_OBJECTS, binding *types.DopeObjectFileBinding) string {
+	objPath := dst
+	if binding.Env != nil || objType == types.DOPE_OBJECT_ENV {
+		objPath = path.Join(objPath, "envs")
+		if binding.Env != nil {
+			objPath = path.Join(objPath, *binding.Env)
+		}
+		if objType == types.DOPE_OBJECT_ENV {
+			objPath = path.Join(objPath, name)
+		}
 	}
-	return path.Join(
-		viper.GetString(string(CONF_VARS_DOPE_PATH)),
-		buff.String(),
-		fmt.Sprintf("%s.%s.dope.yaml", entity.Name, entity.Type),
-	), nil
+	if binding.App != nil || objType == types.DOPE_OBJECT_APP {
+		objPath = path.Join(objPath, "apps")
+		if binding.App != nil {
+			objPath = path.Join(objPath, *binding.App)
+		}
+		if objType == types.DOPE_OBJECT_APP {
+			objPath = path.Join(objPath, name)
+		}
+	}
+	fileName := ""
+	fmt.Println(objType)
+	if objType == types.DOPE_OBJECT_PROJECT {
+		fileName = "project"
+	} else {
+		fileName = name
+	}
+	objPath = path.Join(objPath, fileName+".dope.yaml")
+	return objPath
 }
 
-func getObjectValues(_ *entity.Entity) (any, error) {
+func getObjectValues(types.DOPE_OBJECTS) (any, error) {
 	return nil, nil
 }
