@@ -22,11 +22,16 @@ type ProjectConfig struct {
 	Versioning   *ProjectVersioningOptions `validate:"required" yaml:"versioning"`
 	Apps         []*AppConfig              `yaml:"apps,omitempty"`
 	Environments []*EnvConfig              `yaml:"environments,omitempty"`
+	E2E          *E2EConfig                `yaml:"e2e,omitempty"`
 }
 
 type ProjectVersioningOptions struct {
 	Granularity VERSIONING_GRANULARITY_LEVELS `validate:"required" yaml:"granularity"`
 	Version     string                        `yaml:"version"`
+}
+
+type E2EConfig struct {
+	Package string `validate:"required" yaml:"package"`
 }
 
 type VERSIONING_GRANULARITY_LEVELS string

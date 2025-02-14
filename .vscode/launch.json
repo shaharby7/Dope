@@ -10,15 +10,9 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/pkg/cli",
-            "cwd": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}/example",
             "args": [
-                "install",
-                "--verbose"
-                // "build",
-                // "-p",
-                // "./example/.dope",
-                // "-d",
-                // "./example/build"
+                "e2e",
             ]
         },
         {

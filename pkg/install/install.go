@@ -1,7 +1,9 @@
 package install
 
 import (
+	"fmt"
 	"path"
+	"path/filepath"
 
 	"github.com/shaharby7/Dope/pkg/utils"
 	"helm.sh/helm/v3/pkg/action"
@@ -23,14 +25,18 @@ func InstallProject( //TODO: let's not hardcode everything :)
 	// create a new Helm action configuration
 	settings := cli.New()
 
+	p, err := filepath.Abs(path.Join(projectDst, "helm/local/dope/values.yaml"))
+	if err != nil {
+		return err
+	}
 	valueOpts := &values.Options{
 		ValueFiles: []string{
-			path.Join(projectDst, "helm/local/dope/values.yaml"),
+			p,
 		},
 	}
 
 	actionConfig := new(action.Configuration)
-	err := actionConfig.Init(settings.RESTClientGetter(), namespace, "",func(format string, v ...interface{}) {})
+	err = actionConfig.Init(settings.RESTClientGetter(), namespace, "", func(format string, v ...interface{}) {})
 
 	if err != nil {
 		return utils.FailedBecause("initiating helm action", err)
@@ -51,8 +57,8 @@ func InstallProject( //TODO: let's not hardcode everything :)
 		return utils.FailedBecause("locate dope chart", err)
 	}
 
-	p := getter.All(settings)
-	vals, err := valueOpts.MergeValues(p)
+	allSettings := getter.All(settings)
+	vals, err := valueOpts.MergeValues(allSettings)
 
 	if err != nil {
 		return utils.FailedBecause("loading value files", err)
@@ -64,10 +70,11 @@ func InstallProject( //TODO: let's not hardcode everything :)
 		return utils.FailedBecause("loading dope chart", err)
 	}
 	// install the chart
-	_, err = installAction.Run(chartRequested, vals)
-
+	release, err := installAction.Run(chartRequested, vals)
 	if err != nil {
 		return utils.FailedBecause("install dope chart", err)
 	}
+	fmt.Printf("successfully installed revision %d", release.Version)
+
 	return nil
 }

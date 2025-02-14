@@ -1,0 +1,12 @@
+api: Dope
+type: Project
+name: testdata
+description: "testdata"
+values:
+  dopeVersion: 0.0.1
+  module: github.com/shaharby7/Dope/pkg/e2e/testdata
+  versioning:
+    granularity: "app"
+    version: 0.0.1
+  e2e:
+    package: github.com/shaharby7/Dope/pkg/e2e/testdata
