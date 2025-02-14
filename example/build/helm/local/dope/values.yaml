@@ -7,7 +7,7 @@ project:
   e2e:
     package: github.com/shaharby7/Dope/example/pkg/e2e
 build:
-  path: ./build
+  path: ./example/build
 apps:
   - name: myapp
 providers:

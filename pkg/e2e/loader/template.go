@@ -34,7 +34,7 @@ import (
 )
 
 func main() {
-	err := e2e.RunE2E(
+	err := e2e.E2ERuntimeMain(
 		"./.dope",
 		"./build",
 		&e2e.E2eOptions{
