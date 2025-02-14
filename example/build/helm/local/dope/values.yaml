@@ -4,8 +4,10 @@ project:
   versioning:
     granularity: app
     version: 0.0.1
+  e2e:
+    package: github.com/shaharby7/Dope/example/pkg/e2e
 build:
-  path: ./example/build
+  path: ./build
 apps:
   - name: myapp
 providers:

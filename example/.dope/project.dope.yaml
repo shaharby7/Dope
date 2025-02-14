@@ -8,3 +8,5 @@ values:
   versioning:
     granularity: "app" # "app | project"
     version: 0.0.1
+  e2e:
+    package: github.com/shaharby7/Dope/example/pkg/e2e

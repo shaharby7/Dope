@@ -45,3 +45,20 @@ func WriteFile(basePath string, file *OutputFile) error {
 	}
 	return nil
 }
+
+func RemoveFile(basePath string, filePath string) error {
+	absPath := path.Join(basePath, filePath)
+	err := os.Remove(absPath)
+	if err != nil {
+		return fmt.Errorf("could not remove file (%s): %w", absPath, err)
+	}
+	return nil
+}
+
+func RemoveDirectory(path string) error {
+	err := os.RemoveAll(path)
+	if err != nil {
+		return fmt.Errorf("could not remove directory (%s): %w", path, err)
+	}
+	return nil
+}
