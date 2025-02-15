@@ -10,6 +10,15 @@ Deployment oriented programming. `Dope` is a highly Opinionated framework for de
 * *CI/CD* - though not enabled by default, `Dope` would gladly handle the CI/CD workflows for you. This feature requires an integration with `ArgoCD`.
 
 
+## Installation
+
+Install the cli (linux):
+
+```bash
+$ go install github.com/shaharby7/Dope/cmd/dopecli@latest
+$ mv $GOPATH/bin/dopecli /usr/local/bin/dope
+```
+
 ## Quick start
 
 ### Preretirement:
@@ -20,28 +29,35 @@ Deployment oriented programming. `Dope` is a highly Opinionated framework for de
 
 ### Steps
 
-1. Download the `dope-cli`:
+1. To create a new project run a `create` command with `project` variable, and potentially add custom path. You would be asked to give a name to the project: 
 ```shell
-$ go install github.com/shaharby7/Dope@latest
+$ dope create project [path]
 ```
 
-2. Generate a new project:
-```shell
-$ dope create /path/to/project
-Please type the name of your project? myproj
-Please type the domain for your project (github.com by default)? 
+Output:
+```
+Name: test
+Description: test
 ```
 
-3. cd to the project and open it with your favorite IDE.
-4. Create your first application! Open the `project.dope.yaml` file and add to the `apps` node your first app:
+2. Create your first application! 
+
+```shell
+$ dope create app
+```
+
+Go to the newly created file and add values to your first app, for example:
 
 ```yaml
-apps:
-- name: "greater"
-  description: "app example"
+api: Dope
+type: App
+name: "myapp"
+description: "example app"
+values:
+  version: 6
   controllers:
   - name: "server1"
-    description: "http sever controlled by greater"
+    description: "http sever controlled by app1"
     type: HTTPServer
     actions:
     - name: "/api/greet"
@@ -55,45 +71,116 @@ apps:
     - "UGLY_NAMES"
 ```
 
-5. add to the `environments` your first environment:
-```yaml
-environments:
-- name: local
-  apps:
-  - name: "greater"
-    repository: docker.io/shaharby7/greater-local
-    env:
-    - name: UGLY_NAMES
-      value: "shahar,danny"
-    resources: 
-      requests:
-        cpu: 1
-        memory: 2GB
-      limits:
-        cpu: 2
-        memory: 4GB
+3. Add your first environment 
+
+```shell
+$ dope create env
 ```
 
-6. Build! 
+Go to the newly created file and add values to your first environment, for example:
+
+```yaml
+api: Dope
+type: Env
+name: local
+description: "local deployment example"
+values:
+  providers:
+    git:
+      url: https://github.com/shaharby7/Dope.git
+      path: example
+      ref: shahar
+    kubernetes:
+      type: minikube
+    storage:
+      type: minio
+      managed: true
+    cd:
+      type: argo-cd
+      managed: true
+      values:
+        crds:
+          install: false
+        redis-ha:
+          enabled: false
+        controller:
+          replicas: 1
+        server:
+          replicas: 1
+        repoServer:
+          replicas: 1
+        applicationSet:
+          replicaCount: 1
+    workflows:
+      type: argo-workflows
+      managed: false
+```
+
+5. Define how the application should be deployed on this environment:
+```shell
+$ dope create appenv
+Name: app-local
+✔ Description: test deployment█
+✔ Env: local█
+App: myapp
+```
+
+Go to the newly created file and add values to your first app environment, for example:
+
+```yaml
+api: Dope
+type: AppEnv
+name: "local-myapp"
+binding:
+  Env: local
+  App: myapp
+values:
+  registry: "shaharby7/app1-local"
+  values:
+    serviceAccount:
+      create: true
+      automount: true
+      annotations: {}
+  controllers:
+  - name: "server1"
+    env:
+    - name: UGLY_NAMES # overrides the value from the defaults
+      value: "shahar,danny"
+    - name: FAMOUS_NAMES # creates new env var for this controller only
+      value: "donald"
+    replicas: 3
+    resources:
+      requests:
+        cpu: 1 # overrides the default value only for requests.cpu
+  controllersDefaults:
+    env:
+    - name: FORBIDDEN_NAMES
+      value: "nice"
+    - name: UGLY_NAMES
+      value: "shahar"
+    resources:
+      requests:
+        cpu: 2
+        memory: "2Gi"
+      limits:
+        cpu: 2
+        memory: "4Gi"
+
+```
+
+5. Build! 
 ```
 $ dope build 
 ```
-Note - `dope-cli` would search for `./project.dope.yaml` file by default, and would locate all the outputs in a `./build` directory by default, both can be set manually, see the `dope-cli` docs (#todo) 
 
-
-7. Review the output helm charts and values in the `./build` directory
-
-8. Add `dope` helm repo:
+6. Add `dope` helm repo:
 ```shell
 $ helm repo add dope https://shaharby7.github.io/Dope/helm/charts
 ```
 
-8. Deploy your application!:
+7. Deploy your application!:
 ```shell
-helm install dope dope/dope -n dope -f ./example/build/helm/local/dope/values.yaml  --create-namespace
+dope install
 ```
 
-9. Review your deployment and get your greetings! (#todo)
-```
-$ 
-```
+8. Review your deployment and get your greetings! 
