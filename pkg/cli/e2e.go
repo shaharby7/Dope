@@ -1,4 +1,4 @@
-package cmd
+package cli
 
 import (
 	"github.com/shaharby7/Dope/pkg/e2e"

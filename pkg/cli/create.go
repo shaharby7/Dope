@@ -1,4 +1,4 @@
-package cmd
+package cli
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 	"github.com/shaharby7/Dope/pkg/entities"
 	"github.com/shaharby7/Dope/pkg/utils"
 
-	cliUtils "github.com/shaharby7/Dope/pkg/cli/cmd/utils"
+	cliUtils "github.com/shaharby7/Dope/pkg/cli/utils"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
