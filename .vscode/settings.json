@@ -21,5 +21,9 @@
         "stretchr",
         "Templatefull",
         "Templater"
+    ],
+    "conventionalCommits.scopes": [
+        "helm",
+        "install"
     ]
 }

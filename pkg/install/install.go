@@ -6,75 +6,58 @@ import (
 	"path/filepath"
 
 	"github.com/shaharby7/Dope/pkg/utils"
-	"helm.sh/helm/v3/pkg/action"
-	"helm.sh/helm/v3/pkg/cli/values"
-	"helm.sh/helm/v3/pkg/getter"
-
-	"helm.sh/helm/v3/pkg/chart/loader"
-	"helm.sh/helm/v3/pkg/cli"
 )
 
-func InstallProject( //TODO: let's not hardcode everything :)
+func InstallProject(
+	dopePath string,
 	projectDst string,
-	options *InstallOptions,
+	config *config,
 ) error {
-	chartName := "dope"
-	chartVersion := "0.1.5"
-	namespace := "dope"
 
-	// create a new Helm action configuration
-	settings := cli.New()
-
-	p, err := filepath.Abs(path.Join(projectDst, "helm/local/dope/values.yaml"))
+	valuesFile, err := filepath.Abs(
+		path.Join(
+			projectDst,
+			"helm",
+			config.Environment,
+			"dope",
+			"values.yaml",
+		),
+	)
+	if err != nil {
+		return fmt.Errorf("failed to get absolute path for values file: %w", err)
+	}
+	mainCommand := "install"
+	if config.Upgrade {
+		mainCommand = "upgrade"
+	}
+	script := fmt.Sprintf(
+		"helm %s %s dope/dope -n %s -f %s --create-namespace --wait",
+		mainCommand,
+		config.ReleaseName,
+		config.Namespace,
+		valuesFile,
+	)
+	out, err := utils.ExecCommand(script)
+	print(string(out))
 	if err != nil {
 		return err
 	}
-	valueOpts := &values.Options{
-		ValueFiles: []string{
-			p,
-		},
-	}
+	return nil
+}
 
-	actionConfig := new(action.Configuration)
-	err = actionConfig.Init(settings.RESTClientGetter(), namespace, "", func(format string, v ...interface{}) {})
-
+func UninstallProject(
+	dopePath string,
+	projectDst string,
+	config *config,
+) error {
+	script := fmt.Sprintf(
+		"helm uninstall dope -n %s",
+		config.Namespace,
+	)
+	out, err := utils.ExecCommand(script)
+	print(string(out))
 	if err != nil {
-		return utils.FailedBecause("initiating helm action", err)
+		return err
 	}
-
-	// create a new Helm install action
-	installAction := action.NewInstall(actionConfig)
-
-	// set the chart name, version, and namespace
-	installAction.Namespace = namespace
-	installAction.ReleaseName = chartName
-	installAction.Version = chartVersion
-	installAction.CreateNamespace = true
-
-	cp, err := installAction.LocateChart("dope/dope", settings)
-
-	if err != nil {
-		return utils.FailedBecause("locate dope chart", err)
-	}
-
-	allSettings := getter.All(settings)
-	vals, err := valueOpts.MergeValues(allSettings)
-
-	if err != nil {
-		return utils.FailedBecause("loading value files", err)
-	}
-
-	chartRequested, err := loader.Load(cp)
-
-	if err != nil {
-		return utils.FailedBecause("loading dope chart", err)
-	}
-	// install the chart
-	release, err := installAction.Run(chartRequested, vals)
-	if err != nil {
-		return utils.FailedBecause("install dope chart", err)
-	}
-	fmt.Printf("successfully installed revision %d", release.Version)
-
 	return nil
 }
