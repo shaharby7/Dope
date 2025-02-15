@@ -21,5 +21,3 @@
 **/tmptest_*
 example/staging/**
 !**/.gitkeep
-
-dope_config
