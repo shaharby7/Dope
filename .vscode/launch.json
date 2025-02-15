@@ -9,7 +9,7 @@
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "${workspaceFolder}/pkg/cli",
+            "program": "${workspaceFolder}/cmd/dopecli",
             "cwd": "${workspaceFolder}/example",
             "args": [
                 "e2e",

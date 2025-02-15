@@ -7,4 +7,4 @@ rsync -av ./ ./example/staging/Dope --exclude example/ --exclude hack/ --exclude
 ## remove old build
 rm -rf ./example/build
 ## build "example" project with the new dope build
-go run ./pkg/cli build -p ./example/.dope -d ./example/build # TODO: check if it can be done with the staged code
+go run ./cmd/dopecli build -p ./example/.dope -d ./example/build # TODO: check if it can be done with the staged code
