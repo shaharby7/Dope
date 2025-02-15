@@ -84,7 +84,7 @@ func buildAndInstall(dopePath string, dst string, options *E2eOptions) error {
 		}
 	}
 	if options.InstallBefore == nil || *options.InstallBefore {
-		err = install.InstallProject(dst, &install.InstallOptions{})
+		err = install.InstallProject(dopePath, dst, install.NewConfig())
 		if err != nil {
 			return utils.FailedBecause("installing project for test", err)
 		}

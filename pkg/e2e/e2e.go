@@ -50,7 +50,7 @@ func getProjectE2EConfig(dopePath string) (*v1.E2EConfig, error) {
 
 func executeE2EMainFile(mainFile string) error {
 	arbitraryPath, _ := filepath.Abs(
-		fmt.Sprintf("tmptest_%s", utils.RandStringRunes(10)),
+		fmt.Sprintf("dope_tmp_test_%s", utils.RandStringRunes(10)),
 	)
 	defer fsUtils.RemoveDirectory(arbitraryPath)
 	fsUtils.WriteFile(arbitraryPath, &fsUtils.OutputFile{
