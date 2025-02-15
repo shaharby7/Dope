@@ -23,6 +23,7 @@
         "Templater"
     ],
     "conventionalCommits.scopes": [
-        "helm"
+        "helm",
+        "install"
     ]
 }
