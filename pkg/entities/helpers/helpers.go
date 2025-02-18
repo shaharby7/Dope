@@ -44,6 +44,19 @@ func GetApp(eTree *entities.EntitiesTree, appName string) (*entity.Entity, error
 	return nil, fmt.Errorf("could not find configuration for app %s", appName)
 }
 
+func GetClient(eTree *entities.EntitiesTree, clientName string) (*entity.Entity, error) {
+	ok, conf := utils.Find(
+		GetCoreEntitiesByType(*eTree, v1.DOPE_CORE_TYPES_CLIENT),
+		func(e *entity.Entity) bool {
+			return e.Name == clientName
+		},
+	)
+	if ok {
+		return *conf, nil
+	}
+	return nil, fmt.Errorf("could not find configuration for app %s", clientName)
+}
+
 func GetAppEnvConfig(eTree *entities.EntitiesTree, envName string, appName string) (*entity.Entity, error) {
 	ok, conf := utils.Find(
 		GetCoreEntitiesByType(*eTree, v1.DOPE_CORE_TYPES_APPENV),

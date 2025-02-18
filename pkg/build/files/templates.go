@@ -17,8 +17,9 @@ const (
 type templateId int
 
 const (
-	templateId_SRC_FILE_MAIN templateId = iota
-	templateId_SRC_FILE_CONTROLLER
+	templateId_SRC_APP_MAIN templateId = iota
+	templateId_SRC_APP_CONTROLLERS
+	templateId_SRC_CLIENT_MAIN
 	templateId_DOCKERFILE
 	templateId_HELM_APPS
 	templateId_HELM_IMAGE
@@ -28,8 +29,9 @@ const (
 )
 
 var _TEMPLATES_LIST map[templateId]string = map[templateId]string{
-	templateId_SRC_FILE_MAIN:       "src/{{.App}}/main.go",
-	templateId_SRC_FILE_CONTROLLER: "src/{{.App}}/controllers.go",
+	templateId_SRC_APP_MAIN:        "src/apps/{{.App}}/main.go",
+	templateId_SRC_APP_CONTROLLERS: "src/apps/{{.App}}/controllers.go",
+	templateId_SRC_CLIENT_MAIN:     "src/clients/{{.Client}}/client.go",
 	templateId_HELM_IMAGE:          "helm/{{.Env}}/{{.App}}/image.yaml",
 	templateId_HELM_VALUES:         "helm/{{.Env}}/{{.App}}/values.yaml",
 	templateId_HELM_CONTROLLERS:    "helm/{{.Env}}/{{.App}}/controllers.yaml",

@@ -18,7 +18,7 @@ var cmdInstall = &cobra.Command{
 	Use:   "install",
 	Short: "install the project",
 	Long: `install the dope essential helm chart. Thin wrapper for the command
-	"helm install dope dope/dope -n dope -f <dst>/build/helm/local/dope/values.yaml --create-namespace"`,
+	"helm install dope dope/dope -n dope -f <dst>/build/helm/<env>/dope/values.yaml --create-namespace"`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		err := install.InstallProject(
 			viper.GetString(string(CONF_VARS_DOPE_PATH)),

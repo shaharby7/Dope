@@ -12,7 +12,7 @@ var AppManifest = &entity.EntityTypeManifest{
 	ValuesType:      reflect.TypeOf(AppConfig{}),
 	CliOptions: &entity.CliOptions{
 		Aliases:      []string{"app", "application"},
-		PathTemplate: "general/apps/{{.Name}}",
+		PathTemplate: "modules/apps/{{.Name}}",
 	},
 }
 

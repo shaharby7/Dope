@@ -35,9 +35,10 @@ func BuildProject(
 	}
 	appsList := getApplicationsList(eTree, &options)
 	envsList := getEnvironmentList(eTree, &options)
+	clientsList := getClientsList(eTree, &options)
 
 	outputFiles, err := files.GenerateFiles(
-		dst, eTree, metadata, appsList, envsList,
+		dst, eTree, metadata, appsList, envsList, clientsList,
 	)
 	if err != nil {
 		return utils.FailedBecause(
@@ -64,6 +65,13 @@ func getEnvironmentList(eTree *entities.EntitiesTree, buildOptions *bTypes.Build
 		return buildOptions.Apps
 	}
 	return getEntitiesNamesListByType(eTree, v1.DOPE_CORE_TYPES_ENV)
+}
+
+func getClientsList(eTree *entities.EntitiesTree, buildOptions *bTypes.BuildOptions) []string {
+	if len(buildOptions.Clients) > 0 {
+		return buildOptions.Clients
+	}
+	return getEntitiesNamesListByType(eTree, v1.DOPE_CORE_TYPES_CLIENT)
 }
 
 func getEntitiesNamesListByType(eTree *entities.EntitiesTree, t v1.DOPE_CORE_TYPES) []string {
