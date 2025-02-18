@@ -1,0 +1,23 @@
+package {{ .Name }}
+
+import (
+	"fmt"
+	"github.com/shaharby7/Dope/pkg/runtime/client"
+    {{ range $index, $import := .Imports }}
+    "{{ $import }}"{{ end }}
+)
+
+var clientDomains map[string]string
+
+func InitiateClient(domains map[string]string) {
+	clientDomains = domains
+}
+
+
+{{ range $index, $action := .Actions }}
+var {{$action.Method}}_{{$action.App}}_{{$action.FlattenName}} = client.CreateTypedClientCall(
+    "{{$action.Method}}",
+	fmt.Sprintf("%s%s", clientDomains["{{$action.App}}"], "{{$action.Name}}"),
+    {{ $action.Caller}},
+)
+{{ end }}

@@ -3,6 +3,7 @@ package types
 type BuildOptions struct {
 	Apps   []string
 	Envs   []string
+	Clients []string
 	Stages []BuildStage
 }
 

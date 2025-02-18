@@ -3,9 +3,12 @@ package files
 import (
 	"fmt"
 	"path"
+	"strings"
 
+	"github.com/shaharby7/Dope/pkg/entities"
 	v1 "github.com/shaharby7/Dope/pkg/entities/V1"
 	"github.com/shaharby7/Dope/pkg/entities/entity"
+	configHelpers "github.com/shaharby7/Dope/pkg/entities/helpers"
 	"github.com/shaharby7/Dope/pkg/utils"
 
 	fsUtils "github.com/shaharby7/Dope/pkg/utils/fs"
@@ -16,18 +19,18 @@ type appPathArgs struct {
 	App string
 }
 
-func generateSrcFiles(config *entity.Entity, appConfig *entity.Entity) ([]*fsUtils.OutputFile, error) {
+func generateAppFiles(config *entity.Entity, appConfig *entity.Entity) ([]*fsUtils.OutputFile, error) {
 	pathArgs := &appPathArgs{App: appConfig.Name}
 	mainFile, err := generateOutputFile(
-		templateId_SRC_FILE_MAIN,
+		templateId_SRC_APP_MAIN,
 		pathArgs,
 		utils.Empty,
 	)
 	if err != nil {
 		return nil, err
 	}
-	controllerFile, err := generateOutputFile(
-		templateId_SRC_FILE_CONTROLLER,
+	controllersFile, err := generateOutputFile(
+		templateId_SRC_APP_CONTROLLERS,
 		pathArgs,
 		generateControllerData(
 			config,
@@ -37,7 +40,7 @@ func generateSrcFiles(config *entity.Entity, appConfig *entity.Entity) ([]*fsUti
 	if err != nil {
 		return nil, err
 	}
-	return []*fsUtils.OutputFile{mainFile, controllerFile}, nil
+	return []*fsUtils.OutputFile{mainFile, controllersFile}, nil
 }
 
 func generateControllerData(
@@ -75,4 +78,80 @@ func generateControllerData(
 		Imports:     imports.ToSlice(),
 		Controllers: controllers,
 	}
+}
+
+type clientPathArgs struct {
+	Client string
+}
+
+type clientDataArgs struct {
+	Name    string
+	Imports []string
+	Actions []struct {
+		FlattenName string
+		Name        string
+		Caller      string
+		Method      string
+		App         string
+	}
+}
+
+func generateClientFiles(
+	eTree *entities.EntitiesTree,
+	clientConf *entity.Entity,
+) ([]*fsUtils.OutputFile, error) {
+	pathArgs := &clientPathArgs{Client: clientConf.Name}
+	clientFile, err := generateOutputFile(
+		templateId_SRC_CLIENT_MAIN,
+		pathArgs,
+		generateClientData(eTree, clientConf),
+	)
+	if err != nil {
+		return nil, err
+	}
+	return []*fsUtils.OutputFile{clientFile}, nil
+}
+
+func generateClientData(
+	eTree *entities.EntitiesTree,
+	clientConf *entity.Entity,
+) *clientDataArgs {
+	data := &clientDataArgs{
+		Name: clientConf.Name,
+	}
+	imports := set.NewSet[string]()
+	clientValues := entity.GetEntityValues[v1.ClientConfig](clientConf)
+	project, _ := configHelpers.GetProject(eTree)
+	projectValues := entity.GetEntityValues[v1.ProjectConfig](project)
+	for _, app := range clientValues.Apps {
+		appEntity, err := configHelpers.GetApp(eTree, app)
+		if err != nil {
+			continue
+		}
+		appConfig := entity.GetEntityValues[v1.AppConfig](appEntity)
+		for _, controller := range appConfig.Controllers {
+			for _, action := range controller.Actions {
+				imports.Add(
+					path.Join(projectValues.Module, action.Package),
+				)
+				data.Actions = append(data.Actions, struct {
+					FlattenName string
+					Name        string
+					Caller      string
+					Method      string
+					App         string
+				}{
+					Name:        action.Name,
+					FlattenName: strings.Replace(action.Name, "/", "_", -1),
+					Caller: fmt.Sprintf(
+						"%s.%s", path.Base(action.Package), action.Ref,
+					),
+					Method: action.ControllerBinding["method"],
+					App:    app,
+				})
+			}
+		}
+	}
+	data.Imports = imports.ToSlice()
+	return data
 }

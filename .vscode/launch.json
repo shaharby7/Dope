@@ -30,7 +30,7 @@
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "./example/build/src/app1",
+            "program": "./example/build/src/apps/myapp",
             "cwd": "${workspaceFolder}/example",
             "env": {
                 "DOPE_CONTROLLER_NAME": "server1",

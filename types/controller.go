@@ -33,7 +33,11 @@ type TypedAction struct {
 
 // configs
 type ActionInputMetadata struct {
-	HTTPServer *httprouter.Params
+	HTTPServer *HTTPServerRequestConfig
+}
+
+type HTTPServerRequestConfig struct {
+	Params httprouter.Params
 }
 
 type ActionOutputMetadata struct {
