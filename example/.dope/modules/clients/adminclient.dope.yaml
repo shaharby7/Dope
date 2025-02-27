@@ -1,7 +1,7 @@
 api: Dope
 type: Client
-name: "myappClient"
+name: "adminclient"
 description: "example of client for myapp"
 values:
   apps:
-  - myapp
+  - admin

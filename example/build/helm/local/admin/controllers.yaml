@@ -1,0 +1,24 @@
+controllers:
+  - name: listener
+    env:
+      - name: UGLY_NAMES
+        value: shahar,danny
+      - name: FAMOUS_NAMES
+        value: donald
+      - name: DOPE_CONTROLLER_TYPE
+        value: HTTPServer
+      - name: DOPE_CONTROLLER_NAME
+        value: listener
+      - name: DOPE_APP_NAME
+        value: admin
+      - name: DOPE_DOPE_PORT
+        value: "4000"
+      - name: DOPE_HTTPSERVER_PORT
+        value: "3000"
+    replicas: 3
+    resources:
+      limits: {}
+      requests:
+        cpu: "1"
+    type: HTTPServer
+  

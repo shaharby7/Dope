@@ -1,9 +1,9 @@
 api: Dope
 type: AppEnv
-name: "local-myapp"
+name: greeter
 binding:
   Env: local
-  App: myapp
+  App: greeter
 values:
   registry: "shaharby7/app1-local"
   values:
@@ -12,7 +12,7 @@ values:
       automount: true
       annotations: {}
   controllers:
-  - name: "server1"
+  - name: "listener"
     env:
     - name: UGLY_NAMES # overrides the value from the defaults
       value: "shahar,danny"
@@ -22,6 +22,8 @@ values:
     resources:
       requests:
         cpu: 1 # overrides the default value only for requests.cpu
+  clients:
+  - name: "adminclient"
   controllersDefaults:
     env:
     - name: FORBIDDEN_NAMES

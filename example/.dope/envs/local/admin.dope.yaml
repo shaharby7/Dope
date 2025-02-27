@@ -1,0 +1,39 @@
+api: Dope
+type: AppEnv
+name: admin
+binding:
+  Env: local
+  App: admin
+values:
+  registry: "shaharby7/app1-local"
+  values:
+    serviceAccount:
+      create: true
+      automount: true
+      annotations: {}
+  controllers:
+  - name: "listener"
+    env:
+    - name: UGLY_NAMES # overrides the value from the defaults
+      value: "shahar,danny"
+    - name: FAMOUS_NAMES # creates new env var for this controller only
+      value: "donald"
+    replicas: 3
+    resources:
+      requests:
+        cpu: 1 # overrides the default value only for requests.cpu
+  clients:
+  - name: ""
+  controllersDefaults:
+    env:
+    - name: FORBIDDEN_NAMES
+      value: "nice"
+    - name: UGLY_NAMES
+      value: "shahar"
+    resources:
+      requests:
+        cpu: 2
+        memory: "2Gi"
+      limits:
+        cpu: 2
+        memory: "4Gi"

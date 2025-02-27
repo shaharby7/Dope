@@ -1,6 +1,7 @@
 {
     "cSpell.words": [
         "actionables",
+        "adminclient",
         "appenv",
         "automount",
         "cicd",
@@ -25,6 +26,8 @@
     ],
     "conventionalCommits.scopes": [
         "helm",
-        "install"
+        "install",
+        "entity",
+        "exmaple"
     ]
 }

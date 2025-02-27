@@ -1,0 +1,27 @@
+appName: admin
+
+description: ""
+registry: shaharby7/app1-local
+controllers:
+  - name: listener
+    env:
+      - name: UGLY_NAMES
+        value: shahar,danny
+      - name: FAMOUS_NAMES
+        value: donald
+    replicas: 3
+    resources:
+      requests:
+        cpu: "1"
+values:
+  serviceAccount:
+    create: true
+    automount: true
+  imagePullSecrets: null
+  annotations: {}
+  labels: {}
+  securityContext: null
+  volumeMounts: []
+  volumes: []
+  nodeSelector: {}
+  Affinity: null

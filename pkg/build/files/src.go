@@ -142,7 +142,7 @@ func generateClientData(
 					App         string
 				}{
 					Name:        action.Name,
-					FlattenName: strings.Replace(action.Name, "/", "_", -1),
+					FlattenName: flattenString(action.Name),
 					Caller: fmt.Sprintf(
 						"%s.%s", path.Base(action.Package), action.Ref,
 					),
@@ -154,4 +154,10 @@ func generateClientData(
 	}
 	data.Imports = imports.ToSlice()
 	return data
+}
+
+func flattenString(s string) string {
+	s = strings.Replace(s, "/", "_", -1)
+	s = strings.Replace(s, "-", "_", -1)
+	return s
 }

@@ -1,0 +1,29 @@
+api: Dope
+type: App
+name: "admin"
+description: "the application to admin the platform"
+values:
+  version: 1
+  controllers:
+  - name: "listener"
+    description: "exposes api to manage the platform"
+    type: HTTPServer
+    actions:
+    - name: "/api/ugly-names/set-name"
+      description: "set names to ugly"
+      package: pkg/greeter
+      ref: Greet
+      controllerBinding:
+        method: GET
+    - name: "/api/ugly-names/unset-name"
+      description: "set names to not ugly"
+      package: pkg/greeter
+      ref: Greet
+      controllerBinding:
+        method: GET
+    - name: "/api/ugly-names/list"
+      description: "list all ugly names"
+      package: pkg/greeter
+      ref: Greet
+      controllerBinding:
+        method: GET

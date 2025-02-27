@@ -113,7 +113,7 @@ func _generateAppControllersFile(
 		appEnvConfig.Controllers,
 		func(controller v1.ControllerEnvConfig) (string, error) {
 			controllerConfig, _ := configHelpers.GetControllerConfig(controller.Name, app)
-			addControllerDefaults(&controller, controllerConfig, &appEnvConfig.ControllersDefaults)
+			addControllerDefaults(&controller, controllerConfig, appEnvConfig)
 			addDopeEnvVars(&controller, controllerConfig, app)
 			controllerString, err := yamlUtils.EncodeYamlWithIndent([]v1.ControllerEnvConfig{controller}, 1)
 			if err != nil {
@@ -138,7 +138,7 @@ func _generateAppControllersFile(
 func addControllerDefaults(
 	controllerEnvConfig *v1.ControllerEnvConfig,
 	controllerConfig *v1.ControllerConfig,
-	defaults *v1.ControllerEnvConfig,
+	defaults *v1.AppEnvConfig,
 ) {
 	controllerEnvConfig.PopulatedType_ = controllerConfig.Type
 	addControllerEnvDefaults(controllerEnvConfig, defaults)
@@ -154,7 +154,7 @@ func addControllerDefaults(
 	}
 }
 
-func addControllerEnvDefaults(controller *v1.ControllerEnvConfig, defaults *v1.ControllerEnvConfig) {
+func addControllerEnvDefaults(controller *v1.ControllerEnvConfig, defaults *v1.AppEnvConfig) {
 	if defaults.Env != nil {
 		for _, dEnv := range defaults.Env {
 			hasNonDefault := false

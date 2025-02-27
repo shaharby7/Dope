@@ -1,0 +1,22 @@
+api: Dope
+type: App
+name: "greeter"
+description: "the application that only wants to greet you"
+values:
+  version: 6
+  controllers:
+  - name: "listener"
+    description: "http sever controlled by the greeter app"
+    type: HTTPServer
+    actions:
+    - name: "/api/greet"
+      description: "Great anyone who wants"
+      package: pkg/greeter
+      ref: Greet
+      controllerBinding:
+        method: POST
+  clients:
+  - name: "adminclient"
+    package: .dope/modules/clients/adminclient.dope.yaml
+  env:
+  - "UGLY_NAMES"
