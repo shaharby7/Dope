@@ -104,7 +104,9 @@ func generateRouteHandler(action *types.TypedAction) httprouter.Handle {
 			return
 		}
 		inputMetadata := &types.ActionInputMetadata{
-			HTTPServer: &params,
+			HTTPServer: &types.HTTPServerRequestConfig{
+				Params: params,
+			},
 		}
 		p := []reflect.Value{
 			reflect.ValueOf(context.TODO()),

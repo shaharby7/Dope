@@ -1,6 +1,7 @@
 {
     "cSpell.words": [
         "actionables",
+        "adminclient",
         "appenv",
         "automount",
         "cicd",
@@ -15,6 +16,7 @@
         "loggable",
         "manifoldco",
         "minio",
+        "myapp",
         "promptui",
         "SHAHAR",
         "shaharby",
@@ -24,6 +26,8 @@
     ],
     "conventionalCommits.scopes": [
         "helm",
-        "install"
+        "install",
+        "entity",
+        "exmaple"
     ]
 }

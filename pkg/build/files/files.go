@@ -16,6 +16,7 @@ func GenerateFiles(
 	metadata *bTypes.BuildMetadata,
 	appsList []string,
 	envsList []string,
+	clientsList []string,
 ) ([]*fsUtils.OutputFile, error) {
 	files := make([]*fsUtils.OutputFile, 0)
 
@@ -40,12 +41,23 @@ func GenerateFiles(
 		}
 		files = append(files, f...)
 	}
+	for _, client := range clientsList {
+		clientConf, err := configHelpers.GetClient(eTree, client)
+		if err != nil {
+			return nil, err
+		}
+		f, err := generateClientFiles(eTree, clientConf)
+		if err != nil {
+			return nil, utils.FailedBecause("generate src files", err)
+		}
+		files = append(files, f...)
+	}
 	for _, app := range appsList {
 		appConf, err := configHelpers.GetApp(eTree, app)
 		if err != nil {
 			return nil, err
 		}
-		f, err := generateSrcFiles(project, appConf)
+		f, err := generateAppFiles(project, appConf)
 		if err != nil {
 			return nil, utils.FailedBecause("generate src files", err)
 		}

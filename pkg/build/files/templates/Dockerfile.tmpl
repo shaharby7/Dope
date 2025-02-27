@@ -6,7 +6,7 @@ ARG APP_NAME
 WORKDIR /app
 COPY ./ ./
 RUN go mod download
-RUN go build -o /program ./build/src/${APP_NAME}
+RUN go build -o /program ./build/src/apps/${APP_NAME}
 
 #######
 FROM build

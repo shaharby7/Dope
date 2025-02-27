@@ -10,15 +10,15 @@ import (
 
 var controllers = map[string]types.Controller[any]{
 
-    "server1": Controller_server1,
+    "listener": Controller_listener,
 
 }
 
 
-var Controller_server1 = controller.NewHTTPServer(
+var Controller_listener = controller.NewHTTPServer(
 	[]*types.TypedAction{
-		controller.CreateTypedAction(
             
+			controller.CreateTypedAction(
 			&v1.ActionConfig{
 				Name: "/api/greet",
 				ControllerBinding: map[string]string{

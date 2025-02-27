@@ -20,11 +20,13 @@ var AppEnvManifest = &entity.EntityTypeManifest{
 }
 
 type AppEnvConfig struct {
-	Description         string `yaml:"description"`
-	Registry            string
-	Controllers         []ControllerEnvConfig `yaml:"controllers,omitempty"`
-	ControllersDefaults ControllerEnvConfig   `yaml:"controllersDefaults,omitempty"`
-	Values              AppValues             `yaml:"values,omitempty"`
+	Description string `yaml:"description"`
+	Registry    string
+	Controllers []ControllerEnvConfig `yaml:"controllers,omitempty"`
+	Values      AppValues             `yaml:"values,omitempty"`
+	Env         []EnvVar              `yaml:"env,omitempty"`
+	Replicas    uint32                `yaml:"replicas,omitempty"`
+	Resources   *ResourceRequirements `yaml:"resources,omitempty"`
 }
 
 type ControllerEnvConfig struct {

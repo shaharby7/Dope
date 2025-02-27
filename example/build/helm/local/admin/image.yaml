@@ -1,0 +1,4 @@
+image:
+  repository: shaharby7/app1-local
+  pullPolicy: IfNotPresent
+  tag: 1
