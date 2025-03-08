@@ -5,6 +5,7 @@ go 1.22.0
 replace github.com/shaharby7/Dope => ./staging/Dope/
 
 require (
+	github.com/julienschmidt/httprouter v1.3.0
 	github.com/shaharby7/Dope v0.0.0-00010101000000-000000000000
 	github.com/stretchr/testify v1.9.0
 )
@@ -26,7 +27,6 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/huandu/xstrings v1.5.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/julienschmidt/httprouter v1.3.0 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/mitchellh/copystructure v1.2.0 // indirect
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect

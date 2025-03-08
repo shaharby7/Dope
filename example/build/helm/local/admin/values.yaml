@@ -25,3 +25,15 @@ values:
   volumes: []
   nodeSelector: {}
   Affinity: null
+env:
+  - name: FORBIDDEN_NAMES
+    value: nice
+  - name: UGLY_NAMES
+    value: shahar
+resources:
+  limits:
+    cpu: "2"
+    memory: 4Gi
+  requests:
+    cpu: "2"
+    memory: 2Gi

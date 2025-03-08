@@ -24,16 +24,15 @@ values:
         cpu: 1 # overrides the default value only for requests.cpu
   clients:
   - name: "adminclient"
-  controllersDefaults:
-    env:
-    - name: FORBIDDEN_NAMES
-      value: "nice"
-    - name: UGLY_NAMES
-      value: "shahar"
-    resources:
-      requests:
-        cpu: 2
-        memory: "2Gi"
-      limits:
-        cpu: 2
-        memory: "4Gi"
+  env:
+  - name: FORBIDDEN_NAMES
+    value: "nice"
+  - name: UGLY_NAMES
+    value: "shahar"
+  resources:
+    requests:
+      cpu: 2
+      memory: "2Gi"
+    limits:
+      cpu: 2
+      memory: "4Gi"

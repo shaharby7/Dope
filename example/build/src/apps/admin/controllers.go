@@ -5,7 +5,7 @@ import (
 	"github.com/shaharby7/Dope/types"
 	v1 "github.com/shaharby7/Dope/pkg/entities/V1"
     
-    "github.com/shaharby7/Dope/example/pkg/greeter"
+    "github.com/shaharby7/Dope/example/pkg/admin"
 )
 
 var controllers = map[string]types.Controller[any]{
@@ -20,22 +20,22 @@ var Controller_listener = controller.NewHTTPServer(
             
 			controller.CreateTypedAction(
 			&v1.ActionConfig{
-				Name: "/api/ugly-names/set-name",
+				Name: "/api/ugly-names/set-names",
 				ControllerBinding: map[string]string{
-					"method":"GET",
+					"method":"POST",
 				},
 			},
-            greeter.Greet,
+            admin.SetUglyNames,
             ),
             
 			controller.CreateTypedAction(
 			&v1.ActionConfig{
 				Name: "/api/ugly-names/unset-name",
 				ControllerBinding: map[string]string{
-					"method":"GET",
+					"method":"DEL",
 				},
 			},
-            greeter.Greet,
+            admin.RemoveUglyName,
             ),
             
 			controller.CreateTypedAction(
@@ -45,7 +45,7 @@ var Controller_listener = controller.NewHTTPServer(
 					"method":"GET",
 				},
 			},
-            greeter.Greet,
+            admin.GetUglyNames,
             ),
             
 	},

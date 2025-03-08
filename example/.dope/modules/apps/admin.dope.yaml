@@ -9,21 +9,21 @@ values:
     description: "exposes api to manage the platform"
     type: HTTPServer
     actions:
-    - name: "/api/ugly-names/set-name"
+    - name: "/api/ugly-names/set-names"
       description: "set names to ugly"
-      package: pkg/greeter
-      ref: Greet
+      package: pkg/admin
+      ref: SetUglyNames
       controllerBinding:
-        method: GET
+        method: POST
     - name: "/api/ugly-names/unset-name"
       description: "set names to not ugly"
-      package: pkg/greeter
-      ref: Greet
+      package: pkg/admin
+      ref: RemoveUglyName
       controllerBinding:
-        method: GET
+        method: DEL
     - name: "/api/ugly-names/list"
       description: "list all ugly names"
-      package: pkg/greeter
-      ref: Greet
+      package: pkg/admin
+      ref: GetUglyNames
       controllerBinding:
         method: GET

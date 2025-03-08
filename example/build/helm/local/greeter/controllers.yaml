@@ -5,6 +5,8 @@ controllers:
         value: shahar,danny
       - name: FAMOUS_NAMES
         value: donald
+      - name: FORBIDDEN_NAMES
+        value: nice
       - name: DOPE_CONTROLLER_TYPE
         value: HTTPServer
       - name: DOPE_CONTROLLER_NAME
@@ -17,8 +19,11 @@ controllers:
         value: "3000"
     replicas: 3
     resources:
-      limits: {}
+      limits:
+        cpu: "2"
+        memory: 4Gi
       requests:
         cpu: "1"
+        memory: 2Gi
     type: HTTPServer
   

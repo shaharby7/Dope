@@ -38,6 +38,7 @@ type ActionInputMetadata struct {
 
 type HTTPServerRequestConfig struct {
 	Params httprouter.Params
+	// Headers map[string]string // TODO
 }
 
 type ActionOutputMetadata struct {

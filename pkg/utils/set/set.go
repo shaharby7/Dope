@@ -31,6 +31,10 @@ func (s *Set[V]) Exists(val V) bool {
 	return s.data[val]
 }
 
+func (s *Set[V]) Remove(val V) {
+	delete(s.data, val)
+}
+
 func (s *Set[V]) Size() int {
 	return len(s.data)
 }

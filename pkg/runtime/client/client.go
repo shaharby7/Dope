@@ -10,9 +10,20 @@ import (
 	"github.com/shaharby7/Dope/types"
 )
 
+type ClientData struct {
+	Url string
+}
+
+func ParseClientData() *ClientData {
+	return &ClientData{
+		Url: "http://localhost:3000", // todo: take url from env
+	}
+}
+
 func CreateTypedClientCall[In any, Out any](
+	clientData *ClientData,
 	method string,
-	url string,
+	path string,
 	callback func(
 		ctx context.Context,
 		input *In,
@@ -27,6 +38,12 @@ func CreateTypedClientCall[In any, Out any](
 	*types.ActionOutputMetadata,
 	error,
 ) {
+	var fullPath string
+	if path != "" {
+		fullPath = clientData.Url + path
+	} else {
+		fullPath = clientData.Url
+	}
 	clientCall := func(ctx context.Context,
 		input *In,
 		payload *types.ActionInputMetadata,
@@ -41,17 +58,18 @@ func CreateTypedClientCall[In any, Out any](
 		req, err := http.NewRequestWithContext(
 			ctx,
 			method,
-			url,
+			fullPath,
 			bytes.NewBuffer(formatted),
 		)
-
 		if err != nil {
 			return nil, nil, err
 		}
 		if payload != nil && payload.HTTPServer != nil {
+			query := req.URL.Query()
 			for _, param := range payload.HTTPServer.Params {
-				req.Header.Set(param.Key, param.Value)
+				query.Add(param.Key, param.Value)
 			}
+			req.URL.RawQuery = query.Encode()
 		}
 		resp, err := http.DefaultClient.Do(req)
 		respHeaders := make(map[string]string, 0)
@@ -69,7 +87,7 @@ func CreateTypedClientCall[In any, Out any](
 				Headers:    respHeaders,
 			},
 		}
-		var out *Out
+		var out *Out = new(Out)
 		body, err := io.ReadAll(resp.Body)
 		if err != nil {
 			return nil, outputMetadata, err
