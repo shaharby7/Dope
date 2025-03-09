@@ -7,9 +7,10 @@ project:
   e2e:
     package: github.com/shaharby7/Dope/example/pkg/e2e
 build:
-  path: ./example/build
+  path: ./build
 apps:
-  - name: myapp
+  - name: admin
+  - name: greeter
 providers:
   git:
     url: https://github.com/shaharby7/Dope.git

@@ -103,15 +103,13 @@ func generateRouteHandler(action *types.TypedAction) httprouter.Handle {
 			)
 			return
 		}
-		inputMetadata := &types.ActionInputMetadata{
-			HTTPServer: &params,
-		}
-		p := []reflect.Value{
+		inputMetadata := createInputMetadata(r, params)
+		input := []reflect.Value{
 			reflect.ValueOf(context.TODO()),
 			reflect.ValueOf(in),
-			reflect.ValueOf(inputMetadata), // TODO: add payload
+			reflect.ValueOf(inputMetadata),
 		}
-		rawOutput := reflect.ValueOf(action.Callback).Call(p)
+		rawOutput := reflect.ValueOf(action.Callback).Call(input)
 		if len(rawOutput) == 3 && !rawOutput[2].IsNil() {
 			returnServerOutput(
 				fmt.Sprintf("action completed with error: %s", rawOutput[2]), types.HTTPServerResponseConfig{StatusCode: 400}, writer,
@@ -151,4 +149,19 @@ func returnServerOutput(data string, responseConfig types.HTTPServerResponseConf
 	}
 	responseWriter.WriteHeader(responseConfig.StatusCode)
 	io.WriteString(responseWriter, data)
+}
+
+func createInputMetadata(r *http.Request, params httprouter.Params) *types.ActionInputMetadata {
+	flattenedParams := make(map[string]string)
+	for _, param := range params {
+		flattenedParams[param.Key] = param.Value
+	}
+	inputMetadata := &types.ActionInputMetadata{
+		HTTPServer: &types.HTTPServerRequestConfig{
+			Params:  flattenedParams,
+			Headers: r.Header,
+			Query:   r.URL.Query(),
+		},
+	}
+	return inputMetadata
 }

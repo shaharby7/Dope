@@ -20,6 +20,7 @@ func init() {
 	entity.LoadEntityTypeManifest(DOPE_CORE_API, v1.AppManifest)
 	entity.LoadEntityTypeManifest(DOPE_CORE_API, v1.EnvManifest)
 	entity.LoadEntityTypeManifest(DOPE_CORE_API, v1.AppEnvManifest)
+	entity.LoadEntityTypeManifest(DOPE_CORE_API, v1.ClientManifest)
 }
 
 func LoadEntitiesTree(dopePath string) (*EntitiesTree, error) {

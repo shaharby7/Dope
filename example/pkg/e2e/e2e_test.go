@@ -2,15 +2,14 @@ package e2e
 
 import (
 	"context"
+	"testing"
 
 	"github.com/shaharby7/Dope/example/build/src/clients/adminclient"
-	"github.com/shaharby7/Dope/pkg/e2e"
 	"github.com/shaharby7/Dope/types"
 	"github.com/stretchr/testify/assert"
 )
 
-
-func E2E_Client_Example(t e2e.ITestProvider) {
+func TestClientExample(t *testing.T) {
 	namesList := []string{"John", "Doe", "Jane"}
 	confirmation, _, err := adminclient.POST_admin__api_ugly_names_set_names(
 		context.Background(),
@@ -43,7 +42,7 @@ func E2E_Client_Example(t e2e.ITestProvider) {
 	assert.ElementsMatch(t, *output, []string{"Doe", "Jane"})
 }
 
-func E2E_EchoClient(t e2e.ITestProvider) {
+func TestEchoClient(t *testing.T) {
 	output, _, err := adminclient.GET_admin__api_ugly_names_echo_header__name(
 		context.Background(),
 		nil,

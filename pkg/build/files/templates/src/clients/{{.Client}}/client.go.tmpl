@@ -1,0 +1,20 @@
+package {{ .Name }}
+
+import (
+	"github.com/shaharby7/Dope/pkg/runtime/client"
+    {{ range $index, $import := .Imports }}
+    "{{ $import }}"{{ end }}
+)
+
+
+var clientData = client.ParseClientData()
+
+
+{{ range $index, $action := .Actions }}
+var {{$action.Method}}_{{$action.App}}_{{$action.FlattenName}} = client.CreateTypedClientCall(
+	clientData,
+    "{{$action.Method}}",
+	"{{$action.Name}}",
+    {{ $action.Caller}},
+)
+{{ end }}

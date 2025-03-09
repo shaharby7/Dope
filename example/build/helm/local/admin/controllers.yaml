@@ -1,5 +1,5 @@
 controllers:
-  - name: server1
+  - name: listener
     env:
       - name: UGLY_NAMES
         value: shahar,danny
@@ -10,9 +10,9 @@ controllers:
       - name: DOPE_CONTROLLER_TYPE
         value: HTTPServer
       - name: DOPE_CONTROLLER_NAME
-        value: server1
+        value: listener
       - name: DOPE_APP_NAME
-        value: myapp
+        value: admin
       - name: DOPE_DOPE_PORT
         value: "4000"
       - name: DOPE_HTTPSERVER_PORT

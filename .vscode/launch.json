@@ -30,10 +30,10 @@
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "./example/build/src/app1",
+            "program": "./example/build/src/apps/admin",
             "cwd": "${workspaceFolder}/example",
             "env": {
-                "DOPE_CONTROLLER_NAME": "server1",
+                "DOPE_CONTROLLER_NAME": "listener",
                 "DOPE_HTTPSERVER_PORT": "3000",
                 "UGLY_NAMES": "shahar"
             }
