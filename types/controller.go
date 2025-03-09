@@ -5,7 +5,6 @@ import (
 	"reflect"
 	"sync"
 
-	"github.com/julienschmidt/httprouter"
 	v1 "github.com/shaharby7/Dope/pkg/entities/V1"
 )
 
@@ -37,23 +36,14 @@ type ActionInputMetadata struct {
 }
 
 type HTTPServerRequestConfig struct {
-	Params httprouter.Params
-	// Headers map[string]string // TODO
+	Params  map[string]string
+	Query   map[string][]string
+	Headers map[string][]string
 }
 
 type ActionOutputMetadata struct {
 	HTTPServer *HTTPServerResponseConfig
 }
-
-// HTTPServer specifics
-
-// type HTTPServerConfig struct {
-// 	Port string
-// }
-
-// type HTTPSeverActionConfig struct {
-// 	Method HTTPMethod
-// }
 
 type HTTPServerResponseConfig struct {
 	StatusCode int
@@ -73,5 +63,3 @@ const (
 	OPTIONS HTTPMethod = "OPTIONS"
 	TRACE   HTTPMethod = "TRACE"
 )
-
-// Command specifics

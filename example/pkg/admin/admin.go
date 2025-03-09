@@ -52,7 +52,7 @@ func RemoveUglyName(
 		return nil, nil, errors.New("did not get server payload")
 	}
 	params := serverPayload.Params
-	UGLY_NAMES_REPO.Remove(params.ByName("name"))
+	UGLY_NAMES_REPO.Remove(params["name"])
 	return SUCCESS_RESPONSE, SUCCESS_META, nil
 }
 
@@ -65,4 +65,16 @@ func GetUglyNames(
 	error) {
 	names := UGLY_NAMES_REPO.ToSlice()
 	return &names, nil, nil
+}
+
+func Echo(
+	ctx context.Context,
+	_ *utils.TEmpty,
+	controllerPayload *d.ActionInputMetadata,
+) (*d.HTTPServerRequestConfig,
+	*d.ActionOutputMetadata,
+	error) {
+	return controllerPayload.HTTPServer, &d.ActionOutputMetadata{HTTPServer: &d.HTTPServerResponseConfig{
+		Headers: controllerPayload.HTTPServer.Params,
+	}}, nil
 }

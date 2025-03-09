@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"strings"
 
 	"github.com/shaharby7/Dope/types"
 )
@@ -64,13 +65,7 @@ func CreateTypedClientCall[In any, Out any](
 		if err != nil {
 			return nil, nil, err
 		}
-		if payload != nil && payload.HTTPServer != nil {
-			query := req.URL.Query()
-			for _, param := range payload.HTTPServer.Params {
-				query.Add(param.Key, param.Value)
-			}
-			req.URL.RawQuery = query.Encode()
-		}
+		applyPayloadToRequest(payload, req)
 		resp, err := http.DefaultClient.Do(req)
 		respHeaders := make(map[string]string, 0)
 		if resp != nil {
@@ -96,4 +91,21 @@ func CreateTypedClientCall[In any, Out any](
 		return out, outputMetadata, err
 	}
 	return clientCall
+}
+
+func applyPayloadToRequest(payload *types.ActionInputMetadata, req *http.Request) {
+	if payload != nil && payload.HTTPServer != nil {
+		query := req.URL.Query()
+		for key, values := range payload.HTTPServer.Query {
+			for _, value := range values {
+				query.Add(key, value)
+			}
+		}
+		req.URL.RawQuery = query.Encode()
+		req.Header = payload.HTTPServer.Headers
+		for key, val := range payload.HTTPServer.Params {
+			req.URL.Path = strings.ReplaceAll(req.URL.Path, "/:"+key, "/"+val)
+		}
+		req.Header = payload.HTTPServer.Headers
+	}
 }

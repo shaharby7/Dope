@@ -15,15 +15,21 @@ values:
       ref: SetUglyNames
       controllerBinding:
         method: POST
-    - name: "/api/ugly-names/unset-name"
+    - name: "/api/ugly-names/unset-name/:name"
       description: "set names to not ugly"
       package: pkg/admin
       ref: RemoveUglyName
       controllerBinding:
-        method: DEL
+        method: DELETE
     - name: "/api/ugly-names/list"
       description: "list all ugly names"
       package: pkg/admin
       ref: GetUglyNames
+      controllerBinding:
+        method: GET
+    - name: "/api/ugly-names/echo-header/:name"
+      description: "echo full payload"
+      package: pkg/admin
+      ref: Echo
       controllerBinding:
         method: GET

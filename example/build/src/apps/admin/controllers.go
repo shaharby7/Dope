@@ -30,9 +30,9 @@ var Controller_listener = controller.NewHTTPServer(
             
 			controller.CreateTypedAction(
 			&v1.ActionConfig{
-				Name: "/api/ugly-names/unset-name",
+				Name: "/api/ugly-names/unset-name/:name",
 				ControllerBinding: map[string]string{
-					"method":"DEL",
+					"method":"DELETE",
 				},
 			},
             admin.RemoveUglyName,
@@ -46,6 +46,16 @@ var Controller_listener = controller.NewHTTPServer(
 				},
 			},
             admin.GetUglyNames,
+            ),
+            
+			controller.CreateTypedAction(
+			&v1.ActionConfig{
+				Name: "/api/ugly-names/echo-header/:name",
+				ControllerBinding: map[string]string{
+					"method":"GET",
+				},
+			},
+            admin.Echo,
             ),
             
 	},

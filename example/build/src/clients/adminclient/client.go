@@ -18,10 +18,10 @@ var POST_admin__api_ugly_names_set_names = client.CreateTypedClientCall(
     admin.SetUglyNames,
 )
 
-var DEL_admin__api_ugly_names_unset_name = client.CreateTypedClientCall(
+var DELETE_admin__api_ugly_names_unset_name__name = client.CreateTypedClientCall(
 	clientData,
-    "DEL",
-	"/api/ugly-names/unset-name",
+    "DELETE",
+	"/api/ugly-names/unset-name/:name",
     admin.RemoveUglyName,
 )
 
@@ -30,5 +30,12 @@ var GET_admin__api_ugly_names_list = client.CreateTypedClientCall(
     "GET",
 	"/api/ugly-names/list",
     admin.GetUglyNames,
+)
+
+var GET_admin__api_ugly_names_echo_header__name = client.CreateTypedClientCall(
+	clientData,
+    "GET",
+	"/api/ugly-names/echo-header/:name",
+    admin.Echo,
 )
 
